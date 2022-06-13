@@ -2,7 +2,6 @@
 const nextConfig = {
     reactStrictMode: true,
     images: { domains: ["picsum.photos"] },
-    experimental: { images: { layoutRaw: true } },
 };
 
 module.exports = nextConfig;

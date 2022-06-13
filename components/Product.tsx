@@ -9,6 +9,8 @@ interface ProductProps {
     };
 }
 
+//https://tailwindui.com/components/ecommerce/components/product-overviews
+
 export const Product = ({ data: { thumbnailAlt, thumbnailUrl, rating, description } }: ProductProps) => {
     return (
         <>

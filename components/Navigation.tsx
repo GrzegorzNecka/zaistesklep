@@ -6,31 +6,23 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 
 const navigation = [
-    { name: "Home", href: "/", current: true },
-    { name: "About", href: "/about", current: false },
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
 ];
 
 const profileMenuItems = [
-    { name: "Your Profile", href: "#" },
-    { name: "Settigs", href: "#" },
-    { name: "Sign Out", href: "#" },
+    { name: "Your Profile", href: "/" },
+    { name: "Settigs", href: "/" },
+    { name: "Sign Out", href: "/" },
 ];
-
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(" ");
-}
 
 interface DisclosureProps {
     open?: boolean;
 }
 
-interface MenuProps {
-    active: boolean;
-}
-
 export const Navigation = () => {
     return (
-        <Disclosure as="nav" className="bg-gray-300">
+        <Disclosure as="nav" className="bg-white  shadow">
             {({ open }: DisclosureProps) => (
                 <>
                     <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -65,15 +57,7 @@ export const Navigation = () => {
                                     <div className="flex space-x-4">
                                         {navigation.map((item) => (
                                             <Link key={item.name} href={item.href}>
-                                                <a
-                                                    className={classNames(
-                                                        item.current
-                                                            ? "bg-gray-500 text-white"
-                                                            : "text-gray-600 hover:bg-gray-700 hover:text-white",
-                                                        "px-3 py-2 rounded-md text-sm font-medium"
-                                                    )}
-                                                    aria-current={item.current ? "page" : undefined}
-                                                >
+                                                <a className="text-gray-600 hover:underline  px-3 py-2 rounded-md text-sm font-medium">
                                                     {item.name}
                                                 </a>
                                             </Link>
@@ -82,7 +66,6 @@ export const Navigation = () => {
                                 </div>
                             </div>
                             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                                {/* Profile dropdown */}
                                 <Menu as="div" className="ml-3 relative">
                                     <div>
                                         <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
@@ -107,18 +90,11 @@ export const Navigation = () => {
                                             {profileMenuItems.map((item) => {
                                                 return (
                                                     <Menu.Item key={item.name}>
-                                                        {({ active }: MenuProps) => (
-                                                            <Link href={item.href}>
-                                                                <a
-                                                                    className={classNames(
-                                                                        active ? "bg-gray-100" : "",
-                                                                        "block px-4 py-2 text-sm text-gray-700"
-                                                                    )}
-                                                                >
-                                                                    {item.name}
-                                                                </a>
-                                                            </Link>
-                                                        )}
+                                                        <Link href={item.href}>
+                                                            <a className="block px-4 py-2 text-sm text-gray-700">
+                                                                {item.name}
+                                                            </a>
+                                                        </Link>
                                                     </Menu.Item>
                                                 );
                                             })}
@@ -135,13 +111,7 @@ export const Navigation = () => {
                                 <Link key={item.name} href={item.href}>
                                     <Disclosure.Button
                                         as="a"
-                                        className={classNames(
-                                            item.current
-                                                ? "bg-gray-500 text-white cursor-pointer"
-                                                : "text-gray-600 hover:bg-gray-700 hover:text-white cursor-pointer",
-                                            "block px-3 py-2 rounded-md text-base font-medium "
-                                        )}
-                                        aria-current={item.current ? "page" : undefined}
+                                        className="text-gray-600  hover:underline cursor-pointer  block px-3 py-2 rounded-md text-base font-medium "
                                     >
                                         {item.name}
                                     </Disclosure.Button>
