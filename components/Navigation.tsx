@@ -17,7 +17,11 @@ const profileMenuItems = [
 ];
 
 interface DisclosureProps {
-    open?: boolean;
+    open: boolean;
+}
+
+interface MenuItemProps {
+    active: boolean;
 }
 
 export const Navigation = () => {
@@ -45,9 +49,9 @@ export const Navigation = () => {
                                             <img
                                                 className="w-auto"
                                                 src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-                                                alt="Workflow"
+                                                alt=""
                                             />
-                                            <span className="hidden lg:block leading-8 font-bold text-indigo-500 pl-3">
+                                            <span className="hidden lg:block lg: min-w-[140px] leading-8 font-bold text-indigo-500 pl-3">
                                                 Zaiste sklep
                                             </span>
                                         </a>
@@ -91,13 +95,56 @@ export const Navigation = () => {
                                                 return (
                                                     <Menu.Item key={item.name}>
                                                         <Link href={item.href}>
-                                                            <a className="block px-4 py-2 text-sm text-gray-700">
+                                                            <a
+                                                                className={
+                                                                    "hover:bg-gray-100 block px-4 py-2 text-sm text-gray-700"
+                                                                }
+                                                            >
                                                                 {item.name}
                                                             </a>
                                                         </Link>
                                                     </Menu.Item>
                                                 );
                                             })}
+                                            {/* <Menu.Item>
+                                                {({ active }: MenuItemProps) => (
+                                                    <a
+                                                        href="#"
+                                                        className={classNames(
+                                                            active ? "bg-gray-100" : "",
+                                                            "block px-4 py-2 text-sm text-gray-700"
+                                                        )}
+                                                    >
+                                                        Your Profile
+                                                    </a>
+                                                )}
+                                            </Menu.Item>
+                                            <Menu.Item>
+                                                {({ active }) => (
+                                                    <a
+                                                        href="#"
+                                                        className={classNames(
+                                                            active ? "bg-gray-100" : "",
+                                                            "block px-4 py-2 text-sm text-gray-700"
+                                                        )}
+                                                    >
+                                                        Settings
+                                                    </a>
+                                                )}
+                                            </Menu.Item>
+                                            <Menu.Item>
+                                                {({ active }) => (
+                                                    <a
+                                                        href="#"
+                                                        className={classNames(
+                                                            active ? "bg-gray-100" : "",
+                                                            "block px-4 py-2 text-sm text-gray-700"
+                                                        )}
+                                                    >
+                                                        Sign out
+                                                    </a>
+                                                )}
+                                            </Menu.Item> */}
                                         </Menu.Items>
                                     </Transition>
                                 </Menu>
