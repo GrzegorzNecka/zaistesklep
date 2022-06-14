@@ -7,6 +7,7 @@ export const products = [
         imageAlt: "Front of men's Basic Tee in black.",
         price: "$35",
         color: "Black",
+        rating: 5,
     },
     {
         id: 2,
@@ -16,6 +17,7 @@ export const products = [
         imageAlt: "Front of men's Basic Tee in black.",
         price: "$35",
         color: "Black",
+        rating: 2,
     },
     {
         id: 3,
@@ -34,5 +36,6 @@ export const products = [
         imageAlt: "Front of men's Basic Tee in black.",
         price: "$35",
         color: "Black",
+        rating: 3,
     },
 ];
