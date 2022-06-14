@@ -7,6 +7,10 @@ export const Rating = ({ rating }: RaitingProps) => {
         return <></>;
     }
 
+    if (typeof rating === "number" && rating > 5) {
+        return <></>;
+    }
+
     const stars = [1, 2, 3, 4, 5];
 
     return (
