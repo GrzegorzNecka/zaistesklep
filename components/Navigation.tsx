@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const navigation = [
     { name: "Home", href: "/" },
@@ -21,6 +22,19 @@ interface DisclosureProps {
 }
 
 export const Navigation = () => {
+    const router = useRouter();
+    const currentRoute = router.pathname;
+
+    const isActiveLink = (route: string) => {
+        let styleLink = `btn-primary`;
+
+        if (route === currentRoute) {
+            styleLink = `btn-primary--active`;
+        }
+
+        return styleLink;
+    };
+
     return (
         <Disclosure as="nav" className="bg-white  shadow">
             {({ open }: DisclosureProps) => (
@@ -56,10 +70,13 @@ export const Navigation = () => {
                                 <div className="hidden sm:block sm:ml-6">
                                     <div className="flex space-x-4">
                                         {navigation.map((item) => (
-                                            <Link key={item.name} href={item.href}>
-                                                <a className="text-gray-600 hover:underline  px-3 py-2 rounded-md text-sm font-medium">
-                                                    {item.name}
-                                                </a>
+                                            <Link
+                                                key={item.name}
+                                                href={{
+                                                    pathname: item.href,
+                                                }}
+                                            >
+                                                <a className={isActiveLink(item.href)}>{item.name}</a>
                                             </Link>
                                         ))}
                                     </div>
