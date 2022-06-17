@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 @layer components {
-    .btn-primary {
-        @apply text-gray-600 hover:underline  px-3 py-2 rounded-md text-sm font-medium;
+    .btn-primary--inactive {
+        @apply text-gray-600 hover:underline;
     }
     .btn-primary--active {
-        @apply text-gray-500 underline px-3 py-2 rounded-md text-sm font-medium;
+        @apply text-gray-500 underline;
     }
 }
 

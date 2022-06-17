@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
+import { navigationList } from "utils/navigationList";
+import ActiveLink from "./ActiveLink";
 
 const Footer = () => {
     const date = new Date().getFullYear();
@@ -20,19 +22,16 @@ const Footer = () => {
                 </Link>
 
                 <ul className="flex flex-wrap items-center mb-6 text-sm text-gray-500 sm:mb-0 ">
-                    <li>
-                        <Link href="/">
-                            <a className="btn-primary ">Home</a>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link href="/about">
-                            <a className="btn-primary">About</a>
-                        </Link>
-                    </li>
+                    {navigationList.map((item) => (
+                        <li key={item.name}>
+                            <ActiveLink href={item.href} style={`cursor-pointer px-3 py-2 text-sm font-normal`}>
+                                {item.name}
+                            </ActiveLink>
+                        </li>
+                    ))}
                 </ul>
             </div>
-            <hr className="my-6 border-gray-200 sm:mx-auto lg:my-8" />
+            <hr className="my-6 border-gray-200 sm:mx-auto  lg:my-8" />
             <div className="py-6 px-4  md:flex md:items-center md:justify-between">
                 <span className="text-sm text-gray-700 sm:text-center">
                     © {`${date}`}

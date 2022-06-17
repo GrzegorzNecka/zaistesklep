@@ -5,11 +5,8 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
-const navigation = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-];
+import ActiveLink from "./ActiveLink";
+import { navigationList } from "utils/navigationList";
 
 const profileMenuItems = [
     { name: "Your Profile", href: "/" },
@@ -26,7 +23,7 @@ export const Navigation = () => {
     const currentRoute = router.pathname;
 
     const isActiveLink = (route: string) => {
-        let styleLink = `btn-primary`;
+        let styleLink = `btn-primary--inactive`;
 
         if (route === currentRoute) {
             styleLink = `btn-primary--active`;
@@ -69,15 +66,14 @@ export const Navigation = () => {
                                 </div>
                                 <div className="hidden sm:block sm:ml-6">
                                     <div className="flex space-x-4">
-                                        {navigation.map((item) => (
-                                            <Link
+                                        {navigationList.map((item) => (
+                                            <ActiveLink
                                                 key={item.name}
-                                                href={{
-                                                    pathname: item.href,
-                                                }}
+                                                href={item.href}
+                                                style={`px-3 py-2 rounded-md text-sm font-medium cursor-pointer`}
                                             >
-                                                <a className={isActiveLink(item.href)}>{item.name}</a>
-                                            </Link>
+                                                {item.name}
+                                            </ActiveLink>
                                         ))}
                                     </div>
                                 </div>
@@ -128,15 +124,14 @@ export const Navigation = () => {
                     {/* minwidth : 640 */}
                     <Disclosure.Panel className="sm:hidden">
                         <div className="px-2 pt-2 pb-3 space-y-1">
-                            {navigation.map((item) => (
-                                <Link key={item.name} href={item.href}>
-                                    <Disclosure.Button
-                                        as="a"
-                                        className="text-gray-600  hover:underline cursor-pointer  block px-3 py-2 rounded-md text-base font-medium "
-                                    >
-                                        {item.name}
-                                    </Disclosure.Button>
-                                </Link>
+                            {navigationList.map((item) => (
+                                <ActiveLink
+                                    key={item.name}
+                                    href={item.href}
+                                    style={`cursor-pointer  block px-3 py-2 rounded-md text-base font-medium`}
+                                >
+                                    {item.name}
+                                </ActiveLink>
                             ))}
                         </div>
                     </Disclosure.Panel>
