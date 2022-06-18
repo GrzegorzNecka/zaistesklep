@@ -15,7 +15,7 @@ export const Rating = ({ rating }: RaitingProps) => {
 
     return (
         <div className="flex items-center">
-            {stars?.map((star) => (
+            {stars.map((star) => (
                 <div key={star}>
                     <svg
                         className={rating >= star ? `text-yellow-400 w-5 h-5` : `text-gray-400 w-5 h-5`}
