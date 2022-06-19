@@ -1,0 +1,9 @@
+ @sessionToken = next-auth.session-token=972265de2e840293b7c3ac41191f970c16d04c765932294c5e6127ecfb8cb237
+###
+http://localhost:3000/api/hello
+# Cookie: {{sessionToken}}
+
+###
+http://localhost:3000/api/products
+
+

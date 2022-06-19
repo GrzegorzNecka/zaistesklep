@@ -1,5 +1,11 @@
 import { ProductDetails } from "components/Product";
-import { GetStaticPathsResult, GetStaticPropsContext, InferGetStaticPropsType } from "next";
+import { InferGetStaticPropsType } from "next";
+
+// export type InferGetStaticPaths<T> = T extends () => Promise<{
+//     paths: Array<{ params: infer R }>;
+// }>
+//     ? { params?: R }
+//     : never;
 
 export interface StoreApiResponse {
     id: number;
@@ -13,36 +19,6 @@ export interface StoreApiResponse {
         count: number;
     };
 }
-export const getStaticPaths = async (): GetStaticPathsResult => {
-    const res = await fetch(`http://fakestoreapi.com/products/`);
-    const data: StoreApiResponse[] = await res.json();
-
-    return {
-        paths: data.map((product) => {
-            return {
-                params: {
-                    productId: `${product.id}`,
-                },
-            };
-        }),
-        fallback: false,
-    };
-};
-// InferGetStaticPathsType<typeof getStaticPaths>
-export const getStaticProps = async ({ params }: GetStaticPropsContext<{ productId: string }>) => {
-    if (!params?.productId) {
-        return { props: {}, notFound: true };
-    }
-
-    const res = await fetch(`http://fakestoreapi.com/products/${params?.productId}`);
-    const product: StoreApiResponse | null = await res.json();
-
-    return {
-        props: {
-            product,
-        },
-    };
-};
 
 const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
     if (!product) {
@@ -65,3 +41,36 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
 };
 
 export default ProductIdPage;
+
+//async (): GetStaticPathsResult
+export const getStaticPaths = async () => {
+    const res = await fetch(`http://fakestoreapi.com/products/`);
+    const data: StoreApiResponse[] = await res.json();
+
+    return {
+        paths: data.map((product) => {
+            return {
+                params: {
+                    productId: `${product.id}`,
+                },
+            };
+        }),
+        fallback: false,
+    };
+};
+// InferGetStaticPaths<typeof getStaticPaths>
+//async ({ params }: GetStaticPropsContext<{ productId: string }>)
+export const getStaticProps = async ({ params }: InferGetStaticPaths<typeof getStaticPaths>) => {
+    if (!params?.productId) {
+        return { props: {}, notFound: true };
+    }
+
+    const res = await fetch(`http://fakestoreapi.com/products/${params?.productId}`);
+    const product: StoreApiResponse | null = await res.json();
+
+    return {
+        props: {
+            product,
+        },
+    };
+};
