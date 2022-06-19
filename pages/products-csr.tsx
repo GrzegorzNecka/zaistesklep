@@ -1,7 +1,7 @@
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
 import { Main } from "components/Main";
-import { Product } from "components/Product";
+import { ProductDetails } from "components/Product";
 import { InferGetStaticPropsType } from "next";
 import { useQuery } from "react-query";
 
@@ -48,7 +48,7 @@ const ProductsPageCSR = () => {
                     <ul className="bg-white w-full grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 ">
                         {data.map((product) => (
                             <li key={product.id} className="shadow border">
-                                <Product
+                                <ProductDetails
                                     data={{
                                         title: product.title,
                                         description: product.description,

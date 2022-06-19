@@ -3,7 +3,6 @@
 // import styles from "../styles/Home.module.css";
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
-import { Products } from "components/Products";
 
 import { products } from "data/products";
 
@@ -13,7 +12,7 @@ const Home = () => {
         <div className=" flex flex-col min-h-screen ">
             <Header />
             <Main>
-                <Products products={products} />
+                <div>siema</div>
             </Main>
             <Footer />
         </div>

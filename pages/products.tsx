@@ -1,7 +1,7 @@
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
 import { Main } from "components/Main";
-import { Product } from "components/Product";
+import { ProductListItem } from "components/Product";
 import { InferGetStaticPropsType } from "next";
 
 export interface StoreApiResponse {
@@ -38,13 +38,13 @@ const productsPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) 
                     <ul className="bg-white w-full grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 ">
                         {data.map((product) => (
                             <li key={product.id} className="shadow border">
-                                <Product
+                                <ProductListItem
                                     data={{
                                         title: product.title,
-                                        description: product.description,
+                                        // description: product.description,
                                         thumbnailUrl: product.image,
                                         thumbnailAlt: product.title,
-                                        rating: product.rating.rate,
+                                        // rating: product.rating.rate,
                                     }}
                                 />
                             </li>
