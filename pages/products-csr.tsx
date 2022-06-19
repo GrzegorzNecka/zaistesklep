@@ -3,6 +3,7 @@ import { Header } from "components/Header";
 import { Main } from "components/Main";
 import { Product } from "components/Product";
 import { InferGetStaticPropsType } from "next";
+import { useQuery } from "react-query";
 
 export interface StoreApiResponse {
     id: number;
@@ -17,18 +18,27 @@ export interface StoreApiResponse {
     };
 }
 
-export const getStaticProps = async () => {
+const getProducts = async () => {
     const res = await fetch(`http://fakestoreapi.com/products/`);
     const data: StoreApiResponse[] = await res.json();
-
-    return {
-        props: {
-            data,
-        },
-    };
+    return data;
 };
 
-const productsPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const ProductsPageCSR = () => {
+    const { data, isLoading, error } = useQuery("products", getProducts);
+
+    // result.data;
+    // result.isLoading;
+    // result.isError;
+
+    if (isLoading) {
+        return <div>loading..</div>;
+    }
+
+    if (!data || error) {
+        return <div>coś poszło nie tak</div>;
+    }
+
     return (
         <div>
             <Header />
@@ -58,4 +68,4 @@ const productsPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) 
     );
 };
 
-export default productsPage;
+export default ProductsPageCSR;
