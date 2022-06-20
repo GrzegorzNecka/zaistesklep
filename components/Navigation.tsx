@@ -19,18 +19,18 @@ interface DisclosureProps {
 }
 
 export const Navigation = () => {
-    const router = useRouter();
-    const currentRoute = router.pathname;
+    // const router = useRouter();
+    // const currentRoute = router.pathname;
 
-    const isActiveLink = (route: string) => {
-        let styleLink = `btn-primary--inactive`;
+    // const isActiveLink = (route: string) => {
+    //     let styleLink = `btn-primary--inactive`;
 
-        if (route === currentRoute) {
-            styleLink = `btn-primary--active`;
-        }
+    //     if (route === currentRoute) {
+    //         styleLink = `btn-primary--active`;
+    //     }
 
-        return styleLink;
-    };
+    //     return styleLink;
+    // };
 
     return (
         <Disclosure as="nav" className="bg-white  shadow">
@@ -70,9 +70,10 @@ export const Navigation = () => {
                                             <ActiveLink
                                                 key={item.name}
                                                 href={item.href}
-                                                style={`px-3 py-2 rounded-md text-sm font-medium cursor-pointer`}
+                                                customClassName={`px-3 py-2 rounded-md text-sm font-medium cursor-pointer`}
+                                                activeClassName="btn-primary--active"
                                             >
-                                                {item.name}
+                                                <a> {item.name}</a>
                                             </ActiveLink>
                                         ))}
                                     </div>
@@ -128,9 +129,10 @@ export const Navigation = () => {
                                 <ActiveLink
                                     key={item.name}
                                     href={item.href}
-                                    style={`cursor-pointer  block px-3 py-2 rounded-md text-base font-medium`}
+                                    customClassName={`cursor-pointer  block px-3 py-2 rounded-md text-base font-medium`}
+                                    activeClassName="btn-primary--active"
                                 >
-                                    {item.name}
+                                    <a>{item.name}</a>
                                 </ActiveLink>
                             ))}
                         </div>

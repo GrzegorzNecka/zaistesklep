@@ -1,5 +1,6 @@
 import { ProductDetails } from "components/Product";
 import { InferGetStaticPropsType } from "next";
+import Link from "next/link";
 
 // export type InferGetStaticPaths<T> = T extends () => Promise<{
 //     paths: Array<{ params: infer R }>;
@@ -27,8 +28,12 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
 
     return (
         <div>
+            <Link href="/products">
+                <a>wróć na stronę produktów</a>
+            </Link>
             <ProductDetails
                 data={{
+                    id: product.id,
                     title: product.title,
                     description: product.description,
                     thumbnailUrl: product.image,
