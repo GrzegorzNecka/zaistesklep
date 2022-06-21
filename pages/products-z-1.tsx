@@ -18,13 +18,15 @@ export interface StoreApiResponse {
     };
 }
 
+// https://react-query.tanstack.com/guides/paginated-queries
+
 const getProducts = async () => {
     const res = await fetch(`http://fakestoreapi.com/products/`);
     const data: StoreApiResponse[] = await res.json();
     return data;
 };
 
-const ProductsPageCSR = () => {
+const ProductsPageZ1 = () => {
     const { data, isLoading, error } = useQuery("products", getProducts);
 
     if (isLoading) {
@@ -65,4 +67,4 @@ const ProductsPageCSR = () => {
     );
 };
 
-export default ProductsPageCSR;
+export default ProductsPageZ1;
