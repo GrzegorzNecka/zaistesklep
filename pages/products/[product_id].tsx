@@ -56,7 +56,7 @@ export const getStaticPaths = async () => {
         paths: data.map((product) => {
             return {
                 params: {
-                    productId: `${product.id}`,
+                    product_id: `${product.id}`,
                 },
             };
         }),
@@ -66,11 +66,11 @@ export const getStaticPaths = async () => {
 // InferGetStaticPaths<typeof getStaticPaths>
 //async ({ params }: GetStaticPropsContext<{ productId: string }>)
 export const getStaticProps = async ({ params }: InferGetStaticPaths<typeof getStaticPaths>) => {
-    if (!params?.productId) {
+    if (!params?.product_id) {
         return { props: {}, notFound: true };
     }
 
-    const res = await fetch(`http://fakestoreapi.com/products/${params?.productId}`);
+    const res = await fetch(`http://fakestoreapi.com/products/${params?.product_id}`);
     const product: StoreApiResponse | null = await res.json();
 
     return {
