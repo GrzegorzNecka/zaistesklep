@@ -4,6 +4,6 @@ http://localhost:3000/api/hello
 # Cookie: {{sessionToken}}
 
 ###
-http://localhost:3000/api/products
+http://localhost:3000/api/products?page=1
 
 

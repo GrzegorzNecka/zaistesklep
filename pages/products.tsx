@@ -1,6 +1,7 @@
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
 import { Main } from "components/Main";
+import Pagination from "components/Pagination";
 import { ProductListItem } from "components/Product";
 import { InferGetStaticPropsType } from "next";
 
@@ -18,7 +19,7 @@ export interface StoreApiResponse {
 }
 
 export const getStaticProps = async () => {
-    const res = await fetch(`http://fakestoreapi.com/products/`);
+    const res = await fetch(`http://naszsklep-api.vercel.app/api/products`);
     const data: StoreApiResponse[] = await res.json();
 
     return {
@@ -52,6 +53,7 @@ const productsPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) 
                         ))}
                     </ul>
                 </div>
+                <Pagination />
             </Main>
 
             <Footer />
