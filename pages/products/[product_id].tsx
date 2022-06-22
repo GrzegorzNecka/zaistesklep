@@ -2,12 +2,6 @@ import { ProductDetails } from "components/Product";
 import { InferGetStaticPropsType } from "next";
 import Link from "next/link";
 
-// export type InferGetStaticPaths<T> = T extends () => Promise<{
-//     paths: Array<{ params: infer R }>;
-// }>
-//     ? { params?: R }
-//     : never;
-
 export interface StoreApiResponse {
     id: number;
     title: string;

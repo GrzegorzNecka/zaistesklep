@@ -19,7 +19,7 @@ export interface StoreApiResponse {
 }
 
 export const getStaticProps = async () => {
-    const res = await fetch(`http://naszsklep-api.vercel.app/api/products`);
+    const res = await fetch(`https://naszsklep-api.vercel.app/api/products`);
     const data: StoreApiResponse[] = await res.json();
 
     return {
@@ -35,7 +35,7 @@ const productsPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) 
             <Header />
 
             <Main>
-                <div className=" p-16">
+                <div className="p-16">
                     <ul className="bg-white w-full grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 ">
                         {data.map((product) => (
                             <li key={product.id} className="shadow border">
