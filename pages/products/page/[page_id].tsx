@@ -79,12 +79,11 @@ export const getStaticProps = async ({ params }: InferGetStaticPaths<typeof getS
     }
 
     const page = Number(params.page_id);
-
     const take = 25;
     let offset = 0;
 
     if (page < 1) {
-        return;
+        offset = 0;
     }
 
     if (page > 1) {

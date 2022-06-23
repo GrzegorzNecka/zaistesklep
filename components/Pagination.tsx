@@ -1,12 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
-
-// interface ParentState {
-//     currentPage: number;
-//     setCurrentPage: Dispatch<SetStateAction<number>>;
-// }
 
 const Pagination = () => {
     const pagesCount = [...Array(10).keys()].map((p) => p + 1);
@@ -14,18 +8,18 @@ const Pagination = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        if (typeof router.query.page !== "string") {
+        if (typeof router.query.page_id !== "string") {
             setCurrentPage(1);
             return;
         }
 
-        const pageNumber = isNaN(parseInt(router.query.page)) ? 1 : parseInt(router.query.page);
+        const pageNumber = isNaN(parseInt(router.query.page_id)) ? 1 : parseInt(router.query.page_id);
         setCurrentPage(pageNumber);
     }, [router]);
 
     const activeClassName =
         "border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium";
-    const inActiveClassName =
+    const inactiveClassName =
         "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium";
 
     return (
@@ -34,8 +28,8 @@ const Pagination = () => {
                 <ul>
                     {pagesCount.map((page) => (
                         <li key={page} className="inline-block">
-                            <Link href={`/products/?page=${page}`}>
-                                <a className={page !== currentPage ? inActiveClassName : activeClassName}>{page}</a>
+                            <Link href={`/products/page/${page}`}>
+                                <a className={page !== currentPage ? inactiveClassName : activeClassName}>{page}</a>
                             </Link>
                         </li>
                     ))}
