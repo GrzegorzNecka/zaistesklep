@@ -41,7 +41,6 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
 
 export default ProductIdPage;
 
-//async (): GetStaticPathsResult
 export const getStaticPaths = async () => {
     const res = await fetch(`http://fakestoreapi.com/products/`);
     const data: StoreApiResponse[] = await res.json();
@@ -57,8 +56,7 @@ export const getStaticPaths = async () => {
         fallback: false,
     };
 };
-// InferGetStaticPaths<typeof getStaticPaths>
-//async ({ params }: GetStaticPropsContext<{ productId: string }>)
+
 export const getStaticProps = async ({ params }: InferGetStaticPaths<typeof getStaticPaths>) => {
     if (!params?.product_id) {
         return { props: {}, notFound: true };

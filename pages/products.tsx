@@ -5,7 +5,7 @@ import Pagination from "components/Pagination";
 import { ProductListItem } from "components/Product";
 import { InferGetStaticPropsType } from "next";
 
-export interface StoreApiResponse {
+interface StoreApiResponse {
     id: number;
     title: string;
     price: number;
@@ -18,6 +18,37 @@ export interface StoreApiResponse {
     };
 }
 
+const productsPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
+    return (
+        <div>
+            <Header />
+
+            <Main>
+                <div className="relative p-16">
+                    <ul className="relative  bg-white w-full mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
+                        {data.map((product) => (
+                            <li key={product.id} className={`className="group relative" ${product.id}`}>
+                                <ProductListItem
+                                    data={{
+                                        title: product.title,
+                                        // description: product.description,
+                                        thumbnailUrl: product.image,
+                                        thumbnailAlt: product.title,
+                                        rating: product.rating.rate,
+                                        id: product.id,
+                                    }}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </Main>
+            <Pagination />
+            <Footer />
+        </div>
+    );
+};
+
 export const getStaticProps = async () => {
     const res = await fetch(`https://naszsklep-api.vercel.app/api/products`);
     const data: StoreApiResponse[] = await res.json();
@@ -27,38 +58,6 @@ export const getStaticProps = async () => {
             data,
         },
     };
-};
-
-const productsPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
-    return (
-        <div>
-            <Header />
-
-            <Main>
-                <div className="p-16">
-                    <ul className="bg-white w-full grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 ">
-                        {data.map((product) => (
-                            <li key={product.id} className="shadow border">
-                                <ProductListItem
-                                    data={{
-                                        id: product.id,
-                                        title: product.title,
-                                        // description: product.description,
-                                        thumbnailUrl: product.image,
-                                        thumbnailAlt: product.title,
-                                        // rating: product.rating.rate,
-                                    }}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <Pagination />
-            </Main>
-
-            <Footer />
-        </div>
-    );
 };
 
 export default productsPage;

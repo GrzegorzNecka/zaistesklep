@@ -1,16 +1,17 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-interface ParentState {
-    currentPage: number;
-    setCurrentPage: Dispatch<SetStateAction<number>>;
-}
+// interface ParentState {
+//     currentPage: number;
+//     setCurrentPage: Dispatch<SetStateAction<number>>;
+// }
 
-const Pagination = ({ currentPage, setCurrentPage }: ParentState) => {
+const Pagination = () => {
     const pagesCount = [...Array(10).keys()].map((p) => p + 1);
     const router = useRouter();
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         if (typeof router.query.page !== "string") {
