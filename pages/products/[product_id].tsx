@@ -57,14 +57,17 @@ export default ProductIdPage;
 // -----------------  getStaticPaths  ----------------------
 
 export const getStaticPaths = async () => {
-    const res = await fetch(`https://naszsklep-api.vercel.app/api/products/`);
-    const data: StoreApiResponse[] = await res.json();
+    // const res = await fetch(`https://naszsklep-api.vercel.app/api/products/`);
+    // const data: StoreApiResponse[] = await res.json();
+
+    const countOfPages = 2;
+    const data: number[] = await [...Array(countOfPages).keys()].map((p) => p + 1);
 
     return {
         paths: data.map((product) => {
             return {
                 params: {
-                    product_id: `${product.id}`,
+                    product_id: `${product}`,
                 },
             };
         }),

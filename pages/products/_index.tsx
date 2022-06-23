@@ -83,7 +83,7 @@ const ProductsPageCSR = () => {
                     </ul>
                 </div>
             </Main>
-            <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} />
+
             <Footer />
         </div>
     );

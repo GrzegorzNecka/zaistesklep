@@ -56,7 +56,7 @@ export default ProductListIdPage;
 // -----------------  getStaticPaths  ----------------------
 
 export const getStaticPaths = async () => {
-    const countOfPages = 10;
+    const countOfPages = 2;
     const data: number[] = await [...Array(countOfPages).keys()].map((p) => p + 1);
 
     return {
@@ -67,7 +67,7 @@ export const getStaticPaths = async () => {
                 },
             };
         }),
-        fallback: false,
+        fallback: "blocking",
     };
 };
 
