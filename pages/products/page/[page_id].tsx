@@ -56,7 +56,7 @@ export default ProductListIdPage;
 // -----------------  getStaticPaths  ----------------------
 
 export const getStaticPaths = async () => {
-    const countOfPages = 10;
+    const countOfPages = 2;
     const data: number[] = await [...Array(countOfPages).keys()].map((p) => p + 1);
 
     return {
@@ -67,7 +67,7 @@ export const getStaticPaths = async () => {
                 },
             };
         }),
-        fallback: false,
+        fallback: "blocking",
     };
 };
 
@@ -78,19 +78,28 @@ export const getStaticProps = async ({ params }: InferGetStaticPaths<typeof getS
         return { props: {}, notFound: true };
     }
 
-    const page = Number(params.page_id);
-    const take = 25;
-    let offset = 0;
+    const queryConfig = {
+        page: Number(params.page_id),
+        take: 25,
+        offset: 0,
+    };
 
-    if (page < 1) {
-        offset = 0;
+    if (queryConfig.page < 1) {
+        // return {
+        //     redirect: {
+        //         destination: "/products/page/1",
+        //     },
+        // };
+        queryConfig.offset = 0;
     }
 
-    if (page > 1) {
-        offset = (page - 1) * take;
+    if (queryConfig.page > 1) {
+        queryConfig.offset = (queryConfig.page - 1) * queryConfig.take;
     }
 
-    const res = await fetch(`https://naszsklep-api.vercel.app/api/products?take=${take}&offset=${offset}`);
+    const res = await fetch(
+        `https://naszsklep-api.vercel.app/api/products?take=${queryConfig.take}&offset=${queryConfig.offset}`
+    );
     const products: StoreApiResponse[] | null = await res.json();
 
     return {

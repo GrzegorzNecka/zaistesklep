@@ -31,7 +31,7 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
                     <Link href="/products">
                         <a>wróć na stronę produktów</a>
                     </Link>
-                    <ul className="relative  bg-white w-full mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
+                    <ul className="relative  bg-white w-full mt-6    ">
                         <li key={product.id} className={`className="group relative" ${product.id}`}>
                             <ProductDetails
                                 data={{
@@ -57,14 +57,17 @@ export default ProductIdPage;
 // -----------------  getStaticPaths  ----------------------
 
 export const getStaticPaths = async () => {
-    const res = await fetch(`https://naszsklep-api.vercel.app/api/products/`);
-    const data: StoreApiResponse[] = await res.json();
+    // const res = await fetch(`https://naszsklep-api.vercel.app/api/products/`);
+    // const data: StoreApiResponse[] = await res.json();
+
+    const countOfPages = 2;
+    const data: number[] = await [...Array(countOfPages).keys()].map((p) => p + 1);
 
     return {
         paths: data.map((product) => {
             return {
                 params: {
-                    product_id: `${product.id}`,
+                    product_id: `${product}`,
                 },
             };
         }),
