@@ -1,11 +1,15 @@
 import { Footer } from "components/Footer";
 import { Header } from "components/Header";
 import { Main } from "components/Main";
-import Pagination from "components/Pagination";
 import { ProductListItem } from "components/Product";
-import { InferGetStaticPropsType } from "next";
 import { useQuery, useQueryClient } from "react-query";
 import { useState, useEffect } from "react";
+
+/**
+ *
+ * Przykład CSR z useQuery
+ *
+ */
 
 export interface StoreApiResponse {
     id: number;
@@ -38,7 +42,7 @@ const fetchProducts = async (page: number, take: number = 5) => {
 };
 
 const ProductsPageCSR = () => {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1); // to niedziała ponieważ w tym przykąłdzie podawałem te dane do komponentu Paginatin
     const queryClient = useQueryClient();
     const { data, error, isLoading, isFetching } = useQuery(
         ["product", currentPage],

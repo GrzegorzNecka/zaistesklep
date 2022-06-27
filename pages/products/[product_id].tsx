@@ -31,7 +31,7 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
                     <Link href="/products">
                         <a>wróć na stronę produktów</a>
                     </Link>
-                    <ul className="relative  bg-white w-full mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
+                    <ul className="relative  bg-white w-full mt-6    ">
                         <li key={product.id} className={`className="group relative" ${product.id}`}>
                             <ProductDetails
                                 data={{

@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 import Link from "next/link";
 import { Rating } from "./Raiting";
 
@@ -24,11 +25,16 @@ interface ProductDetailsProps {
 export const ProductListItem = ({ data }: ProductListItemProps) => {
     return (
         <div className="p-8">
-            <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
-                <img
+            <div className="w-full p-4 bg-white aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75  lg:aspect-none">
+                <Image
                     src={data.thumbnailUrl}
                     alt={data.thumbnailAlt}
-                    className="w-full h-full object-center object-contain lg:w-full lg:h-full mix-blend-multiply"
+                    className="w-full h-full  lg:w-full lg:h-full mix-blend-multiply"
+                    layout="responsive"
+                    width={16}
+                    height={9}
+                    objectFit="contain"
+                    objectPosition="center"
                 />
             </div>
 
@@ -57,9 +63,20 @@ export const ProductDetails = ({
     data: { thumbnailAlt, thumbnailUrl, rating, description, title },
 }: ProductDetailsProps) => {
     return (
-        <div className="p-8">
+        <div className="p-8 w-full">
             <h2 className=" text-2xl font-bold py-8 ">{title}</h2>
-            <img src={thumbnailUrl} alt={thumbnailAlt} />
+            <div>
+                <Image
+                    src={thumbnailUrl}
+                    alt={thumbnailAlt}
+                    className="w-full h-full  lg:w-full lg:h-full mix-blend-multiply"
+                    layout="responsive"
+                    width={16}
+                    height={9}
+                    objectFit="contain"
+                    objectPosition="center"
+                />
+            </div>
             <p className=" py-8">{description}</p>
             <Rating rating={rating}></Rating>
         </div>
