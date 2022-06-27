@@ -19,10 +19,6 @@ const Pagination = () => {
 
         const pageNumber = isNaN(parseInt(router.query.page_id)) ? 1 : parseInt(router.query.page_id);
 
-        if (pageNumber < 1) {
-            router.push("/products/page/1");
-        }
-
         if (!paginationCollection.includes(pageNumber)) {
             const nextPageNumber = paginationCollection.length + 1;
 
