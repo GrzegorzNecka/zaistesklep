@@ -1,6 +1,3 @@
-import { Footer } from "components/Footer";
-import { Header } from "components/Header";
-import { Main } from "components/Main";
 import { ProductListItem } from "components/Product";
 import { useQuery, useQueryClient } from "react-query";
 import { useState, useEffect } from "react";
@@ -63,32 +60,25 @@ const ProductsPageCSR = () => {
 
     return (
         <div>
-            <Header />
-            <Main>
-                <div className="relative p-16">
-                    {(isLoading || isFetching) && (
-                        <div className="abolute top-1/2 left-1/2 translate-x-1/2">loading..</div>
-                    )}
-                    <ul className="relative  bg-white w-full mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
-                        {data.map((product) => (
-                            <li key={product.id} className={`className="group relative" ${product.id}`}>
-                                <ProductListItem
-                                    data={{
-                                        title: product.title,
-                                        // description: product.description,
-                                        thumbnailUrl: product.image,
-                                        thumbnailAlt: product.title,
-                                        rating: product.rating.rate,
-                                        id: product.id,
-                                    }}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </Main>
-
-            <Footer />
+            <div className="relative p-16">
+                {(isLoading || isFetching) && <div className="abolute top-1/2 left-1/2 translate-x-1/2">loading..</div>}
+                <ul className="relative  bg-white w-full mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
+                    {data.map((product) => (
+                        <li key={product.id} className={`className="group relative" ${product.id}`}>
+                            <ProductListItem
+                                data={{
+                                    title: product.title,
+                                    // description: product.description,
+                                    thumbnailUrl: product.image,
+                                    thumbnailAlt: product.title,
+                                    rating: product.rating.rate,
+                                    id: product.id,
+                                }}
+                            />
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 };

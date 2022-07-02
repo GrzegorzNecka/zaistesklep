@@ -1,7 +1,6 @@
 import { ProductListItem } from "components/Product";
 import { InferGetStaticPropsType } from "next";
-import { Footer } from "components/Footer";
-import { Header } from "components/Header";
+
 import Pagination from "components/Pagination";
 import { Main } from "components/Main";
 
@@ -24,31 +23,28 @@ const ProductListIdPage = ({ products }: InferGetStaticPropsType<typeof getStati
     }
 
     return (
-        <div>
-            <Header />
-            <Main>
-                <div className="relative p-16">
-                    <ul className="relative  bg-white w-full mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
-                        {products.map((product) => (
-                            <li key={product.id} className={`className="group relative" ${product.id}`}>
-                                <ProductListItem
-                                    data={{
-                                        title: product.title,
-                                        // description: product.description,
-                                        thumbnailUrl: product.image,
-                                        thumbnailAlt: product.title,
-                                        rating: product.rating.rate,
-                                        id: product.id,
-                                    }}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </Main>
+        <Main>
+            <div className="relative p-16">
+                <ul className="relative  bg-white w-full mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
+                    {products.map((product) => (
+                        <li key={product.id} className={`className="group relative" ${product.id}`}>
+                            <ProductListItem
+                                data={{
+                                    title: product.title,
+                                    // description: product.description,
+                                    thumbnailUrl: product.image,
+                                    thumbnailAlt: product.title,
+                                    rating: product.rating.rate,
+                                    id: product.id,
+                                }}
+                            />
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
             <Pagination />
-            <Footer />
-        </div>
+        </Main>
     );
 };
 
