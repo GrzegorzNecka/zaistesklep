@@ -1,8 +1,9 @@
+import { Main } from "components/Main";
 import { ProductDetails } from "components/Product";
 import { InferGetStaticPropsType } from "next";
-import { Footer } from "components/Footer";
-import { Header } from "components/Header";
-import { Main } from "components/Main";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
+
 import Link from "next/link";
 
 export interface StoreApiResponse {
@@ -16,6 +17,7 @@ export interface StoreApiResponse {
         rate: number;
         count: number;
     };
+    longDescription: string;
 }
 
 const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -24,31 +26,28 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
     }
 
     return (
-        <div>
-            <Header />
-            <Main>
-                <div className="relative p-16">
-                    <Link href="/products">
-                        <a>wróć na stronę produktów</a>
-                    </Link>
-                    <ul className="relative  bg-white w-full mt-6    ">
-                        <li key={product.id} className={`className="group relative" ${product.id}`}>
-                            <ProductDetails
-                                data={{
-                                    id: product.id,
-                                    title: product.title,
-                                    description: product.description,
-                                    thumbnailUrl: product.image,
-                                    thumbnailAlt: product.title,
-                                    rating: product.rating.rate,
-                                }}
-                            />
-                        </li>
-                    </ul>
-                </div>
-            </Main>
-            <Footer />
-        </div>
+        <Main>
+            <div className="relative p-16">
+                <Link href="/products">
+                    <a>wróć na stronę produktów</a>
+                </Link>
+                <ul className="relative  bg-white w-full mt-6    ">
+                    <li key={product.id} className={`className="group relative" ${product.id}`}>
+                        <ProductDetails
+                            data={{
+                                id: product.id,
+                                title: product.title,
+                                description: product.description,
+                                thumbnailUrl: product.image,
+                                thumbnailAlt: product.title,
+                                rating: product.rating.rate,
+                                longDescription: product.longDescription,
+                            }}
+                        />
+                    </li>
+                </ul>
+            </div>
+        </Main>
     );
 };
 
@@ -57,9 +56,6 @@ export default ProductIdPage;
 // -----------------  getStaticPaths  ----------------------
 
 export const getStaticPaths = async () => {
-    // const res = await fetch(`https://naszsklep-api.vercel.app/api/products/`);
-    // const data: StoreApiResponse[] = await res.json();
-
     const countOfPages = 2;
     const data: number[] = await [...Array(countOfPages).keys()].map((p) => p + 1);
 
@@ -83,11 +79,21 @@ export const getStaticProps = async ({ params }: InferGetStaticPaths<typeof getS
     }
 
     const res = await fetch(`https://naszsklep-api.vercel.app/api/products/${params?.product_id}`);
+
     const product: StoreApiResponse | null = await res.json();
+
+    if (!product) {
+        return {
+            props: {},
+            notFound: true,
+        };
+    }
+
+    const markdown: string = product.longDescription;
 
     return {
         props: {
-            product,
+            product: { ...product, longDescription: await serialize(markdown) },
         },
         revalidate: 10,
     };
