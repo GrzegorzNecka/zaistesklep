@@ -2,15 +2,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Rating } from "./Raiting";
-<<<<<<< HEAD
-import ReactMarkdown from "react-markdown";
-import Head from "next/head";
-import { NextSeo } from "next-seo";
-=======
 import { NextSeo } from "next-seo";
 import Markdown from "./Markdown";
 import { MarkdownResult } from "utils/types";
->>>>>>> ad8913d510949c25e5b77af5b2f6f684beda4668
 
 interface ProductDetails {
     id: number;
@@ -114,11 +108,7 @@ export const ProductDetails = ({
                 <p className=" py-8">{description}</p>
 
                 <article className="prose prose-xl">
-<<<<<<< HEAD
-                    <ReactMarkdown>{longDescription}</ReactMarkdown>
-=======
                     <Markdown>{longDescription}</Markdown>
->>>>>>> ad8913d510949c25e5b77af5b2f6f684beda4668
                 </article>
 
                 <Rating rating={rating}></Rating>

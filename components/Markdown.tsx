@@ -1,5 +1,4 @@
 import Link from "next/link";
-// import ReactMarkdown from "react-markdown";
 import { MDXRemote } from "next-mdx-remote";
 import { MarkdownResult } from "utils/types";
 
@@ -13,11 +12,18 @@ const Markdown = ({ children }: { children: MarkdownResult }) => {
                         return <a {...props}></a>;
                     }
 
-                    return (
-                        <Link href={href}>
-                            <a {...props}></a>
-                        </Link>
-                    );
+                    // console.log("ss", children);
+
+                    //process.env.NEXT_PUBLIC_HOST === http://localhost:3000
+                    if (process.env.NEXT_PUBLIC_HOST && href.startsWith(process.env.NEXT_PUBLIC_HOST)) {
+                        return (
+                            <Link href={href}>
+                                <a {...props}></a>
+                            </Link>
+                        );
+                    }
+
+                    return <a rel="noopener noreferrer" href={href} {...props}></a>;
                 },
             }}
         />

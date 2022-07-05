@@ -1,7 +1,6 @@
 import { Main } from "components/Main";
 import { ProductDetails } from "components/Product";
 import { InferGetStaticPropsType } from "next";
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 
 import Link from "next/link";
