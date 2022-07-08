@@ -26,26 +26,24 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
 
     return (
         <Main>
-            <div className="relative p-16">
-                <Link href="/products">
-                    <a>wróć na stronę produktów</a>
-                </Link>
-                <ul className="relative  bg-white w-full mt-6    ">
-                    <li key={product.id} className={`className="group relative" ${product.id}`}>
-                        <ProductDetails
-                            data={{
-                                id: product.id,
-                                title: product.title,
-                                description: product.description,
-                                thumbnailUrl: product.image,
-                                thumbnailAlt: product.title,
-                                rating: product.rating.rate,
-                                longDescription: product.longDescription,
-                            }}
-                        />
-                    </li>
-                </ul>
-            </div>
+            <Link href="/products">
+                <a>wróć na stronę produktów</a>
+            </Link>
+            <ul className="relative  bg-white w-full mt-6    ">
+                <li key={product.id} className={`className="group relative" ${product.id}`}>
+                    <ProductDetails
+                        data={{
+                            id: product.id,
+                            title: product.title,
+                            description: product.description,
+                            thumbnailUrl: product.image,
+                            thumbnailAlt: product.title,
+                            rating: product.rating.rate,
+                            longDescription: product.longDescription,
+                        }}
+                    />
+                </li>
+            </ul>
         </Main>
     );
 };

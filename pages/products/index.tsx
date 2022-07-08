@@ -1,6 +1,7 @@
 import { ProductListItem } from "components/Product";
 import { useQuery, useQueryClient } from "react-query";
 import { useState, useEffect } from "react";
+import { Main } from "components/Main";
 
 /**
  *
@@ -55,31 +56,29 @@ const ProductsPageCSR = () => {
     }, [currentPage, queryClient]);
 
     if (!data || error) {
-        return <div>coś poszło nie tak</div>;
+        return <Main>coś poszło nie tak </Main>;
     }
 
     return (
-        <div>
-            <div className="relative p-16">
-                {(isLoading || isFetching) && <div className="abolute top-1/2 left-1/2 translate-x-1/2">loading..</div>}
-                <ul className="relative  bg-white w-full mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
-                    {data.map((product) => (
-                        <li key={product.id} className={`className="group relative" ${product.id}`}>
-                            <ProductListItem
-                                data={{
-                                    title: product.title,
-                                    // description: product.description,
-                                    thumbnailUrl: product.image,
-                                    thumbnailAlt: product.title,
-                                    rating: product.rating.rate,
-                                    id: product.id,
-                                }}
-                            />
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </div>
+        <Main>
+            {(isLoading || isFetching) && <div className="abolute top-1/2 left-1/2 translate-x-1/2">loading..</div>}
+            <ul className="relative  bg-white w-full mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
+                {data.map((product) => (
+                    <li key={product.id} className={`className="group relative" ${product.id}`}>
+                        <ProductListItem
+                            data={{
+                                title: product.title,
+                                // description: product.description,
+                                thumbnailUrl: product.image,
+                                thumbnailAlt: product.title,
+                                rating: product.rating.rate,
+                                id: product.id,
+                            }}
+                        />
+                    </li>
+                ))}
+            </ul>
+        </Main>
     );
 };
 
