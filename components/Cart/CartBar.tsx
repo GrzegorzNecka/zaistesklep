@@ -1,22 +1,14 @@
 import Link from "next/link";
-import { useState } from "react";
-
-interface CartItem {
-    price: number;
-    title: string;
-}
-
-// 7,38
+import { useCartState } from "./CartContext";
 
 export default function CartBar() {
-    const [cart, setCart] = useState<CartItem[]>([{ price: 21.37, title: "Koszulka" }]);
-
+    const cartState = useCartState();
     return (
         <div>
             <Link href="/cart">
                 <a>
                     <div className=" flex">
-                        <span> {cart.length}</span>
+                        <span> {cartState?.items.length}</span>
 
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
