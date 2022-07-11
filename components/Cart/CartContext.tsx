@@ -5,6 +5,7 @@ import { useState } from "react";
 interface CartItem {
     price: number;
     title: string;
+    count: number;
 }
 
 interface CartState {
@@ -16,7 +17,7 @@ interface CartState {
 export const CartStateContext = createContext<CartState | null>(null);
 
 // context.provider.value
-const initialContextValue: CartItem[] = [{ price: 21.37, title: "Koszulka" }];
+const initialContextValue: CartItem[] = [{ price: 21.37, title: "Koszulka", count: 1 }];
 
 // context.provider
 export const CartStateContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -27,7 +28,13 @@ export const CartStateContextProvider = ({ children }: { children: React.ReactNo
             value={{
                 items: cartItems,
                 addItemToCart: (item) => {
-                    setCartItems((prevState) => [...prevState, item]);
+                    setCartItems((prevState) => {
+                        const existingItem = prevState.find((existingItem) => existingItem.title === item.title);
+                        //6:40
+                        if (!existingItem) {
+                            return [...prevState, item];
+                        }
+                    });
                 },
             }}
         >
