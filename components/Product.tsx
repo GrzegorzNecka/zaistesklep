@@ -67,8 +67,10 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
                     onClick={() =>
                         cartState.addItemToCart({
+                            id: data.id,
                             price: 12.37,
                             title: data.title,
+                            count: 1,
                         })
                     }
                 >

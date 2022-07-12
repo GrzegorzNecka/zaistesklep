@@ -10,10 +10,16 @@ const CartContent = () => {
                     return (
                         <li key={index}>
                             <div className="flex justify-between">
-                                <div> {item.title}</div>
+                                <div>
+                                    {/* {item.title} {item.count ? `x ${item.count + 1}` : ""} */}
+                                    {item.title} x {item.count}
+                                </div>
                                 <div>
                                     {item.price}
-                                    <button className="ml-4 text-red-500">
+                                    <button
+                                        onClick={() => cartState.removeItemFromCart(item.id)}
+                                        className="ml-4 text-red-500"
+                                    >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             className="h-6 w-6"
@@ -42,6 +48,7 @@ const CartContent = () => {
 
 const CartSummary = () => {
     const cartState = useCartState();
+
     return (
         <div>
             podsumowanie koszyka
