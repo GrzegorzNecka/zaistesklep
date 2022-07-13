@@ -1,6 +1,6 @@
 import { ProductListItem } from "components/Product";
 import { InferGetStaticPropsType } from "next";
-
+import { InferGetStaticPathsType } from "utils/types";
 import Pagination from "components/Pagination";
 import { Main } from "components/Main";
 
@@ -69,7 +69,7 @@ export const getStaticPaths = async () => {
 
 // -----------------  getStaticProps  ----------------------
 
-export const getStaticProps = async ({ params }: InferGetStaticPaths<typeof getStaticPaths>) => {
+export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof getStaticPaths>) => {
     if (!params?.page_id) {
         return { props: {}, notFound: true };
     }

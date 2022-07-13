@@ -2,7 +2,7 @@ import { Main } from "components/Main";
 import { ProductDetails } from "components/Product";
 import { InferGetStaticPropsType } from "next";
 import { serialize } from "next-mdx-remote/serialize";
-
+import { InferGetStaticPathsType } from "utils/types";
 import Link from "next/link";
 
 export interface StoreApiResponse {
@@ -54,10 +54,10 @@ export default ProductIdPage;
 
 export const getStaticPaths = async () => {
     const countOfPages = 2;
-    const data: number[] = await [...Array(countOfPages).keys()].map((p) => p + 1);
+    const fakeData: number[] = await [...Array(countOfPages).keys()].map((p) => p + 1);
 
     return {
-        paths: data.map((product) => {
+        paths: fakeData.map((product) => {
             return {
                 params: {
                     product_id: `${product}`,
@@ -70,12 +70,14 @@ export const getStaticPaths = async () => {
 
 // -----------------  getStaticProps  ----------------------
 
-export const getStaticProps = async ({ params }: InferGetStaticPaths<typeof getStaticPaths>) => {
+export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof getStaticPaths>) => {
+    const API_PRODUCT = "https://naszsklep-api.vercel.app/api/products";
+
     if (!params?.product_id) {
         return { props: {}, notFound: true };
     }
 
-    const res = await fetch(`https://naszsklep-api.vercel.app/api/products/${params?.product_id}`);
+    const res = await fetch(`${API_PRODUCT}/${params?.product_id}`);
 
     const product: StoreApiResponse | null = await res.json();
 
