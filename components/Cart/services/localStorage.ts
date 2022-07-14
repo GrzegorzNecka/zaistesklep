@@ -1,5 +1,5 @@
 import { CartItem } from "../types";
-
+//https://codesandbox.io/s/vvfw0?file=/src/custom-hooks/useLocalStorage.tsx
 export const getCartItemsFromStorage = () => {
     const itemsFromLocalStorage = localStorage.getItem("ZAISTE_SHOPPING_CART");
 
