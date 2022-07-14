@@ -13,7 +13,7 @@ import { getCartItemsFromStorage, setCartItemsInStorage } from "components/Cart/
 export const CartStateContext = createContext<CartState | null>(null);
 
 export const CartStateContextProvider = ({ children }: { children: React.ReactNode }) => {
-    const [cartItems, setCartItems] = useState<CartItem[] | undefined>(undefined);
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
     // const [cartItems, setCartItems] =    useCartItems
 
     useEffect(() => {
@@ -21,9 +21,9 @@ export const CartStateContextProvider = ({ children }: { children: React.ReactNo
     }, []); // tylko raz na początku
 
     useEffect(() => {
-        if (cartItems === undefined) {
-            return;
-        }
+        // if (cartItems === undefined) {
+        //     return;
+        // }
 
         setCartItemsInStorage(cartItems);
     }, [cartItems]); // gdy zmieni się cartItems
