@@ -8,31 +8,9 @@ import { useContext } from "react";
 import { createContext } from "react";
 import { useState, useEffect } from "react";
 import { CartItem, CartState } from "components/Cart/types";
-
+import { getCartItemsFromStorage, setCartItemsInStorage } from "components/Cart/services/localStorage";
 // createContext()
 export const CartStateContext = createContext<CartState | null>(null);
-
-const getCartItemsFromStorage = () => {
-    const itemsFromLocalStorage = localStorage.getItem("ZAISTE_SHOPPING_CART");
-
-    if (!itemsFromLocalStorage) {
-        return [];
-    }
-
-    try {
-        const items = JSON.parse(itemsFromLocalStorage);
-        console.log("🚀 ~ file: CartContext.tsx ~ line 30 ~ getCartItemsFromStorage ~ items", items);
-        //zakładamy że items to poprawny json
-        return items;
-    } catch (error) {
-        console.error(error);
-        return [];
-    }
-};
-
-const setCartItemsInStorage = (cartItems: CartItem[]) => {
-    localStorage.setItem("ZAISTE_SHOPPING_CART", JSON.stringify(cartItems));
-};
 
 export const CartStateContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [cartItems, setCartItems] = useState<CartItem[] | undefined>(undefined);
