@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+//https://github.com/LoQeN00/nextjs-graphql-ts-shop/tree/main/components
+// /https://react-query-v2.tanstack.com/reference/hydration
+//https://react-query-v2.tanstack.com/guides/ssr
+
+//https://github.com/LoQeN00/nextjs-graphql-ts-shop/blob/main/pages/products-ssg/%5BpageIndex%5D.tsx
+//https://github.com/LoQeN00/nextjs-graphql-ts-shop/blob/main/components/PageSSG.tsx
+//https://github.com/LoQeN00/nextjs-graphql-ts-shop/blob/main/components/PaginationSSG.tsx
 
 type Pagination = Array<number>;
 

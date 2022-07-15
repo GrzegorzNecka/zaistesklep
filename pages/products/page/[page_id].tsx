@@ -3,6 +3,7 @@ import { InferGetStaticPropsType } from "next";
 import { InferGetStaticPathsType } from "utils/types";
 import Pagination from "components/Pagination";
 import { Main } from "components/Main";
+import { useQuery } from "react-query";
 
 interface StoreApiResponse {
     id: number;
@@ -69,10 +70,22 @@ export const getStaticPaths = async () => {
 
 // -----------------  getStaticProps  ----------------------
 
+// function getProducts() {
+//     const fetchProducts = fetch(`https://naszsklep-api.vercel.app/api/products?take=${25}&offset=${0}`).then((res) =>
+//         res.json()
+//     );
+
+//     const { data } = useQuery("products", fetchProducts);
+
+//     return data;
+// }
+
 export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof getStaticPaths>) => {
     if (!params?.page_id) {
         return { props: {}, notFound: true };
     }
+
+    // const test = await getProducts();
 
     const queryConfig = {
         page: Number(params.page_id),
@@ -81,11 +94,6 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
     };
 
     if (queryConfig.page < 1) {
-        // return {
-        //     redirect: {
-        //         destination: "/products/page/1",
-        //     },
-        // };
         queryConfig.offset = 0;
     }
 
