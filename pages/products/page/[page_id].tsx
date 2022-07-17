@@ -1,8 +1,10 @@
 import { ProductListItem } from "components/Product";
 import { InferGetStaticPropsType } from "next";
-
+import { InferGetStaticPathsType } from "utils/types";
 import Pagination from "components/Pagination";
 import { Main } from "components/Main";
+import { useQuery } from "react-query";
+import { countOfProducts, fetchProducts } from "services/pages/products";
 
 interface StoreApiResponse {
     id: number;
@@ -17,7 +19,11 @@ interface StoreApiResponse {
     };
 }
 
-const ProductListIdPage = ({ products }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const ProductListIdPage = ({
+    products,
+    currentPage: currentPage,
+    totalCount: totalCount,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
     if (!products) {
         return <div>nie znaleziono strony</div>;
     }
@@ -31,7 +37,6 @@ const ProductListIdPage = ({ products }: InferGetStaticPropsType<typeof getStati
                             <ProductListItem
                                 data={{
                                     title: product.title,
-                                    // description: product.description,
                                     thumbnailUrl: product.image,
                                     thumbnailAlt: product.title,
                                     rating: product.rating.rate,
@@ -41,6 +46,10 @@ const ProductListIdPage = ({ products }: InferGetStaticPropsType<typeof getStati
                         </li>
                     ))}
                 </ul>
+            </div>
+            <div>
+                {`page number: ${currentPage}`} {`-`} {`count of products: ${totalCount} `} {`-`}{" "}
+                {`pages: ${Math.floor(totalCount / 25)} `}
             </div>
 
             <Pagination />
@@ -52,55 +61,42 @@ export default ProductListIdPage;
 // -----------------  getStaticPaths  ----------------------
 
 export const getStaticPaths = async () => {
-    const countOfPages = 2;
-    const data: number[] = await [...Array(countOfPages).keys()].map((p) => p + 1);
+    const paths = [];
+
+    for (let id = 1; id < 2; id++) {
+        paths.push({
+            params: {
+                page_id: `${id}`,
+            },
+        });
+    }
 
     return {
-        paths: data.map((id) => {
-            return {
-                params: {
-                    page_id: `${id}`,
-                },
-            };
-        }),
+        paths,
         fallback: "blocking",
     };
 };
 
 // -----------------  getStaticProps  ----------------------
 
-export const getStaticProps = async ({ params }: InferGetStaticPaths<typeof getStaticPaths>) => {
+export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof getStaticPaths>) => {
     if (!params?.page_id) {
         return { props: {}, notFound: true };
     }
 
-    const queryConfig = {
-        page: Number(params.page_id),
-        take: 25,
-        offset: 0,
-    };
+    const currentPage = Number(params.page_id);
+    let take = 25;
+    let offset = 0;
 
-    if (queryConfig.page < 1) {
-        // return {
-        //     redirect: {
-        //         destination: "/products/page/1",
-        //     },
-        // };
-        queryConfig.offset = 0;
-    }
-
-    if (queryConfig.page > 1) {
-        queryConfig.offset = (queryConfig.page - 1) * queryConfig.take;
-    }
-
-    const res = await fetch(
-        `https://naszsklep-api.vercel.app/api/products?take=${queryConfig.take}&offset=${queryConfig.offset}`
-    );
-    const products: StoreApiResponse[] | null = await res.json();
+    const totalCount = await countOfProducts();
+    const products = await fetchProducts(take, offset);
 
     return {
         props: {
             products,
+            currentPage: currentPage,
+            totalCount: totalCount,
         },
     };
 };
+// https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/

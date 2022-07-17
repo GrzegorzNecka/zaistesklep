@@ -2,7 +2,7 @@ import { Main } from "components/Main";
 import { ProductDetails } from "components/Product";
 import { InferGetStaticPropsType } from "next";
 import { serialize } from "next-mdx-remote/serialize";
-
+import { InferGetStaticPathsType } from "utils/types";
 import Link from "next/link";
 
 export interface StoreApiResponse {
@@ -26,26 +26,24 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
 
     return (
         <Main>
-            <div className="relative p-16">
-                <Link href="/products">
-                    <a>wróć na stronę produktów</a>
-                </Link>
-                <ul className="relative  bg-white w-full mt-6    ">
-                    <li key={product.id} className={`className="group relative" ${product.id}`}>
-                        <ProductDetails
-                            data={{
-                                id: product.id,
-                                title: product.title,
-                                description: product.description,
-                                thumbnailUrl: product.image,
-                                thumbnailAlt: product.title,
-                                rating: product.rating.rate,
-                                longDescription: product.longDescription,
-                            }}
-                        />
-                    </li>
-                </ul>
-            </div>
+            <Link href="/products">
+                <a>wróć na stronę produktów</a>
+            </Link>
+            <ul className="relative  bg-white w-full mt-6    ">
+                <li key={product.id} className={`className="group relative" ${product.id}`}>
+                    <ProductDetails
+                        data={{
+                            id: product.id,
+                            title: product.title,
+                            description: product.description,
+                            thumbnailUrl: product.image,
+                            thumbnailAlt: product.title,
+                            rating: product.rating.rate,
+                            longDescription: product.longDescription,
+                        }}
+                    />
+                </li>
+            </ul>
         </Main>
     );
 };
@@ -55,24 +53,25 @@ export default ProductIdPage;
 // -----------------  getStaticPaths  ----------------------
 
 export const getStaticPaths = async () => {
-    const countOfPages = 2;
-    const data: number[] = await [...Array(countOfPages).keys()].map((p) => p + 1);
+    const paths = [];
+
+    for (let id = 1; id < 2; id++) {
+        paths.push({
+            params: {
+                product_id: `${id}`,
+            },
+        });
+    }
 
     return {
-        paths: data.map((product) => {
-            return {
-                params: {
-                    product_id: `${product}`,
-                },
-            };
-        }),
+        paths,
         fallback: "blocking",
     };
 };
 
 // -----------------  getStaticProps  ----------------------
 
-export const getStaticProps = async ({ params }: InferGetStaticPaths<typeof getStaticPaths>) => {
+export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof getStaticPaths>) => {
     if (!params?.product_id) {
         return { props: {}, notFound: true };
     }

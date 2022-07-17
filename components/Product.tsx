@@ -5,6 +5,7 @@ import { Rating } from "./Raiting";
 import { NextSeo } from "next-seo";
 import Markdown from "./Markdown";
 import { MarkdownResult } from "utils/types";
+import { useCartState } from "./Cart/CartContext";
 
 interface ProductDetails {
     id: number;
@@ -27,6 +28,8 @@ interface ProductDetailsProps {
 }
 
 export const ProductListItem = ({ data }: ProductListItemProps) => {
+    const cartState = useCartState();
+
     return (
         <div className="p-8">
             <div className="w-full p-4 bg-white aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75  lg:aspect-none">
@@ -58,6 +61,21 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
             </div>
             <div className="pt-4">
                 <Rating rating={data.rating}></Rating>
+            </div>
+            <div className="pt-4">
+                <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                    onClick={() =>
+                        cartState.addItemToCart({
+                            id: data.id,
+                            price: 12.37,
+                            title: data.title,
+                            count: 1,
+                        })
+                    }
+                >
+                    dodaj do koszyka
+                </button>
             </div>
         </div>
     );

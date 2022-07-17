@@ -3,5 +3,9 @@ interface MainProps {
 }
 
 export const Main = ({ children }: MainProps) => {
-    return <main className=" mt-20 mb-20 flex-grow max-w-7xl mx-auto w-full bg-white shadow">{children}</main>;
+    return (
+        <main className="  flex-grow max-w-7xl mx-auto w-full bg-white ">
+            <div className="relative p-16">{children}</div>
+        </main>
+    );
 };

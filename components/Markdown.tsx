@@ -12,8 +12,6 @@ const Markdown = ({ children }: { children: MarkdownResult }) => {
                         return <a {...props}></a>;
                     }
 
-                    // console.log("ss", children);
-
                     //process.env.NEXT_PUBLIC_HOST === http://localhost:3000
                     if (process.env.NEXT_PUBLIC_HOST && href.startsWith(process.env.NEXT_PUBLIC_HOST)) {
                         return (
