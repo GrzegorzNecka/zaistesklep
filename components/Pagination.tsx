@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
+// https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/
+
 //https://github.com/LoQeN00/nextjs-graphql-ts-shop/tree/main/components
 // /https://react-query-v2.tanstack.com/reference/hydration
 //https://react-query-v2.tanstack.com/guides/ssr
@@ -12,10 +15,10 @@ import { useEffect, useState } from "react";
 type Pagination = Array<number>;
 
 const Pagination = () => {
-    const initialPaginationCollection = [...Array(10).keys()].map((p) => p + 1);
+    const initialPagination = [...Array(10).keys()].map((p) => p + 1);
     const router = useRouter();
 
-    const [paginationCollection, setPaginationCollection] = useState<Pagination>(initialPaginationCollection);
+    const [pagination, setpagination] = useState<Pagination>(initialPagination);
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
@@ -26,11 +29,11 @@ const Pagination = () => {
 
         const pageNumber = isNaN(parseInt(router.query.page_id)) ? 1 : parseInt(router.query.page_id);
 
-        if (!paginationCollection.includes(pageNumber)) {
-            const nextPageNumber = paginationCollection.length + 1;
+        if (!pagination.includes(pageNumber)) {
+            const nextPageNumber = pagination.length + 1;
 
             if (pageNumber === nextPageNumber) {
-                setPaginationCollection([...paginationCollection, pageNumber]);
+                setpagination([...pagination, pageNumber]);
             }
         }
 
@@ -53,7 +56,7 @@ const Pagination = () => {
                             </Link>
                         )}
                     </li>
-                    {paginationCollection.map((page) => (
+                    {pagination.map((page) => (
                         <li key={page} className="inline-block">
                             <Link href={`/products/page/${page}`}>
                                 <a className={page !== currentPage ? inactiveClassName : activeClassName}>{page}</a>

@@ -14,19 +14,6 @@ interface DisclosureProps {
 }
 
 export const Navigation = () => {
-    // const router = useRouter();
-    // const currentRoute = router.pathname;
-
-    // const isActiveLink = (route: string) => {
-    //     let styleLink = `btn-primary--inactive`;
-
-    //     if (route === currentRoute) {
-    //         styleLink = `btn-primary--active`;
-    //     }
-
-    //     return styleLink;
-    // };
-
     return (
         <Disclosure as="nav" className="bg-white ">
             {({ open }: DisclosureProps) => (

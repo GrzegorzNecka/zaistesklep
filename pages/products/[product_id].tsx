@@ -53,17 +53,18 @@ export default ProductIdPage;
 // -----------------  getStaticPaths  ----------------------
 
 export const getStaticPaths = async () => {
-    const countOfPages = 2;
-    const fakeData: number[] = await [...Array(countOfPages).keys()].map((p) => p + 1);
+    const paths = [];
+
+    for (let id = 1; id < 2; id++) {
+        paths.push({
+            params: {
+                product_id: `${id}`,
+            },
+        });
+    }
 
     return {
-        paths: fakeData.map((product) => {
-            return {
-                params: {
-                    product_id: `${product}`,
-                },
-            };
-        }),
+        paths,
         fallback: "blocking",
     };
 };
@@ -71,13 +72,11 @@ export const getStaticPaths = async () => {
 // -----------------  getStaticProps  ----------------------
 
 export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof getStaticPaths>) => {
-    const API_PRODUCT = "https://naszsklep-api.vercel.app/api/products";
-
     if (!params?.product_id) {
         return { props: {}, notFound: true };
     }
 
-    const res = await fetch(`${API_PRODUCT}/${params?.product_id}`);
+    const res = await fetch(`https://naszsklep-api.vercel.app/api/products/${params?.product_id}`);
 
     const product: StoreApiResponse | null = await res.json();
 
