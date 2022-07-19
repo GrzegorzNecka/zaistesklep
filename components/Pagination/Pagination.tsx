@@ -12,23 +12,43 @@ interface PaginationProps {
 const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
     // const total = 4206;
 
-    const siblingCount = 3;
-    const pageSize = 25;
-    const totalPageCount = Math.floor(totalCount / pageSize);
-    const totalPageNumbers = siblingCount + 5;
+    const siblingCount = 1; //eprezentuje minimalną liczbę przycisków wyświetlanych na po każdej stronie przycisku. domyślnie to 1
+    const pageSize = 25; //reprezentacja maksymalnej liczby elementów widocznej na stronie.
+
+    const totalPageCount = Math.floor(totalCount / pageSize); //suma wszystkich stron
+    const totalPageNumbers = siblingCount + 5; // suma wszystkich elementów
 
     const firstPageIndex = 1;
     const lastPageIndex = totalPageCount;
 
-    // const paginationLogic = usePagination({ totalCount, pageSize, siblingCount, currentPage });
+    const [range, setRange] = useState<number[]>([]);
 
-    const paginationRange = useMemo(() => {
-        console.log("22");
-    }, [totalCount, pageSize, siblingCount, currentPage]);
+    // const paginationLogic = usePagination({ totalCount, pageSize, siblingCount, currentPage });
+    const calculatRange = (start: number, end: number) => {
+        const length = end - start + 1;
+        //start = 4
+        //end = 10
+        //length = 10 - 4 + 1 = 7
+
+        const result = Array.from({ length }, (_, idx) => idx + start);
+
+        // => [0+4, 1+4, 2+4, 3+4, 4+4, 5+4, 6+4](7)
+
+        return result;
+    };
 
     useEffect(() => {
-        console.log("11");
-    }, [currentPage]);
+        // 1-1 , 1 = 1
+        // 50-1, 1 = 50
+        const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
+        // 1+1 , 168 = 2
+        // 56+1, 168 = 57
+        const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPageCount);
+
+        //6>= 168
+
+        setRange(() => calculatRange(4, 10));
+    }, [currentPage, totalCount]);
 
     return (
         <>
@@ -45,11 +65,19 @@ const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
                             )}
                         </li>
 
-                        <li>
-                            <span className="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium pointer-events-none">
-                                {currentPage}
-                            </span>
-                        </li>
+                        {range.map((item) => {
+                            return (
+                                <li key={item}>
+                                    <a
+                                        className={`border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium pointer-events-none ${
+                                            item === currentPage && "border-indigo-500 text-indigo-600"
+                                        }`}
+                                    >
+                                        {item}
+                                    </a>
+                                </li>
+                            );
+                        })}
 
                         {/* <PaginationList list={leftResult} />
                         <PaginationDots isDots={leftDots} />
