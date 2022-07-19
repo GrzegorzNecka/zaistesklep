@@ -1,10 +1,12 @@
 import Link from "next/link";
 
-export const PaginationList = ({ list }) => {
-    const isArray = (elem: number | number[]) => Array.isArray(elem);
+interface PaginationListProps {
+    list: number | number[];
+}
 
-    if (isArray(list)) {
-        return list.map((item) => {
+export const PaginationList = ({ list }: PaginationListProps) => {
+    if (Array.isArray(list)) {
+        return list.map((item: number) => {
             return (
                 <li key={item} className="inline-block">
                     <Link href={`/products/list/${item}`}>
@@ -26,6 +28,10 @@ export const PaginationList = ({ list }) => {
     );
 };
 
-export const PaginationDots = ({ isDots }) => {
+interface PaginationDots {
+    isDots: boolean;
+}
+
+export const PaginationDots = ({ isDots }: PaginationDots) => {
     return isDots && <span>...</span>;
 };

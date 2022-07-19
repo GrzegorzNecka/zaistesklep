@@ -4,34 +4,16 @@ import { useEffect, useState } from "react";
 import { usePagination } from "./usePagination";
 import { PaginationList, PaginationDots } from "components/Pagination/PaginationChunks";
 
-type Pagination = Array<number>;
-
 interface PaginationProps {
     currentPage: number;
     totalCount: number;
-}
-
-interface UsePaginationProps {
-    currentPage: number;
-    totalCount: number;
-    siblingCount?: number;
-    pageSize: number;
 }
 
 const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
     const siblingCount = 3;
     const pageSize = 25;
 
-    const { leftResult, leftDots, middleResult, rightDots, rightResult } = usePagination<UsePaginationProps>({
-        currentPage,
-        totalCount,
-        siblingCount,
-        pageSize,
-    });
-
-    if (currentPage < 1 || currentPage > totalCount) {
-        return null;
-    }
+    const paginationLogic = usePagination({ totalCount, pageSize, siblingCount, currentPage });
 
     return (
         <>
@@ -47,11 +29,11 @@ const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
                                 </Link>
                             )}
                         </li>
-                        <PaginationList list={leftResult} />
+                        {/* <PaginationList list={leftResult} />
                         <PaginationDots isDots={leftDots} />
                         <PaginationList list={middleResult} />
                         <PaginationDots isDots={rightDots} />
-                        <PaginationList list={rightResult} />
+                        <PaginationList list={rightResult} /> */}
                         <li>
                             {currentPage !== totalCount && (
                                 <Link href={`/products/list/${currentPage + 1}`}>
