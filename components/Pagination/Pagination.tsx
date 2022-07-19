@@ -1,37 +1,34 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { usePagination } from "./usePagination";
 import { PaginationList, PaginationDots } from "components/Pagination/PaginationChunks";
-
-type Pagination = Array<number>;
 
 interface PaginationProps {
     currentPage: number;
     totalCount: number;
 }
 
-interface UsePaginationProps {
-    currentPage: number;
-    totalCount: number;
-    siblingCount?: number;
-    pageSize: number;
-}
-
 const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
+    // const total = 4206;
+
     const siblingCount = 3;
     const pageSize = 25;
+    const totalPageCount = Math.floor(totalCount / pageSize);
+    const totalPageNumbers = siblingCount + 5;
 
-    const { leftResult, leftDots, middleResult, rightDots, rightResult } = usePagination<UsePaginationProps>({
-        currentPage,
-        totalCount,
-        siblingCount,
-        pageSize,
-    });
+    const firstPageIndex = 1;
+    const lastPageIndex = totalPageCount;
 
-    if (currentPage < 1 || currentPage > totalCount) {
-        return null;
-    }
+    // const paginationLogic = usePagination({ totalCount, pageSize, siblingCount, currentPage });
+
+    const paginationRange = useMemo(() => {
+        console.log("22");
+    }, [totalCount, pageSize, siblingCount, currentPage]);
+
+    useEffect(() => {
+        console.log("11");
+    }, [currentPage]);
 
     return (
         <>
@@ -47,11 +44,18 @@ const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
                                 </Link>
                             )}
                         </li>
-                        <PaginationList list={leftResult} />
+
+                        <li>
+                            <span className="border-indigo-500 text-indigo-600 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium pointer-events-none">
+                                {currentPage}
+                            </span>
+                        </li>
+
+                        {/* <PaginationList list={leftResult} />
                         <PaginationDots isDots={leftDots} />
                         <PaginationList list={middleResult} />
                         <PaginationDots isDots={rightDots} />
-                        <PaginationList list={rightResult} />
+                        <PaginationList list={rightResult} /> */}
                         <li>
                             {currentPage !== totalCount && (
                                 <Link href={`/products/list/${currentPage + 1}`}>

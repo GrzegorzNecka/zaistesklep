@@ -70,7 +70,8 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
     let take = 25;
     let offset = 0;
 
-    const totalCount = await countOfProducts();
+    // const totalCount = await countOfProducts();
+    const totalCount = 4206;
     const products = await fetchProducts(take, offset);
 
     return {
