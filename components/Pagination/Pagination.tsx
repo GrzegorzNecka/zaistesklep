@@ -2,53 +2,70 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { usePagination } from "./usePagination";
+import { PaginationList, PaginationDots } from "components/Pagination/PaginationChunks";
 
 type Pagination = Array<number>;
 
-const Pagination = ({ currentPage, totalCount }) => {
-    const pageSize = 25;
-    const siblingCount = 1;
+interface PaginationProps {
+    currentPage: number;
+    totalCount: number;
+}
 
-    const paginationRange = usePagination({
+interface UsePaginationProps {
+    currentPage: number;
+    totalCount: number;
+    siblingCount?: number;
+    pageSize: number;
+}
+
+const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
+    const siblingCount = 3;
+    const pageSize = 25;
+
+    const { leftResult, leftDots, middleResult, rightDots, rightResult } = usePagination<UsePaginationProps>({
         currentPage,
         totalCount,
         siblingCount,
         pageSize,
     });
-    console.log("🚀 ~ file: Pagination.tsx ~ line 19 ~ Pagination ~ paginationRange", paginationRange);
 
-    // if (currentPage === 0 || paginationRange!.length < 2) {
-    //     return null;
-    // }
-
-    // let lastPage = paginationRange![paginationRange!.length - 1];
+    if (currentPage < 1 || currentPage > totalCount) {
+        return null;
+    }
 
     return (
-        <nav className=" w-full sm:border-t border-gray-200 px-4 flex items-center  pb-16 justify-center sm:px-0 mt-2">
-            <div className="hidden sm:-mt-px sm:flex">
-                <div>
-                    {`page number: ${currentPage}`} {`-`} {`count of products: ${totalCount} `}
-                    {`pages: ${Math.floor(totalCount / 25)} `}
-                </div>
-                <ul>
-                    <br />
-
-                    {/* {pagination.map((page) => (
-                        <li key={page} className="inline-block">
-                            <Link href={`/products/page/${page}`}>
-                                <a className={page !== currentPage ? inactiveClassName : activeClassName}>{page}</a>
-                            </Link>
+        <>
+            <nav className=" w-full sm:border-t border-gray-200 px-4 flex items-center  pb-16 justify-center sm:px-0 mt-2">
+                <div className="hidden sm:-mt-px sm:flex">
+                    <ul className="flex items-end ">
+                        <li>
+                            {currentPage >= 2 && (
+                                <Link href={`/products/list/${currentPage - 1}`}>
+                                    <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+                                        prev
+                                    </a>
+                                </Link>
+                            )}
                         </li>
-                    ))} */}
-                </ul>
-
-                <p className=" py-10"> {`wynik : ${paginationRange}`}</p>
-            </div>
-        </nav>
+                        <PaginationList list={leftResult} />
+                        <PaginationDots isDots={leftDots} />
+                        <PaginationList list={middleResult} />
+                        <PaginationDots isDots={rightDots} />
+                        <PaginationList list={rightResult} />
+                        <li>
+                            {currentPage !== totalCount && (
+                                <Link href={`/products/list/${currentPage + 1}`}>
+                                    <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+                                        next
+                                    </a>
+                                </Link>
+                            )}
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </>
     );
 };
 
 export default Pagination;
-function classnames(arg0: string, arg1: { disabled: boolean }): string | undefined {
-    throw new Error("Function not implemented.");
-}
