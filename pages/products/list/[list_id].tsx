@@ -1,29 +1,12 @@
 import { ProductListItem } from "components/Product";
 import { InferGetStaticPropsType } from "next";
 import { InferGetStaticPathsType } from "utils/types";
-import Pagination from "components/Pagination";
+import Pagination from "components/Pagination/Pagination";
 import { Main } from "components/Main";
 import { useQuery } from "react-query";
 import { countOfProducts, fetchProducts } from "services/pages/products";
 
-interface StoreApiResponse {
-    id: number;
-    title: string;
-    price: number;
-    description: string;
-    category: string;
-    image: string;
-    rating: {
-        rate: number;
-        count: number;
-    };
-}
-
-const ProductListIdPage = ({
-    products,
-    currentPage: currentPage,
-    totalCount: totalCount,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+const ProductListIdPage = ({ products, currentPage, totalCount }: InferGetStaticPropsType<typeof getStaticProps>) => {
     if (!products) {
         return <div>nie znaleziono strony</div>;
     }
@@ -47,12 +30,11 @@ const ProductListIdPage = ({
                     ))}
                 </ul>
             </div>
-            <div>
+            {/* <div>
                 {`page number: ${currentPage}`} {`-`} {`count of products: ${totalCount} `} {`-`}{" "}
                 {`pages: ${Math.floor(totalCount / 25)} `}
-            </div>
-
-            <Pagination />
+            </div> */}
+            <Pagination currentPage={currentPage} totalCount={totalCount} />
         </Main>
     );
 };
@@ -66,7 +48,7 @@ export const getStaticPaths = async () => {
     for (let id = 1; id < 2; id++) {
         paths.push({
             params: {
-                page_id: `${id}`,
+                list_id: `${id}`,
             },
         });
     }
@@ -80,15 +62,16 @@ export const getStaticPaths = async () => {
 // -----------------  getStaticProps  ----------------------
 
 export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof getStaticPaths>) => {
-    if (!params?.page_id) {
+    if (!params?.list_id) {
         return { props: {}, notFound: true };
     }
 
-    const currentPage = Number(params.page_id);
+    const currentPage = Number(params.list_id);
     let take = 25;
     let offset = 0;
 
-    const totalCount = await countOfProducts();
+    // const totalCount = await countOfProducts();
+    const totalCount = 4206;
     const products = await fetchProducts(take, offset);
 
     return {
@@ -99,4 +82,3 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
         },
     };
 };
-// https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/
