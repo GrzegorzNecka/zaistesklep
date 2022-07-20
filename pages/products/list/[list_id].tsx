@@ -82,4 +82,3 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
         },
     };
 };
-// https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/

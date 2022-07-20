@@ -1,33 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-
-interface PaginationRangeProps {
-    range: number[];
-    currentPage: number;
-}
-
-const PaginationRange = ({ range, currentPage }: PaginationRangeProps) => {
-    return (
-        <>
-            {range.map((item) => {
-                return (
-                    <li key={item}>
-                        <Link href={`/products/list/${item}`}>
-                            <a
-                                className={`border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium  ${
-                                    item === currentPage && "border-indigo-500 text-indigo-600 pointer-events-none"
-                                }`}
-                            >
-                                {item}
-                            </a>
-                        </Link>
-                    </li>
-                );
-            })}
-        </>
-    );
-};
+import { PaginationRange } from "./PaginationRange";
 
 interface PaginationProps {
     currentPage: number;
@@ -42,10 +16,8 @@ const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
 
     const siblingCount = 1; //reprezentuje minimalną liczbę przycisków wyświetlanych na po każdej stronie przycisku. domyślnie to 1
     const pageSize = 25; //reprezentacja maksymalnej liczby elementów widocznej na stronie.
-
     const totalPageCount = Math.floor(totalCount / pageSize); //suma wszystkich stron
     const totalPageNumbers = siblingCount + 5; // suma wszystkich elementów
-
     const firstPageIndex = 1;
     const lastPageIndex = totalPageCount;
 
@@ -99,6 +71,7 @@ const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
         // 56+1, 168 = 57
         //zwraca mniejszą liczbę  => aktualna strona + minimalna liczba przycisków lub suma wszsystkich stron
         const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPageCount);
+        // kiedy
         const shouldShowRightDots = rightSiblingIndex < totalPageCount - 2;
 
         /*
@@ -138,6 +111,18 @@ const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
         }
     }, [currentPage, totalCount]);
 
+    const router = useRouter();
+
+    useEffect(() => {
+        if (typeof router.query.list_id !== "string") {
+            return;
+        }
+
+        if (currentPage < 1 || currentPage > totalPageCount) {
+            router.push(`/products/list/1`, undefined, { shallow: true });
+        }
+    }, [router.query.list_id]);
+
     return (
         <>
             <nav className=" w-full sm:border-t border-gray-200 px-4 flex items-center  pb-16 justify-center sm:px-0 mt-2">
@@ -155,11 +140,23 @@ const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
 
                         <PaginationRange currentPage={currentPage} range={leftRange} />
 
-                        {leftDots && <span>...</span>}
+                        {leftDots && (
+                            <li>
+                                <span className="border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
+                                    ...
+                                </span>
+                            </li>
+                        )}
 
                         <PaginationRange currentPage={currentPage} range={middleRange} />
 
-                        {rightDots && <span>...</span>}
+                        {rightDots && (
+                            <li>
+                                <span className="border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
+                                    ...
+                                </span>
+                            </li>
+                        )}
 
                         <PaginationRange currentPage={currentPage} range={rightRange} />
 
