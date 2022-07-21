@@ -8,16 +8,16 @@ import { MarkdownResult } from "utils/types";
 import { useCartState } from "./Cart/CartContext";
 
 interface ProductDetails {
-    id: number;
+    id: string;
     title: string;
     description: string;
     thumbnailUrl: string;
     thumbnailAlt: string;
-    rating: number;
+    // rating: number;
     longDescription: MarkdownResult;
 }
 
-type ProductListItem = Pick<ProductDetails, "id" | "title" | "thumbnailUrl" | "thumbnailAlt" | "rating">;
+type ProductListItem = Pick<ProductDetails, "id" | "title" | "thumbnailUrl" | "thumbnailAlt">;
 
 interface ProductListItemProps {
     data: ProductListItem;
@@ -59,9 +59,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
                 </div>
                 <p className="text-sm font-medium text-gray-900">20zł</p>
             </div>
-            <div className="pt-4">
-                <Rating rating={data.rating}></Rating>
-            </div>
+            <div className="pt-4">{/* <Rating rating={data.rating}></Rating> */}</div>
             <div className="pt-4">
                 <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
@@ -82,7 +80,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
 };
 
 export const ProductDetails = ({
-    data: { thumbnailAlt, thumbnailUrl, rating, description, title, longDescription, id },
+    data: { thumbnailAlt, thumbnailUrl, description, title, longDescription, id },
 }: ProductDetailsProps) => {
     return (
         <>
@@ -129,7 +127,7 @@ export const ProductDetails = ({
                     <Markdown>{longDescription}</Markdown>
                 </article>
 
-                <Rating rating={rating}></Rating>
+                {/* <Rating rating={rating}></Rating> */}
             </div>
         </>
     );
