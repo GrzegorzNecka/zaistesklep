@@ -29,25 +29,27 @@ interface Product {
     slug: string;
 }
 
-// interface GetProductsListResponse {
-//     products: Product[];
-// }
+///===================================
 
-//  interface Product {
-//     slug: string;
-//     name: string;
-//     price: number;
-//     images: Image[];
-// }
+interface GetProductDetailsBySlugResponse {
+    products: Products[];
+}
+interface Products {
+    slug: string;
+    name: string;
+    price: number;
+    description: string;
+    images: Image[];
+    longDescription: string;
+    id: string;
+}
 
-// interface Image {
-//     url: string;
-//     width: number;
-//     height: number;
-//     id: string;
-// }
+interface Image {
+    url: string;
+}
 
 const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
+    console.log("🚀 ~ file: [product_id].tsx ~ line 51 ~ ProductIdPage ~ product", product);
     if (!product) {
         return <div>coś poszło nie tak</div>;
     }
@@ -61,11 +63,11 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
                 <li key={product.id} className={`className="group relative" ${product.id}`}>
                     <ProductDetails
                         data={{
-                            id: product.id,
-                            title: product.title,
+                            id: product.slug,
+                            title: product.name,
                             description: product.description,
-                            thumbnailUrl: product.image,
-                            thumbnailAlt: product.title,
+                            thumbnailUrl: product.images[0].url,
+                            thumbnailAlt: product.name,
                             // rating: product.rating.rate,
                             longDescription: product.longDescription,
                         }}
@@ -120,13 +122,13 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
         return { props: {}, notFound: true };
     }
 
-    const { data } = await apolloClient.query({
+    const { data } = await apolloClient.query<GetProductDetailsBySlugResponse>({
         variables: {
             slug: params.product_id,
         },
         query: gql`
             query GetProductDetailsBySlug($slug: String) {
-                product(where: { slug: $slug }) {
+                products(where: { slug: $slug }) {
                     slug
                     name
                     price
@@ -153,11 +155,11 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
         };
     }
 
-    const markdown: string = data.longDescription;
+    const markdown: string = data.products[0].description;
 
     return {
         props: {
-            product: { ...data, longDescription: await serialize(markdown) },
+            product: { ...data.products[0], longDescription: await serialize(markdown) },
         },
         revalidate: 10,
     };

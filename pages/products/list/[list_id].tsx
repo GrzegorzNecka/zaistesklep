@@ -5,25 +5,65 @@ import Pagination from "components/Pagination/Pagination";
 import { Main } from "components/Main";
 import { useQuery } from "react-query";
 import { countOfProducts, fetchProducts } from "services/pages/products";
+import { gql } from "@apollo/client";
+import { apolloClient } from "graphql/apolloClient";
+export interface StoreApiResponse {
+    id: number;
+    title: string;
+    price: number;
+    description: string;
+    category: string;
+    image: string;
+    // rating: {
+    //     rate: number;
+    //     count: number;
+    // };
+    longDescription: string;
+}
 
-const ProductListIdPage = ({ products, currentPage, totalCount }: InferGetStaticPropsType<typeof getStaticProps>) => {
-    if (!products) {
+interface GetProductsListResponse {
+    products: Product[];
+}
+
+interface Product {
+    slug: string;
+    name: string;
+    price: number;
+    images: Image[];
+}
+
+interface Image {
+    url: string;
+    width: number;
+    height: number;
+    id: string;
+}
+
+const ProductListIdPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
+    if (!data) {
         return <div>nie znaleziono strony</div>;
     }
-
+    /**
+ * 
+ *  id: 'ckdu44mn40gxh010405uwgbtw',
+      slug: 'unisex-long-sleeve-tee',
+      name: 'Unisex Long Sleeve Tee',
+      price: 1999
+ * 
+ */
     return (
         <Main>
             <div className="relative p-16">
                 <ul className="relative  bg-white w-full mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
-                    {products.map((product) => (
-                        <li key={product.id} className={`className="group relative" ${product.id}`}>
+                    {data.map((product) => (
+                        <li key={product.slug} className={`className="group relative" ${product.slug}`}>
                             <ProductListItem
                                 data={{
-                                    title: product.title,
-                                    thumbnailUrl: product.image,
-                                    thumbnailAlt: product.title,
-                                    rating: product.rating.rate,
-                                    id: product.id,
+                                    id: product.slug,
+                                    title: product.name,
+                                    thumbnailUrl: product.images[0].url,
+                                    thumbnailAlt: product.images[0].id,
+                                    // rating: product.rating.rate,
                                 }}
                             />
                         </li>
@@ -34,7 +74,7 @@ const ProductListIdPage = ({ products, currentPage, totalCount }: InferGetStatic
                 {`page number: ${currentPage}`} {`-`} {`count of products: ${totalCount} `} {`-`}{" "}
                 {`pages: ${Math.floor(totalCount / 25)} `}
             </div> */}
-            <Pagination currentPage={currentPage} totalCount={totalCount} />
+            {/* <Pagination currentPage={currentPage} totalCount={totalCount} /> */}
         </Main>
     );
 };
@@ -66,19 +106,39 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
         return { props: {}, notFound: true };
     }
 
-    const currentPage = Number(params.list_id);
-    let take = 25;
-    let offset = 0;
+    // const currentPage = Number(params.list_id);
+    // let take = 25;
+    // let offset = 0;
 
-    const totalCount = await countOfProducts();
-    const products = await fetchProducts(take, offset);
+    /* const totalCount = await countOfProducts();*/
+    // const totalCount = 4206;
+    // const products = await fetchProducts(take, offset);
+
+    const { data } = await apolloClient.query<GetProductsListResponse>({
+        query: gql`
+            query GetProductsList {
+                products {
+                    slug
+                    name
+                    price
+                    images(first: 1) {
+                        url
+                        width
+                        height
+                        id
+                    }
+                }
+            }
+        `,
+    });
+    console.log("🚀 ~ file: [list_id].tsx ~ line 122 ~ getStaticProps ~ data", data.products);
 
     return {
         props: {
-            products,
-            currentPage: currentPage,
-            totalCount: totalCount,
+            // products,
+            // currentPage: currentPage,
+            // totalCount: totalCount,
+            data: data.products,
         },
     };
 };
-// https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/
