@@ -1,5 +1,11 @@
+query GetProductsSlugs {
+    products {
+        slug
+    }
+}
+
 query GetProductDetailsBySlug($slug: String) {
-    products(where: { slug: $slug }) {
+    product(where: { slug: $slug }) {
         slug
         name
         price
@@ -7,12 +13,6 @@ query GetProductDetailsBySlug($slug: String) {
         images {
             url
         }
-    }
-}
-
-query GetProductsSlugs {
-    products {
-        slug
     }
 }
 

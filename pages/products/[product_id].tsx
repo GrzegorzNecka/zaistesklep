@@ -88,18 +88,18 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
         query: GetProductDetailsBySlugDocument,
     });
 
-    if (!data) {
+    if (!data.product) {
         return {
             props: {},
             notFound: true,
         };
     }
 
-    const markdown: string = data.products[0].description;
+    const markdown: string = data.product.description;
 
     return {
         props: {
-            product: { ...data.products[0], longDescription: await serialize(markdown) },
+            product: { ...data.product, longDescription: await serialize(markdown) },
         },
         revalidate: 10,
     };
