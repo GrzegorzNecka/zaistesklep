@@ -49,7 +49,6 @@ interface Image {
 }
 
 const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
-    console.log("🚀 ~ file: [product_id].tsx ~ line 51 ~ ProductIdPage ~ product", product);
     if (!product) {
         return <div>coś poszło nie tak</div>;
     }
@@ -140,13 +139,6 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
             }
         `,
     });
-
-    // 02:28 -https://szkola.zaisteprogramuj.pl/courses/1668919/lectures/39033222
-    // na graphiQl cośmi nie łapie tego zapytania
-
-    // const res = await fetch(`https://naszsklep-api.vercel.app/api/products/${params?.product_id}`);
-
-    // const product: StoreApiResponse | null = await res.json();
 
     if (!data) {
         return {
