@@ -7,50 +7,13 @@ import { useQuery } from "react-query";
 import { countOfProducts, fetchProducts } from "services/pages/products";
 import { gql } from "@apollo/client";
 import { apolloClient } from "graphql/apolloClient";
-export interface StoreApiResponse {
-    id: number;
-    title: string;
-    price: number;
-    description: string;
-    category: string;
-    image: string;
-    // rating: {
-    //     rate: number;
-    //     count: number;
-    // };
-    longDescription: string;
-}
-
-interface GetProductsListResponse {
-    products: Product[];
-}
-
-interface Product {
-    slug: string;
-    name: string;
-    price: number;
-    images: Image[];
-}
-
-interface Image {
-    url: string;
-    width: number;
-    height: number;
-    id: string;
-}
+import { GetProductsListDocument, GetProductsListQuery } from "generated/graphql";
 
 const ProductListIdPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
     if (!data) {
         return <div>nie znaleziono strony</div>;
     }
-    /**
- * 
- *  id: 'ckdu44mn40gxh010405uwgbtw',
-      slug: 'unisex-long-sleeve-tee',
-      name: 'Unisex Long Sleeve Tee',
-      price: 1999
- * 
- */
+
     return (
         <Main>
             <div className="relative p-16">
@@ -114,24 +77,9 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
     // const totalCount = 4206;
     // const products = await fetchProducts(take, offset);
 
-    const { data } = await apolloClient.query<GetProductsListResponse>({
-        query: gql`
-            query GetProductsList {
-                products {
-                    slug
-                    name
-                    price
-                    images(first: 1) {
-                        url
-                        width
-                        height
-                        id
-                    }
-                }
-            }
-        `,
+    const { data } = await apolloClient.query<GetProductsListQuery>({
+        query: GetProductsListDocument,
     });
-    console.log("🚀 ~ file: [list_id].tsx ~ line 122 ~ getStaticProps ~ data", data.products);
 
     return {
         props: {

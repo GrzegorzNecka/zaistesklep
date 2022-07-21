@@ -6,47 +6,13 @@ import { InferGetStaticPathsType } from "utils/types";
 import Link from "next/link";
 import { apolloClient } from "graphql/apolloClient";
 import { gql } from "@apollo/client";
-
-// export interface StoreApiResponse {
-//     id: number;
-//     title: string;
-//     price: number;
-//     description: string;
-//     category: string;
-//     image: string;
-//     rating: {
-//         rate: number;
-//         count: number;
-//     };
-//     longDescription: string;
-// }
-
-interface GetProductsSlugResponse {
-    products: Product[];
-}
-
-interface Product {
-    slug: string;
-}
-
-///===================================
-
-interface GetProductDetailsBySlugResponse {
-    products: Products[];
-}
-interface Products {
-    slug: string;
-    name: string;
-    price: number;
-    description: string;
-    images: Image[];
-    longDescription: string;
-    id: string;
-}
-
-interface Image {
-    url: string;
-}
+import {
+    GetProductDetailsBySlugDocument,
+    GetProductDetailsBySlugQuery,
+    GetProductDetailsBySlugQueryVariables,
+    GetProductsSlugsDocument,
+    GetProductsSlugsQuery,
+} from "generated/graphql";
 
 const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
     if (!product) {
@@ -59,7 +25,7 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
                 <a>wróć na stronę produktów</a>
             </Link>
             <ul className="relative  bg-white w-full mt-6    ">
-                <li key={product.id} className={`className="group relative" ${product.id}`}>
+                <li key={product.slug} className={`className="group relative" ${product.slug}`}>
                     <ProductDetails
                         data={{
                             id: product.slug,
@@ -92,14 +58,8 @@ export const getStaticPaths = async () => {
     //     });
     // }
 
-    const { data } = await apolloClient.query<GetProductsSlugResponse>({
-        query: gql`
-            query GetProductsSlugs {
-                products {
-                    slug
-                }
-            }
-        `,
+    const { data } = await apolloClient.query<GetProductsSlugsQuery>({
+        query: GetProductsSlugsDocument,
     });
 
     return {
@@ -121,23 +81,11 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
         return { props: {}, notFound: true };
     }
 
-    const { data } = await apolloClient.query<GetProductDetailsBySlugResponse>({
+    const { data } = await apolloClient.query<GetProductDetailsBySlugQuery, GetProductDetailsBySlugQueryVariables>({
         variables: {
             slug: params.product_id,
         },
-        query: gql`
-            query GetProductDetailsBySlug($slug: String) {
-                products(where: { slug: $slug }) {
-                    slug
-                    name
-                    price
-                    description
-                    images {
-                        url
-                    }
-                }
-            }
-        `,
+        query: GetProductDetailsBySlugDocument,
     });
 
     if (!data) {
