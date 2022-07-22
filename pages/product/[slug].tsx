@@ -3,9 +3,8 @@ import { ProductDetails } from "components/Product";
 import { InferGetStaticPropsType } from "next";
 import { serialize } from "next-mdx-remote/serialize";
 import { InferGetStaticPathsType } from "utils/types";
-import Link from "next/link";
 import { apolloClient } from "graphql/apolloClient";
-import { gql } from "@apollo/client";
+
 import {
     GetProductDetailsBySlugDocument,
     GetProductDetailsBySlugQuery,
@@ -21,24 +20,17 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
 
     return (
         <Main>
-            <Link href="/products">
-                <a>wróć na stronę produktów</a>
-            </Link>
-            <ul className="relative  bg-white w-full mt-6    ">
-                <li key={product.slug} className={`className="group relative" ${product.slug}`}>
-                    <ProductDetails
-                        data={{
-                            id: product.slug,
-                            title: product.name,
-                            description: product.description,
-                            thumbnailUrl: product.images[0].url,
-                            thumbnailAlt: product.name,
-                            // rating: product.rating.rate,
-                            longDescription: product.longDescription,
-                        }}
-                    />
-                </li>
-            </ul>
+            <ProductDetails
+                data={{
+                    id: product.slug,
+                    title: product.name,
+                    description: product.description,
+                    thumbnailUrl: product.images[0].url,
+                    thumbnailAlt: product.name,
+                    // rating: product.rating.rate,
+                    longDescription: product.longDescription,
+                }}
+            />
         </Main>
     );
 };
@@ -48,16 +40,6 @@ export default ProductIdPage;
 // -----------------  getStaticPaths  ----------------------
 
 export const getStaticPaths = async () => {
-    // const paths = [];
-
-    // for (let id = 1; id < 2; id++) {
-    //     paths.push({
-    //         params: {
-    //             product_id: `${id}`,
-    //         },
-    //     });
-    // }
-
     const { data } = await apolloClient.query<GetProductsSlugsQuery>({
         query: GetProductsSlugsDocument,
     });
@@ -66,7 +48,7 @@ export const getStaticPaths = async () => {
         paths: data.products.map((product) => {
             return {
                 params: {
-                    product_id: product.slug,
+                    slug: product.slug,
                 },
             };
         }),
@@ -77,13 +59,13 @@ export const getStaticPaths = async () => {
 // -----------------  getStaticProps  ----------------------
 
 export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof getStaticPaths>) => {
-    if (!params?.product_id) {
+    if (!params?.slug) {
         return { props: {}, notFound: true };
     }
 
     const { data } = await apolloClient.query<GetProductDetailsBySlugQuery, GetProductDetailsBySlugQueryVariables>({
         variables: {
-            slug: params.product_id,
+            slug: params.slug,
         },
         query: GetProductDetailsBySlugDocument,
     });

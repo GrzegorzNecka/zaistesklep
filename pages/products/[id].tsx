@@ -1,4 +1,4 @@
-import { ProductListItem } from "components/Product";
+import { ProductListItem } from "components/Products";
 import { InferGetStaticPropsType } from "next";
 import { InferGetStaticPathsType } from "utils/types";
 import Pagination from "components/Pagination/Pagination";
@@ -51,7 +51,7 @@ export const getStaticPaths = async () => {
     for (let id = 1; id < 2; id++) {
         paths.push({
             params: {
-                list_id: `${id}`,
+                id: `${id}`,
             },
         });
     }
@@ -65,11 +65,11 @@ export const getStaticPaths = async () => {
 // -----------------  getStaticProps  ----------------------
 
 export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof getStaticPaths>) => {
-    if (!params?.list_id) {
+    if (!params?.id) {
         return { props: {}, notFound: true };
     }
 
-    // const currentPage = Number(params.list_id);
+    // const currentPage = Number(params.id);
     // let take = 25;
     // let offset = 0;
 

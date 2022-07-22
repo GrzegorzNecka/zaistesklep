@@ -6,76 +6,18 @@ import { NextSeo } from "next-seo";
 import Markdown from "./Markdown";
 import { MarkdownResult } from "utils/types";
 import { useCartState } from "./Cart/CartContext";
+import { ProductDetails, ProductDetailsProps } from "./types";
 
-interface ProductDetails {
-    id: string;
-    title: string;
-    description: string;
-    thumbnailUrl: string;
-    thumbnailAlt: string;
-    // rating: number;
-    longDescription: MarkdownResult;
-}
-
-type ProductListItem = Pick<ProductDetails, "id" | "title" | "thumbnailUrl" | "thumbnailAlt">;
-
-interface ProductListItemProps {
-    data: ProductListItem;
-}
-
-interface ProductDetailsProps {
-    data: ProductDetails;
-}
-
-export const ProductListItem = ({ data }: ProductListItemProps) => {
-    const cartState = useCartState();
-
+const Test = ({ thumbnailAlt, thumbnailUrl, description, title, id }: ProductDetails) => {
     return (
-        <div className="p-8">
-            <div className="w-full p-4 bg-white aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75  lg:aspect-none">
-                <Image
-                    src={data.thumbnailUrl}
-                    alt={data.thumbnailAlt}
-                    className="w-full h-full  lg:w-full lg:h-full mix-blend-multiply"
-                    layout="responsive"
-                    width={16}
-                    height={9}
-                    objectFit="contain"
-                    objectPosition="center"
-                />
-            </div>
+        <>
+            <div>{thumbnailAlt}</div>
+            <div>{thumbnailUrl}</div>
+            <div>{description}</div>
+            <div>{title}</div>
 
-            <div className="mt-4 flex justify-between">
-                <div>
-                    <h3 className="text-sm text-gray-700">
-                        <Link href={`/products/${data.id}`}>
-                            <a>
-                                <span aria-hidden="true" className="">
-                                    {data.title}
-                                </span>
-                            </a>
-                        </Link>
-                    </h3>
-                </div>
-                <p className="text-sm font-medium text-gray-900">20zł</p>
-            </div>
-            <div className="pt-4">{/* <Rating rating={data.rating}></Rating> */}</div>
-            <div className="pt-4">
-                <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                    onClick={() =>
-                        cartState.addItemToCart({
-                            id: data.id,
-                            price: 12.37,
-                            title: data.title,
-                            count: 1,
-                        })
-                    }
-                >
-                    dodaj do koszyka
-                </button>
-            </div>
-        </div>
+            <div>{id}</div>
+        </>
     );
 };
 
@@ -107,27 +49,28 @@ export const ProductDetails = ({
                     cardType: "summary_large_image",
                 }}
             />
-            <div className="p-8 w-full">
-                <h2 className=" text-2xl font-bold py-8 ">{title}</h2>
-                <div>
-                    <Image
-                        src={thumbnailUrl}
-                        alt={thumbnailAlt}
-                        className="w-full h-full  lg:w-full lg:h-full mix-blend-multiply"
-                        layout="responsive"
-                        width={16}
-                        height={9}
-                        objectFit="contain"
-                        objectPosition="center"
-                    />
+
+            <Test seo={{ thumbnailAlt, thumbnailUrl, description, title, longDescription, id }} />
+
+            <div className="font-mono bg-slate-600">
+                <div className="">
+                    <div>
+                        <Image
+                            src={thumbnailUrl}
+                            alt={thumbnailAlt}
+                            className=""
+                            layout="responsive"
+                            width={16}
+                            height={9}
+                            objectFit="contain"
+                            objectPosition="center"
+                        />
+                    </div>
+                    <h2 className="  ">{title}</h2>
+                    <article className="">
+                        <Markdown>{longDescription}</Markdown>
+                    </article>
                 </div>
-                <p className=" py-8">{description}</p>
-
-                <article className="prose prose-xl">
-                    <Markdown>{longDescription}</Markdown>
-                </article>
-
-                {/* <Rating rating={rating}></Rating> */}
             </div>
         </>
     );
