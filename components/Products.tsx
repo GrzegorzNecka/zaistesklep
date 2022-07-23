@@ -13,14 +13,14 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
 
     return (
         <div className="p-8">
-            <div className="w-full p-4 bg-white aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75  lg:aspect-none">
+            <div className="w-full bg-white aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75  lg:aspect-none">
                 <Image
                     src={data.thumbnailUrl}
                     alt={data.thumbnailAlt}
                     className="w-full h-full  lg:w-full lg:h-full mix-blend-multiply"
                     layout="responsive"
-                    width={16}
-                    height={9}
+                    width={4}
+                    height={3}
                     objectFit="contain"
                     objectPosition="center"
                 />
@@ -43,7 +43,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
             <div className="pt-4">{/* <Rating rating={data.rating}></Rating> */}</div>
             <div className="pt-4">
                 <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                    className=" w-full mb-8 bg-transparent hover:bg-black text-blackfont-semibold hover:text-white py-2 px-4 border-2 border-black hover:border-transparent rounded"
                     onClick={() =>
                         cartState.addItemToCart({
                             id: data.id,

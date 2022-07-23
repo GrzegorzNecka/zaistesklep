@@ -6,24 +6,9 @@ import { NextSeo } from "next-seo";
 import Markdown from "./Markdown";
 import { MarkdownResult } from "utils/types";
 import { useCartState } from "./Cart/CartContext";
-import { ProductDetails, ProductDetailsProps } from "./types";
+import { ProductDetailsProps } from "./types";
 
-const Test = ({ thumbnailAlt, thumbnailUrl, description, title, id }: ProductDetails) => {
-    return (
-        <>
-            <div>{thumbnailAlt}</div>
-            <div>{thumbnailUrl}</div>
-            <div>{description}</div>
-            <div>{title}</div>
-
-            <div>{id}</div>
-        </>
-    );
-};
-
-export const ProductDetails = ({
-    data: { thumbnailAlt, thumbnailUrl, description, title, longDescription, id },
-}: ProductDetailsProps) => {
+const SeoProvider = ({ data: { thumbnailAlt, thumbnailUrl, description, title, id } }: ProductDetailsProps) => {
     return (
         <>
             <NextSeo
@@ -49,11 +34,19 @@ export const ProductDetails = ({
                     cardType: "summary_large_image",
                 }}
             />
+        </>
+    );
+};
 
-            <Test seo={{ thumbnailAlt, thumbnailUrl, description, title, longDescription, id }} />
+export const ProductDetails = ({
+    data: { thumbnailAlt, thumbnailUrl, description, title, longDescription, id },
+}: ProductDetailsProps) => {
+    return (
+        <>
+            <SeoProvider data={{ thumbnailAlt, thumbnailUrl, description, title, id, longDescription }} />
 
-            <div className="font-mono bg-slate-600">
-                <div className="">
+            <div className="font-mono ">
+                <div className="grid grid-cols-2 gap">
                     <div>
                         <Image
                             src={thumbnailUrl}
@@ -66,10 +59,21 @@ export const ProductDetails = ({
                             objectPosition="center"
                         />
                     </div>
-                    <h2 className="  ">{title}</h2>
-                    <article className="">
-                        <Markdown>{longDescription}</Markdown>
-                    </article>
+
+                    <div className="">
+                        <div className="flex justify-between pb-8">
+                            <h2 className="font-bold text-xl ">{title}</h2>
+                            <span className=" font-medium text-xl justify-self-end">23zł</span>
+                        </div>
+
+                        <button className="mb-8 bg-transparent hover:bg-black text-blackfont-semibold hover:text-white py-2 px-4 border-2 border-black hover:border-transparent rounded">
+                            Dodaj do kosza
+                        </button>
+
+                        <article className="">
+                            <Markdown>{longDescription}</Markdown>
+                        </article>
+                    </div>
                 </div>
             </div>
         </>
