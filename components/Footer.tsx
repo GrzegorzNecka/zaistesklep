@@ -3,6 +3,8 @@ import Link from "next/link";
 import { navigationList } from "utils/navigationList";
 import ActiveLinkRoute from "./ActiveLinkRoute";
 import Brand from "svg/brand.svg";
+import Breadcrumbs from "./Breadcrumbs";
+
 const Footer = () => {
     const date = new Date().getFullYear();
 
@@ -18,7 +20,9 @@ const Footer = () => {
                     </a>
                 </Link>
 
-                <ul className="flex flex-wrap items-center mb-6 text-sm text-gray-500 sm:mb-0 ">
+                {console.log("render footer")}
+
+                {/* <ul className="flex flex-wrap items-center mb-6 text-sm text-gray-500 sm:mb-0 ">
                     {navigationList.map((item) => (
                         <li key={item.name}>
                             <ActiveLinkRoute href={item.href} style={`cursor-pointer px-3 py-2 text-sm font-normal`}>
@@ -26,8 +30,10 @@ const Footer = () => {
                             </ActiveLinkRoute>
                         </li>
                     ))}
-                </ul>
+                </ul> */}
             </div>
+
+            <Breadcrumbs />
             <hr className="my-6 border-gray-200 sm:mx-auto  lg:my-8" />
             <div className="py-6 px-4  md:flex md:items-center md:justify-between">
                 <span className="text-sm text-gray-700 sm:text-center">

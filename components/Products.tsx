@@ -30,7 +30,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
                 <div>
                     <h3 className="text-sm text-gray-700">
                         <Link href={`/product/${data.id}`}>
-                            <a>
+                            <a className="hover:underline">
                                 <span aria-hidden="true" className="">
                                     {data.title}
                                 </span>
