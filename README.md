@@ -1,3 +1,11 @@
+## Init
+
+-   node:
+-   npm:
+-   react: 17.4
+-   yarn:
+-   next:
+
 ## do zrobienia
 
 1. paginacja - dokończ
@@ -21,9 +29,22 @@ npm run dev
 yarn dev
 ```
 
-## GraphQl
+## Plugins
 
-### graphql-code-generator
+### Markdown
+
+### Tailwind:
+
+[tailwindcss/aspect-ratio]()
+[require("@tailwindcss/typography]()
+[headless UI](https://headlessui.com/)
+[hero icons](https://heroicons.com/)
+
+### GraphQl:
 
 [graphql-code-generator](https://www.graphql-code-generator.com/docs/getting-started/installation)
 uruchamia generator: `yarn generate-graphql`
+
+### Forms:
+
+[tailwind-forms](https://github.com/tailwindlabs/tailwindcss-forms)
