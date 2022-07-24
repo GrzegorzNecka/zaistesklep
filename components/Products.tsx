@@ -13,7 +13,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
 
     return (
         <div className="p-8">
-            <div className="w-full bg-white aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75  lg:aspect-none">
+            <div className="w-full bg-white md:aspect-w-1   rounded-md overflow-hidden group-hover:opacity-75   lg:aspect-none">
                 <Image
                     src={data.thumbnailUrl}
                     alt={data.thumbnailAlt}

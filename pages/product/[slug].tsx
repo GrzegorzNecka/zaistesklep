@@ -44,6 +44,13 @@ export const getStaticPaths = async () => {
         query: GetProductsSlugsDocument,
     });
 
+    if (!data) {
+        return {
+            paths: [],
+            fallback: "blocking",
+        };
+    }
+
     return {
         paths: data.products.map((product) => {
             return {
@@ -70,7 +77,7 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
         query: GetProductDetailsBySlugDocument,
     });
 
-    if (!data.product) {
+    if (!data || !data.product) {
         return {
             props: {},
             notFound: true,

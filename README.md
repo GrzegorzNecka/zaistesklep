@@ -1,4 +1,11 @@
-## zaiste blog
+## do zrobienia
+
+1. paginacja - dokończ
+2. koszyk zadanie dokończgg
+3. cena z serwera
+4. strona z produktem -> dodaj do koszyka
+
+## demo blog
 
 [ActiveLink](https://zaiste.net/programming/reactjs/howtos/create-activelink-nextjs/)
 
