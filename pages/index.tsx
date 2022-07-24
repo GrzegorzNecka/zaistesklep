@@ -18,7 +18,8 @@ const Home = () => {
 
     return (
         <Main>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
+            {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+            <div>mian</div>
         </Main>
     );
 };

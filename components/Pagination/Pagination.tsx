@@ -109,7 +109,7 @@ const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
             setRightDots(true);
             setRightRange([lastPageIndex]);
         }
-    }, [currentPage, totalCount]);
+    }, [currentPage, totalCount, lastPageIndex, totalPageCount, totalPageNumbers]);
 
     const router = useRouter();
 
@@ -121,7 +121,7 @@ const Pagination = ({ currentPage, totalCount }: PaginationProps) => {
         if (currentPage < 1 || currentPage > totalPageCount) {
             router.push(`/products/list/1`, undefined, { shallow: true });
         }
-    }, [router.query.list_id]);
+    }, [router, currentPage, totalPageCount]);
 
     return (
         <>
