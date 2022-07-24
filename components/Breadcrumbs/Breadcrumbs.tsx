@@ -35,12 +35,12 @@ const Breadcrumbs = () => {
             .filter((path) => path !== "")
             .map((path, index) => {
                 const title = path.charAt(0).toUpperCase() + path.substring(1).toLowerCase();
-                const url = `${process.env.NEXT_PUBLIC_HOST}/${path}`;
+                const url = `/${path}`;
 
                 switch (nastedPaths) {
                     case "/products/[id]":
                         if (index === 0) {
-                            return { url: `${process.env.NEXT_PUBLIC_HOST}/products/1`, title };
+                            return { url: `/products/1`, title };
                         }
 
                         if (index === 1) {
@@ -49,7 +49,7 @@ const Breadcrumbs = () => {
 
                     case "/product/[slug]":
                         if (index === 0) {
-                            return { url: `${process.env.NEXT_PUBLIC_HOST}/products/1`, title: "Products" };
+                            return { url: `/products/1`, title: "Products" };
                         }
 
                         if (index === 1) {
@@ -63,7 +63,7 @@ const Breadcrumbs = () => {
                         }
 
                         if (index === 1) {
-                            return { url: `${process.env.NEXT_PUBLIC_HOST}/${prevPath}/${path}`, title };
+                            return { url: `/${prevPath}/${path}`, title };
                         }
                 }
                 // typescript krzyczał - że zwraca undefined

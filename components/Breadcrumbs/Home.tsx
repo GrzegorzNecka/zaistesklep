@@ -8,7 +8,7 @@ export const Home = ({ currentPaths }: CurrentPathsProps) => {
             {currentPaths.length ? (
                 <li>
                     <div className="flex items-center">
-                        <Link href={`${process.env.NEXT_PUBLIC_HOST}`}>
+                        <Link href={`/`}>
                             <a className="mr-2 text-sm font-medium text-gray-900">Home</a>
                         </Link>
                         <Separator />
