@@ -2,26 +2,25 @@
 import Link from "next/link";
 import { navigationList } from "utils/navigationList";
 import ActiveLinkRoute from "./ActiveLinkRoute";
+import Brand from "svg/brand.svg";
+import Breadcrumbs from "./Breadcrumbs/Breadcrumbs";
 
 const Footer = () => {
     const date = new Date().getFullYear();
 
     return (
         <footer className="max-w-7xl mx-auto w-full p-4 bg-white md:px-6 md:py-8 ">
+            <hr className="my-6 border-gray-200 sm:mx-auto  lg:my-8" />
             <div className="sm:flex sm:items-center sm:justify-between">
                 <Link href="/">
                     <a className="flex items-center mb-4 sm:mb-0">
                         <span className="self-center text-2xl font-semibold whitespace-nowrap ">
-                            <img
-                                alt="Workflow"
-                                className="h-8 w-auto sm:h-10"
-                                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                            />
+                            <Brand width="80" height="80" />
                         </span>
                     </a>
                 </Link>
 
-                <ul className="flex flex-wrap items-center mb-6 text-sm text-gray-500 sm:mb-0 ">
+                {/* <ul className="flex flex-wrap items-center mb-6 text-sm text-gray-500 sm:mb-0 ">
                     {navigationList.map((item) => (
                         <li key={item.name}>
                             <ActiveLinkRoute href={item.href} style={`cursor-pointer px-3 py-2 text-sm font-normal`}>
@@ -29,14 +28,16 @@ const Footer = () => {
                             </ActiveLinkRoute>
                         </li>
                     ))}
-                </ul>
+                </ul> */}
+                <Breadcrumbs />
             </div>
+
             <hr className="my-6 border-gray-200 sm:mx-auto  lg:my-8" />
             <div className="py-6 px-4  md:flex md:items-center md:justify-between">
                 <span className="text-sm text-gray-700 sm:text-center">
                     © {`${date}`}
                     <Link href="/">
-                        <a> Zaiste Sklep </a>
+                        <a> Demo Shop </a>
                     </Link>
                     - All Rights Reserved.
                 </span>

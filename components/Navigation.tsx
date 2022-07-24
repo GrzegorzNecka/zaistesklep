@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import ActiveLink from "./ActiveLink";
 import { navigationList } from "utils/navigationList";
 import CartBar from "./Cart/CartBar";
+import Brand from "svg/brand.svg";
 
 interface DisclosureProps {
     open: boolean;
@@ -31,8 +32,8 @@ export const Navigation = () => {
                                         )}
                                     </Disclosure.Button>
                                 </div>
-                                <div className="hidden sm:block sm:ml-6">
-                                    <div className="flex space-x-4">
+                                <div className="hidden sm:block">
+                                    <div className="flex items-center h-full space-x-4">
                                         {navigationList.map((item) => (
                                             <ActiveLink
                                                 key={item.name}
@@ -45,21 +46,18 @@ export const Navigation = () => {
                                         ))}
                                     </div>
                                 </div>
-                                <div className="flex-shrink-0 flex items-center">
+                                <div className="flex-shrink-0 ">
                                     <Link href="/">
-                                        <a className=" h-8 flex">
-                                            <img
-                                                className="w-auto"
-                                                src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-                                                alt=""
-                                            />
-                                            <span className="hidden lg:block lg: min-w-[140px] leading-8 font-bold text-indigo-500 pl-3">
-                                                Zaiste sklep
+                                        <a className="h-16 flex items-center  ">
+                                            <Brand height="60" />
+
+                                            <span className="hidden lg:block lg:  leading-8 font-bold text-black pl-3">
+                                                DEMO SHOP
                                             </span>
                                         </a>
                                     </Link>
                                 </div>
-                                <div className="flex item">
+                                <div className="flex item items-center">
                                     <CartBar />
                                 </div>
                             </div>
