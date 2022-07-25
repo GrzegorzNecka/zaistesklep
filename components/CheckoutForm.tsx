@@ -1,8 +1,10 @@
 //https://tailwindui.com/components/ecommerce/components/checkout-forms
 
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
+import { useForm } from "react-hook-form";
+import { validateCreditCardDate } from "utils/validations";
 
-interface CheckoutFormDAta {
+interface CheckoutFormData {
     firstName: string;
     lastName: string;
     emailAdress: string;
@@ -10,6 +12,10 @@ interface CheckoutFormDAta {
     city: string;
     postalCode: string;
     note: string;
+    nameOnCard: string;
+    cardNumber: string;
+    expirationDate: string;
+    cvc: string;
 }
 /**
  * nameOnCard
@@ -26,21 +32,30 @@ interface CheckoutFormDAta {
  */
 
 const CheckoutForm = () => {
-    const handeleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
-        e.preventDefault();
-        console.log(e.target);
-    };
+    const {
+        register,
+        setValue,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<CheckoutFormData>();
 
-    const [firstName, setFirstName] = useState("");
+    const onSubmit = handleSubmit((data) => console.log(data));
 
-    const handleChangeEmailChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-        setFirstName(e.target.value);
-    };
+    // const handeleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    //     e.preventDefault();
+    //     console.log(e.target);
+    // };
+
+    // const [firstName, setFirstName] = useState("");
+
+    // const handleChangeEmailChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    //     setFirstName(e.target.value);
+    // };
 
     return (
         <div className="flex flex-col md:w-full">
             <h2 className="mb-4 font-bold md:text-xl text-heading ">Shipping Address</h2>
-            <form onSubmit={handeleSubmit} className="justify-center w-full mx-auto">
+            <form onSubmit={onSubmit} className="justify-center w-full mx-auto">
                 <div className="">
                     <div className="space-x-0 lg:flex lg:space-x-4">
                         <div className="w-full lg:w-1/2">
@@ -48,20 +63,29 @@ const CheckoutForm = () => {
                                 First Name
                             </label>
                             <input
-                                name="firstName"
+                                // name="firstName"
                                 type="text"
                                 placeholder="First Name"
                                 className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
-                                value={firstName}
-                                onChange={handleChangeEmailChange}
+                                // value={firstName}
+                                // onChange={handleChangeEmailChange}
+                                {...register("firstName", {
+                                    required: "First name is required matherfucker",
+                                    maxLength: 20,
+                                })}
                             />
+                            {errors.firstName?.type === "required" && (
+                                <span role="alert" className="w-full inline-block  text-rose-600">
+                                    {errors.firstName.message}
+                                </span>
+                            )}
                         </div>
                         <div className="w-full lg:w-1/2 ">
                             <label htmlFor="lastName" className="block mb-3 text-sm font-semibold text-gray-500">
                                 Last Name
                             </label>
                             <input
-                                name="lastName"
+                                {...register("lastName")}
                                 type="text"
                                 placeholder="Last Name"
                                 className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
@@ -74,7 +98,7 @@ const CheckoutForm = () => {
                                 Email
                             </label>
                             <input
-                                name="emailAdress"
+                                {...register("emailAdress")}
                                 type="email"
                                 placeholder="Email"
                                 id="email=adress"
@@ -91,7 +115,7 @@ const CheckoutForm = () => {
                             <input
                                 type="text"
                                 className="w-full px-4 mb-3 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
-                                name="address"
+                                {...register("address")}
                                 placeholder="Address"
                             ></input>
                         </div>
@@ -102,7 +126,7 @@ const CheckoutForm = () => {
                                 City
                             </label>
                             <input
-                                name="city"
+                                {...register("city")}
                                 type="text"
                                 placeholder="City"
                                 className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
@@ -113,13 +137,70 @@ const CheckoutForm = () => {
                                 Postcode
                             </label>
                             <input
-                                name="postalCode"
+                                {...register("postalCode")}
                                 type="text"
                                 placeholder="Post Code"
                                 className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
                             />
                         </div>
                     </div>
+                    <h3 className="mt-12 mb-4 font-bold md:text-lg text-heading ">Payment Details</h3>
+                    <div className="space-x-0 lg:flex lg:space-x-4">
+                        <div className="w-full lg:w-1/2">
+                            <label htmlFor="nameOnCard" className="block mb-3 text-sm font-semibold text-gray-500">
+                                Name on Card
+                            </label>
+                            <input
+                                {...register("nameOnCard")}
+                                type="text"
+                                placeholder="name on Card"
+                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                            />
+                        </div>
+                        <div className="w-full lg:w-1/2 ">
+                            <label htmlFor="cardNumber" className="block mb-3 text-sm font-semibold text-gray-500">
+                                Card number
+                            </label>
+                            <input
+                                {...register("cardNumber")}
+                                type="text"
+                                placeholder="Card Number"
+                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                            />
+                        </div>
+                        <div className="w-full lg:w-1/2 ">
+                            <label htmlFor="expirationDate" className="block mb-3 text-sm font-semibold text-gray-500">
+                                Expiration date (MM/YY)
+                            </label>
+
+                            <input
+                                {...register("expirationDate", {
+                                    required: true,
+                                    validate: (value) => validateCreditCardDate(value),
+                                })}
+                                type="text"
+                                placeholder="Expiration date"
+                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                            />
+
+                            <span role="alert" className="w-full inline-block  text-rose-600">
+                                {errors.expirationDate?.message}
+                            </span>
+                        </div>
+                        <div className="w-full lg:w-1/2 ">
+                            <label htmlFor="cvc" className="block mb-3 text-sm font-semibold text-gray-500">
+                                CVC
+                            </label>
+
+                            <input
+                                {...register("cvc", { required: true })}
+                                type="text"
+                                placeholder="cvc"
+                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                            />
+                        </div>
+                    </div>
+
                     <div className="flex items-center mt-4">
                         <label className="flex items-center text-sm group text-heading">
                             <input
@@ -134,7 +215,7 @@ const CheckoutForm = () => {
                             Notes (Optional)
                         </label>
                         <textarea
-                            name="note"
+                            {...register("note")}
                             className="flex items-center w-full px-4 py-3 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-black"
                             placeholder="Notes htmlFor delivery"
                         ></textarea>
