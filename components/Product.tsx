@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Rating } from "./Raiting";
 import { NextSeo } from "next-seo";
 import Markdown from "./Markdown";
-import { MarkdownResult } from "utils/types";
+import { MarkdownResult } from "types";
 import { useCartState } from "./Cart/CartContext";
 import { ProductDetailsProps } from "./types";
 
@@ -66,9 +66,7 @@ export const ProductDetails = ({
                             <span className=" font-medium text-xl justify-self-end">23zł</span>
                         </div>
 
-                        <button className="mb-8 bg-transparent hover:bg-black text-blackfont-semibold hover:text-white py-2 px-4 border-2 border-black hover:border-transparent rounded">
-                            Dodaj do kosza
-                        </button>
+                        <button className="btn-custom-primary">Dodaj do kosza</button>
 
                         <article className="">
                             <Markdown>{longDescription}</Markdown>

@@ -9,9 +9,12 @@
 ## do zrobienia
 
 1. paginacja - dokończ
-2. koszyk zadanie dokończgg
+2. koszyk zadanie dokończ
 3. cena z serwera
 4. strona z produktem -> dodaj do koszyka
+5. wyszukiwarka produktów
+6. dodaj ulubione produkty
+7. globalne style kolory i buttony
 
 ## demo blog
 

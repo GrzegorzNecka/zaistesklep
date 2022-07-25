@@ -1,4 +1,4 @@
-import { MarkdownResult } from "utils/types";
+import { MarkdownResult } from "types";
 
 export interface ProductDetails {
     id: string;
