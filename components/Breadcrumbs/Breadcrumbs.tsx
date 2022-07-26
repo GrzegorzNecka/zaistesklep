@@ -68,6 +68,8 @@ const Breadcrumbs = () => {
                 return { url, title };
             });
 
+        prevPath = "";
+
         if (!paths) {
             return;
         }

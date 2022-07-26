@@ -12,7 +12,7 @@ import * as yup from "yup";
 
 const checkoutFormSchema = yup
     .object({
-        firstName: yup.string().required(),
+        firstName: yup.string().min(3, "first NAme has to be longer than 3 characters!").required(),
         lastName: yup.string().required(),
         emailAdress: yup.string().email().required(),
         address: yup.string().required(),
@@ -23,10 +23,11 @@ const checkoutFormSchema = yup
         cardNumber: yup.string().required(),
         expirationDate: yup.string().required(),
         cvc: yup.string().required(),
+        confirm: yup.boolean().oneOf([true], "You must accept the terms and conditions"),
     })
     .required();
 
-type CheckoutFormData = yup.InferType<typeof checkoutFormSchema>;
+export type CheckoutFormData = yup.InferType<typeof checkoutFormSchema>;
 
 const CheckoutForm = () => {
     const { register, setValue, handleSubmit, formState } = useForm<CheckoutFormData>({
@@ -83,22 +84,20 @@ const CheckoutForm = () => {
                                 type="text"
                                 title="First Name"
                                 name="firstName"
-                                register={register}
-                                formState={formState}
-                                required="First name is required matherfucker"
-                                validate={false}
-                                maxLength={20}
+                                useForm={{ register, formState }}
                             />
                         </div>
                         <div className="w-full lg:w-1/2 ">
                             <label htmlFor="lastName" className="block mb-3 text-sm font-semibold text-gray-500">
                                 Last Name
                             </label>
-                            <input
-                                {...register("lastName")}
+                            <FormInput
                                 type="text"
-                                placeholder="Last Name"
-                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                                title="Last Name"
+                                name="lastName"
+                                useForm={{ register, formState }}
+                                // required="false"
+                                // validate={false}
                             />
                         </div>
                     </div>
@@ -107,13 +106,11 @@ const CheckoutForm = () => {
                             <label htmlFor="emailAdress" className="block mb-3 text-sm font-semibold text-gray-500">
                                 Email
                             </label>
-                            <input
-                                {...register("emailAdress")}
+                            <FormInput
                                 type="email"
-                                placeholder="Email"
-                                id="email=adress"
-                                autoComplete="email"
-                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                                title="Email"
+                                name="emailAdress"
+                                useForm={{ register, formState }}
                             />
                         </div>
                     </div>
@@ -122,12 +119,12 @@ const CheckoutForm = () => {
                             <label htmlFor="address" className="block mb-3 text-sm font-semibold text-gray-500">
                                 Address
                             </label>
-                            <input
+                            <FormInput
                                 type="text"
-                                className="w-full px-4 mb-3 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
-                                {...register("address")}
-                                placeholder="Address"
-                            ></input>
+                                title="Address"
+                                name="emailAdress"
+                                useForm={{ register, formState }}
+                            />
                         </div>
                     </div>
                     <div className="space-x-0 lg:flex lg:space-x-4">
@@ -135,22 +132,17 @@ const CheckoutForm = () => {
                             <label htmlFor="city" className="block mb-3 text-sm font-semibold text-gray-500">
                                 City
                             </label>
-                            <input
-                                {...register("city")}
-                                type="text"
-                                placeholder="City"
-                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
-                            />
+                            <FormInput type="text" title="City" name="city" useForm={{ register, formState }} />
                         </div>
                         <div className="w-full lg:w-1/2 ">
                             <label htmlFor="postalCode" className="block mb-3 text-sm font-semibold text-gray-500">
                                 Postcode
                             </label>
-                            <input
-                                {...register("postalCode")}
+                            <FormInput
                                 type="text"
-                                placeholder="Post Code"
-                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                                title="Postcode"
+                                name="postalCode"
+                                useForm={{ register, formState }}
                             />
                         </div>
                     </div>
@@ -160,22 +152,23 @@ const CheckoutForm = () => {
                             <label htmlFor="nameOnCard" className="block mb-3 text-sm font-semibold text-gray-500">
                                 Name on Card
                             </label>
-                            <input
-                                {...register("nameOnCard")}
+                            <FormInput
                                 type="text"
-                                placeholder="name on Card"
-                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                                title="name on Card"
+                                name="nameOnCard"
+                                useForm={{ register, formState }}
                             />
                         </div>
                         <div className="w-full lg:w-1/2 ">
                             <label htmlFor="cardNumber" className="block mb-3 text-sm font-semibold text-gray-500">
                                 Card number
                             </label>
-                            <input
-                                {...register("cardNumber")}
+
+                            <FormInput
                                 type="text"
-                                placeholder="Card Number"
-                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                                title="Card Number"
+                                name="cardNumber"
+                                useForm={{ register, formState }}
                             />
                         </div>
                         <div className="w-full lg:w-1/2 ">
@@ -186,10 +179,9 @@ const CheckoutForm = () => {
                                 type="text"
                                 title="Expiration date"
                                 name="expirationDate"
-                                register={register}
-                                formState={formState}
-                                required={true}
-                                validate={true}
+                                useForm={{ register, formState }}
+                                // required={true}
+                                // validate={true}
                             />
 
                             {/* <input
@@ -211,22 +203,19 @@ const CheckoutForm = () => {
                                 CVC
                             </label>
 
-                            <input
-                                {...register("cvc", { required: false })}
-                                type="text"
-                                placeholder="cvc"
-                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
-                            />
+                            <FormInput type="text" title="CVC" name="cvc" useForm={{ register, formState }} />
                         </div>
                     </div>
 
                     <div className="flex items-center mt-4">
-                        <label className="flex items-center text-sm group text-heading">
-                            <input
+                        <label htmlFor=" confirm" className="flex items-center text-sm group text-heading">
+                            {/* <input
                                 type="checkbox"
                                 className="w-5 h-5 border border-gray-300 rounded focus:outline-none focus:ring-1"
-                            />
-                            <span className="ml-2">Save this information htmlFor next time</span>
+                            /> */}
+                            <FormInput name="confirm" type="checkbox" useForm={{ register, formState }} />
+
+                            <span className="ml-2">I accept the all terms </span>
                         </label>
                     </div>
                     <div className="relative pt-3 xl:pt-6">
