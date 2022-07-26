@@ -3,41 +3,35 @@
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { useForm } from "react-hook-form";
 import { validateCreditCardDate } from "utils/validations";
+import FormInput from "./FormInput";
+// import { CheckoutFormData } from "./types";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-interface CheckoutFormData {
-    firstName: string;
-    lastName: string;
-    emailAdress: string;
-    address: string;
-    city: string;
-    postalCode: string;
-    note: string;
-    nameOnCard: string;
-    cardNumber: string;
-    expirationDate: string;
-    cvc: string;
-}
-/**
- * nameOnCard
- * cardNumber
- * expirationDate
- * cvc
- * address
- * apartment
- * city
- * region
- * postalCode
- * sameAsShipping
- *
- */
+//https://www.youtube.com/watch?v=cTY_L1X_oC4
+
+const checkoutFormSchema = yup
+    .object({
+        firstName: yup.string().required(),
+        lastName: yup.string().required(),
+        emailAdress: yup.string().email().required(),
+        address: yup.string().required(),
+        city: yup.string().required(),
+        postalCode: yup.string().required(),
+        note: yup.string().required(),
+        nameOnCard: yup.string().required(),
+        cardNumber: yup.string().required(),
+        expirationDate: yup.string().required(),
+        cvc: yup.string().required(),
+    })
+    .required();
+
+type CheckoutFormData = yup.InferType<typeof checkoutFormSchema>;
 
 const CheckoutForm = () => {
-    const {
-        register,
-        setValue,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<CheckoutFormData>();
+    const { register, setValue, handleSubmit, formState } = useForm<CheckoutFormData>({
+        resolver: yupResolver(checkoutFormSchema),
+    });
 
     const onSubmit = handleSubmit((data) => console.log(data));
 
@@ -57,28 +51,44 @@ const CheckoutForm = () => {
             <h2 className="mb-4 font-bold md:text-xl text-heading ">Shipping Address</h2>
             <form onSubmit={onSubmit} className="justify-center w-full mx-auto">
                 <div className="">
+                    {/* <div>
+                        <label htmlFor="test" className="block mb-3 text-sm font-semibold text-gray-500">
+                            test
+                        </label>
+                        <input
+                            // name="firstName"
+                            type="text"
+                            placeholder="First Name"
+                            className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                            // value={firstName}
+                            // onChange={handleChangeEmailChange}
+                            {...register("test", {
+                                required: "First name is required matherfucker",
+                                maxLength: 20,
+                            })}
+                        />
+                        {formState.errors.firstName?.type === "required" && (
+                            <span role="alert" className="w-full inline-block  text-rose-600">
+                                {formState.errors.firstName.message}
+                            </span>
+                        )}
+                    </div> */}
+
                     <div className="space-x-0 lg:flex lg:space-x-4">
                         <div className="w-full lg:w-1/2">
                             <label htmlFor="firstName" className="block mb-3 text-sm font-semibold text-gray-500">
                                 First Name
                             </label>
-                            <input
-                                // name="firstName"
+                            <FormInput
                                 type="text"
-                                placeholder="First Name"
-                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
-                                // value={firstName}
-                                // onChange={handleChangeEmailChange}
-                                {...register("firstName", {
-                                    required: "First name is required matherfucker",
-                                    maxLength: 20,
-                                })}
+                                title="First Name"
+                                name="firstName"
+                                register={register}
+                                formState={formState}
+                                required="First name is required matherfucker"
+                                validate={false}
+                                maxLength={20}
                             />
-                            {errors.firstName?.type === "required" && (
-                                <span role="alert" className="w-full inline-block  text-rose-600">
-                                    {errors.firstName.message}
-                                </span>
-                            )}
                         </div>
                         <div className="w-full lg:w-1/2 ">
                             <label htmlFor="lastName" className="block mb-3 text-sm font-semibold text-gray-500">
@@ -172,8 +182,17 @@ const CheckoutForm = () => {
                             <label htmlFor="expirationDate" className="block mb-3 text-sm font-semibold text-gray-500">
                                 Expiration date (MM/YY)
                             </label>
+                            <FormInput
+                                type="text"
+                                title="Expiration date"
+                                name="expirationDate"
+                                register={register}
+                                formState={formState}
+                                required={true}
+                                validate={true}
+                            />
 
-                            <input
+                            {/* <input
                                 {...register("expirationDate", {
                                     required: true,
                                     validate: (value) => validateCreditCardDate(value),
@@ -185,7 +204,7 @@ const CheckoutForm = () => {
 
                             <span role="alert" className="w-full inline-block  text-rose-600">
                                 {errors.expirationDate?.message}
-                            </span>
+                            </span> */}
                         </div>
                         <div className="w-full lg:w-1/2 ">
                             <label htmlFor="cvc" className="block mb-3 text-sm font-semibold text-gray-500">
@@ -193,7 +212,7 @@ const CheckoutForm = () => {
                             </label>
 
                             <input
-                                {...register("cvc", { required: true })}
+                                {...register("cvc", { required: false })}
                                 type="text"
                                 placeholder="cvc"
                                 className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"

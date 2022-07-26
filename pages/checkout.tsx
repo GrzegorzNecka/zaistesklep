@@ -1,5 +1,5 @@
-import CheckoutForm from "components/CheckoutForm";
-import CheckoutSummary from "components/CheckoutSummary";
+import CheckoutForm from "components/CheckoutForm/CheckoutForm";
+import CheckoutSummary from "components/CheckoutForm/CheckoutSummary";
 import { Main } from "components/Main";
 import React from "react";
 

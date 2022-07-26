@@ -53,3 +53,5 @@ uruchamia generator: `yarn generate-graphql`
 ### Forms:
 
 [tailwind-forms](https://github.com/tailwindlabs/tailwindcss-forms)
+[rhf](https://react-hook-form.com/get-started#IntegratingControlledInputs)
+[yup](https://github.com/jquense/yup)
