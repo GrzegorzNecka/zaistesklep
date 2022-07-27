@@ -1,5 +1,5 @@
-import { DeepRequired, FieldErrorsImpl, FormState, UseFormRegister, ValidationRule } from "react-hook-form";
-import { validateCreditCardDate } from "utils/validations";
+import { FormState, UseFormRegister } from "react-hook-form";
+// import { validateCreditCardDate } from "utils/validations";
 
 import { CheckoutFormData } from "./CheckoutForm";
 

@@ -1,6 +1,6 @@
 //https://tailwindui.com/components/ecommerce/components/checkout-forms
 
-import { ChangeEventHandler, FormEventHandler, useState } from "react";
+// import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { useForm } from "react-hook-form";
 import { validateCreditCardDate } from "utils/validations";
 import FormInput from "./FormInput";
@@ -14,27 +14,46 @@ const checkoutFormSchema = yup
     .object({
         firstName: yup
             .string()
-            .min(3, "first Name has to be longer than 3 characters!")
-            .required("first name  is required"),
+            .required("first name  is required")
+            .min(3, "first Name has to be longer than 3 characters!"),
         lastName: yup
             .string()
-            .min(3, "last Name has to be longer than 3 characters!")
-            .required("last name  is required"),
+            .required("last name  is required")
+            .min(3, "last Name has to be longer than 3 characters!"),
         emailAdress: yup
             .string()
-            .email("the email must have a specific format like @ etc")
-            .required("email adress is required"),
+            .required("email adress is required")
+            .email("the email must have a specific format like @ etc"),
         address: yup.string().required("adress  is required"),
         city: yup.string().required("city is required"),
         postalCode: yup
             .string()
-            .matches(/^[0-9]{2}-[0-9]{3}/, "post code have to contain only numbers and look like 00-000")
-            .required("post code is required"),
+            .required("post code is required")
+            .matches(/^[0-9]{2}-[0-9]{3}/, "post code should only contain numbers and look like 00-000"),
+
         note: yup.string(),
-        nameOnCard: yup.string().required("name on card is required"),
-        cardNumber: yup.string().required("card number is required"),
-        expirationDate: yup.string().required("expiration date is required"),
-        cvc: yup.string().required("CVC number is required"),
+        // nameOnCard: yup.string().required("name on card is required"),
+        nameOnCard: yup
+            .string()
+            .oneOf(["VISA", "MASTERCARD"], "this must be one of the following values: VISA, MASTERCARD"),
+        cardNumber: yup
+            .string()
+            .required("card number is required")
+            .length(26, "card number must be exactly 26 characters"),
+
+        // expirationDate: yup.string().required("expiration date is required"),
+        expirationDate: yup
+            .string()
+            .required("expiration date is required")
+            .matches(
+                validateCreditCardDate(),
+                "enter month as MM, separator / and years as YY. The year may be 4 years longer than today"
+            ),
+        cvc: yup
+            .string()
+            .required("CVC number is required")
+            .matches(/^[0-9]{4}/, "cvc must be exactly 4 numbers"),
+
         acceptTerms: yup.boolean().oneOf([true], "Accept terms is required"),
     })
     .required();
@@ -58,7 +77,7 @@ const CheckoutForm = () => {
                             <FormInput
                                 type="text"
                                 name="firstName"
-                                placeholder="First Name (min 3 characters)"
+                                placeholder="First Name "
                                 useForm={{ register, formState }}
                             >
                                 First Name
@@ -67,7 +86,7 @@ const CheckoutForm = () => {
                         <div className="w-full lg:w-1/2 ">
                             <FormInput
                                 type="text"
-                                placeholder="First Name (min 3 characters)"
+                                placeholder="First Name"
                                 name="lastName"
                                 useForm={{ register, formState }}
                             >
@@ -99,7 +118,7 @@ const CheckoutForm = () => {
                             </FormInput>
                         </div>
                     </div>
-                    <div className="space-x-0 lg:flex lg:space-x-4">
+                    <div className="mt-4 space-x-0 lg:flex lg:space-x-4">
                         <div className="w-full lg:w-1/2">
                             <FormInput type="text" placeholder="City" name="city" useForm={{ register, formState }}>
                                 City
@@ -119,14 +138,19 @@ const CheckoutForm = () => {
                     <h3 className="mt-12 mb-4 font-bold md:text-lg text-heading ">Payment Details</h3>
                     <div className="space-x-0 lg:flex lg:space-x-4">
                         <div className="w-full lg:w-1/2">
-                            <FormInput
-                                type="text"
-                                placeholder="name on Card"
-                                name="nameOnCard"
-                                useForm={{ register, formState }}
+                            <label htmlFor="nameOnCard" className="block mb-3 text-sm font-semibold text-gray-500">
+                                Name on Card
+                            </label>
+                            <select
+                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                                {...register("nameOnCard")}
                             >
-                                Name on Card{" "}
-                            </FormInput>
+                                <option value="VISA">VISA</option>
+                                <option value="MASTERCARD">MASTERCARD</option>
+                            </select>
+                            <span role="alert" className="w-full inline-bloc text-xs text-rose-600">
+                                {formState.errors.nameOnCard?.message}
+                            </span>
                         </div>
                         <div className="w-full lg:w-1/2 ">
                             <FormInput
@@ -135,7 +159,7 @@ const CheckoutForm = () => {
                                 name="cardNumber"
                                 useForm={{ register, formState }}
                             >
-                                Card number{" "}
+                                Card number
                             </FormInput>
                         </div>
                         <div className="w-full lg:w-1/2 ">
