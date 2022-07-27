@@ -12,18 +12,30 @@ import * as yup from "yup";
 
 const checkoutFormSchema = yup
     .object({
-        firstName: yup.string().min(3, "first NAme has to be longer than 3 characters!").required(),
-        lastName: yup.string().required(),
-        emailAdress: yup.string().email().required(),
-        address: yup.string().required(),
-        city: yup.string().required(),
-        postalCode: yup.string().required(),
-        note: yup.string().required(),
-        nameOnCard: yup.string().required(),
-        cardNumber: yup.string().required(),
-        expirationDate: yup.string().required(),
-        cvc: yup.string().required(),
-        confirm: yup.boolean().oneOf([true], "You must accept the terms and conditions"),
+        firstName: yup
+            .string()
+            .min(3, "first Name has to be longer than 3 characters!")
+            .required("first name  is required"),
+        lastName: yup
+            .string()
+            .min(3, "last Name has to be longer than 3 characters!")
+            .required("last name  is required"),
+        emailAdress: yup
+            .string()
+            .email("the email must have a specific format like @ etc")
+            .required("email adress is required"),
+        address: yup.string().required("adress  is required"),
+        city: yup.string().required("city is required"),
+        postalCode: yup
+            .string()
+            .matches(/^[0-9]{2}-[0-9]{3}/, "post code have to contain only numbers and look like 00-000")
+            .required("post code is required"),
+        note: yup.string(),
+        nameOnCard: yup.string().required("name on card is required"),
+        cardNumber: yup.string().required("card number is required"),
+        expirationDate: yup.string().required("expiration date is required"),
+        cvc: yup.string().required("CVC number is required"),
+        acceptTerms: yup.boolean().oneOf([true], "Accept terms is required"),
     })
     .required();
 
@@ -36,187 +48,117 @@ const CheckoutForm = () => {
 
     const onSubmit = handleSubmit((data) => console.log(data));
 
-    // const handeleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
-    //     e.preventDefault();
-    //     console.log(e.target);
-    // };
-
-    // const [firstName, setFirstName] = useState("");
-
-    // const handleChangeEmailChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    //     setFirstName(e.target.value);
-    // };
-
     return (
         <div className="flex flex-col md:w-full">
             <h2 className="mb-4 font-bold md:text-xl text-heading ">Shipping Address</h2>
             <form onSubmit={onSubmit} className="justify-center w-full mx-auto">
                 <div className="">
-                    {/* <div>
-                        <label htmlFor="test" className="block mb-3 text-sm font-semibold text-gray-500">
-                            test
-                        </label>
-                        <input
-                            // name="firstName"
-                            type="text"
-                            placeholder="First Name"
-                            className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
-                            // value={firstName}
-                            // onChange={handleChangeEmailChange}
-                            {...register("test", {
-                                required: "First name is required matherfucker",
-                                maxLength: 20,
-                            })}
-                        />
-                        {formState.errors.firstName?.type === "required" && (
-                            <span role="alert" className="w-full inline-block  text-rose-600">
-                                {formState.errors.firstName.message}
-                            </span>
-                        )}
-                    </div> */}
-
                     <div className="space-x-0 lg:flex lg:space-x-4">
                         <div className="w-full lg:w-1/2">
-                            <label htmlFor="firstName" className="block mb-3 text-sm font-semibold text-gray-500">
-                                First Name
-                            </label>
                             <FormInput
                                 type="text"
-                                title="First Name"
                                 name="firstName"
+                                placeholder="First Name (min 3 characters)"
                                 useForm={{ register, formState }}
-                            />
+                            >
+                                First Name
+                            </FormInput>
                         </div>
                         <div className="w-full lg:w-1/2 ">
-                            <label htmlFor="lastName" className="block mb-3 text-sm font-semibold text-gray-500">
-                                Last Name
-                            </label>
                             <FormInput
                                 type="text"
-                                title="Last Name"
+                                placeholder="First Name (min 3 characters)"
                                 name="lastName"
                                 useForm={{ register, formState }}
-                                // required="false"
-                                // validate={false}
-                            />
+                            >
+                                Last Name
+                            </FormInput>
                         </div>
                     </div>
                     <div className="mt-4">
                         <div className="w-full">
-                            <label htmlFor="emailAdress" className="block mb-3 text-sm font-semibold text-gray-500">
-                                Email
-                            </label>
                             <FormInput
                                 type="email"
-                                title="Email"
+                                placeholder="Email"
                                 name="emailAdress"
                                 useForm={{ register, formState }}
-                            />
+                            >
+                                Email
+                            </FormInput>
                         </div>
                     </div>
                     <div className="mt-4">
                         <div className="w-full">
-                            <label htmlFor="address" className="block mb-3 text-sm font-semibold text-gray-500">
-                                Address
-                            </label>
                             <FormInput
                                 type="text"
-                                title="Address"
-                                name="emailAdress"
+                                placeholder="Address"
+                                name="address"
                                 useForm={{ register, formState }}
-                            />
+                            >
+                                Address
+                            </FormInput>
                         </div>
                     </div>
                     <div className="space-x-0 lg:flex lg:space-x-4">
                         <div className="w-full lg:w-1/2">
-                            <label htmlFor="city" className="block mb-3 text-sm font-semibold text-gray-500">
+                            <FormInput type="text" placeholder="City" name="city" useForm={{ register, formState }}>
                                 City
-                            </label>
-                            <FormInput type="text" title="City" name="city" useForm={{ register, formState }} />
+                            </FormInput>
                         </div>
                         <div className="w-full lg:w-1/2 ">
-                            <label htmlFor="postalCode" className="block mb-3 text-sm font-semibold text-gray-500">
-                                Postcode
-                            </label>
                             <FormInput
                                 type="text"
-                                title="Postcode"
+                                placeholder="Postcode"
                                 name="postalCode"
                                 useForm={{ register, formState }}
-                            />
+                            >
+                                Post Code
+                            </FormInput>
                         </div>
                     </div>
                     <h3 className="mt-12 mb-4 font-bold md:text-lg text-heading ">Payment Details</h3>
                     <div className="space-x-0 lg:flex lg:space-x-4">
                         <div className="w-full lg:w-1/2">
-                            <label htmlFor="nameOnCard" className="block mb-3 text-sm font-semibold text-gray-500">
-                                Name on Card
-                            </label>
                             <FormInput
                                 type="text"
-                                title="name on Card"
+                                placeholder="name on Card"
                                 name="nameOnCard"
                                 useForm={{ register, formState }}
-                            />
+                            >
+                                Name on Card{" "}
+                            </FormInput>
                         </div>
                         <div className="w-full lg:w-1/2 ">
-                            <label htmlFor="cardNumber" className="block mb-3 text-sm font-semibold text-gray-500">
-                                Card number
-                            </label>
-
                             <FormInput
                                 type="text"
-                                title="Card Number"
+                                placeholder="Card Number"
                                 name="cardNumber"
                                 useForm={{ register, formState }}
-                            />
+                            >
+                                Card number{" "}
+                            </FormInput>
                         </div>
                         <div className="w-full lg:w-1/2 ">
-                            <label htmlFor="expirationDate" className="block mb-3 text-sm font-semibold text-gray-500">
-                                Expiration date (MM/YY)
-                            </label>
                             <FormInput
                                 type="text"
-                                title="Expiration date"
+                                placeholder="Expiration date"
                                 name="expirationDate"
                                 useForm={{ register, formState }}
-                                // required={true}
-                                // validate={true}
-                            />
-
-                            {/* <input
-                                {...register("expirationDate", {
-                                    required: true,
-                                    validate: (value) => validateCreditCardDate(value),
-                                })}
-                                type="text"
-                                placeholder="Expiration date"
-                                className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
-                            />
-
-                            <span role="alert" className="w-full inline-block  text-rose-600">
-                                {errors.expirationDate?.message}
-                            </span> */}
+                            >
+                                Expiration date (MM/YY)
+                            </FormInput>
                         </div>
                         <div className="w-full lg:w-1/2 ">
-                            <label htmlFor="cvc" className="block mb-3 text-sm font-semibold text-gray-500">
+                            <FormInput type="text" placeholder="CVC" name="cvc" useForm={{ register, formState }}>
                                 CVC
-                            </label>
-
-                            <FormInput type="text" title="CVC" name="cvc" useForm={{ register, formState }} />
+                            </FormInput>
                         </div>
                     </div>
-
-                    <div className="flex items-center mt-4">
-                        <label htmlFor=" confirm" className="flex items-center text-sm group text-heading">
-                            {/* <input
-                                type="checkbox"
-                                className="w-5 h-5 border border-gray-300 rounded focus:outline-none focus:ring-1"
-                            /> */}
-                            <FormInput name="confirm" type="checkbox" useForm={{ register, formState }} />
-
-                            <span className="ml-2">I accept the all terms </span>
-                        </label>
+                    {/* //----------------------- */}
+                    <div className="flex  flex-col  items-start  mt-4">
+                        <FormInput type="checkbox" name="acceptTerms" useForm={{ register, formState }}>
+                            Accept Terms & Conditions
+                        </FormInput>
                     </div>
                     <div className="relative pt-3 xl:pt-6">
                         <label htmlFor="note" className="block mb-3 text-sm font-semibold text-gray-500">
