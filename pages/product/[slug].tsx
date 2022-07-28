@@ -2,7 +2,7 @@ import { Main } from "components/Main";
 import { ProductDetails } from "components/Product";
 import { InferGetStaticPropsType } from "next";
 import { serialize } from "next-mdx-remote/serialize";
-import { InferGetStaticPathsType } from "utils/types";
+import { InferGetStaticPathsType } from "types";
 import { apolloClient } from "graphql/apolloClient";
 
 import {
@@ -12,6 +12,7 @@ import {
     GetProductsSlugsDocument,
     GetProductsSlugsQuery,
 } from "generated/graphql";
+import { validateCurrency } from "utils/currency";
 
 const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
     if (!product) {
@@ -22,13 +23,16 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
         <Main>
             <ProductDetails
                 data={{
-                    id: product.slug,
+                    id: product.id,
                     title: product.name,
                     description: product.description,
                     thumbnailUrl: product.images[0].url,
                     thumbnailAlt: product.name,
+                    slug: product.slug,
                     // rating: product.rating.rate,
                     longDescription: product.longDescription,
+                    price: product.price / 100,
+                    priceWithCurrency: validateCurrency(product.price / 100),
                 }}
             />
         </Main>

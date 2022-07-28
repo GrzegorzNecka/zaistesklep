@@ -1,9 +1,22 @@
+## Init
+
+-   node:
+-   npm:
+-   react: 17.4
+-   yarn:
+-   next:
+
 ## do zrobienia
 
 1. paginacja - dokończ
-2. koszyk zadanie dokończgg
+2. koszyk zadanie dokończ
 3. cena z serwera
 4. strona z produktem -> dodaj do koszyka
+5. wyszukiwarka produktów
+6. dodaj ulubione produkty
+7. globalne style kolory i buttony
+8. dodaj memo do komponentów tj. bradcrums / home , page ...
+9.
 
 ## demo blog
 
@@ -21,9 +34,24 @@ npm run dev
 yarn dev
 ```
 
-## GraphQl
+## Plugins
 
-### graphql-code-generator
+### Markdown
+
+### Tailwind:
+
+[tailwindcss/aspect-ratio]()
+[require("@tailwindcss/typography]()
+[headless UI](https://headlessui.com/)
+[hero icons](https://heroicons.com/)
+
+### GraphQl:
 
 [graphql-code-generator](https://www.graphql-code-generator.com/docs/getting-started/installation)
 uruchamia generator: `yarn generate-graphql`
+
+### Forms:
+
+[tailwind-forms](https://github.com/tailwindlabs/tailwindcss-forms)
+[rhf](https://react-hook-form.com/get-started#IntegratingControlledInputs)
+[yup](https://github.com/jquense/yup)

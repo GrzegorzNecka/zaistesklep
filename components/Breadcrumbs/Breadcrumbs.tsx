@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import { CurrentPaths, CurrentPathsProps } from "./types";
-import { Separator } from "./Separator";
+import { CurrentPaths } from "./types";
 import { Home } from "./Home";
 import { Page } from "./Page";
 
@@ -69,6 +67,8 @@ const Breadcrumbs = () => {
                 // typescript krzyczał - że zwraca undefined
                 return { url, title };
             });
+
+        prevPath = "";
 
         if (!paths) {
             return;

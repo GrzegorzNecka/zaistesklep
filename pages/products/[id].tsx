@@ -1,6 +1,6 @@
 import { ProductListItem } from "components/Products";
 import { InferGetStaticPropsType } from "next";
-import { InferGetStaticPathsType } from "utils/types";
+import { InferGetStaticPathsType } from "types";
 import Pagination from "components/Pagination/Pagination";
 import { Main } from "components/Main";
 import { useQuery } from "react-query";
@@ -8,6 +8,7 @@ import { countOfProducts, fetchProducts } from "services/pages/products";
 import { gql } from "@apollo/client";
 import { apolloClient } from "graphql/apolloClient";
 import { GetProductsListDocument, GetProductsListQuery } from "generated/graphql";
+import { validateCurrency } from "utils/currency";
 
 const ProductListIdPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
     if (!data) {
@@ -22,10 +23,13 @@ const ProductListIdPage = ({ data }: InferGetStaticPropsType<typeof getStaticPro
                         <li key={product.slug} className={`className="group relative" ${product.slug}`}>
                             <ProductListItem
                                 data={{
-                                    id: product.slug,
+                                    id: product.id,
+                                    slug: product.slug,
                                     title: product.name,
                                     thumbnailUrl: product.images[0].url,
                                     thumbnailAlt: product.images[0].id,
+                                    price: product.price / 100,
+                                    priceWithCurrency: validateCurrency(product.price / 100),
                                     // rating: product.rating.rate,
                                 }}
                             />

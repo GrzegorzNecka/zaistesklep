@@ -53,6 +53,7 @@ const CartSummary = () => {
         <div>
             podsumowanie koszyka
             <div>Liczba elementów: {cartState.items.length}</div>
+            <div>Łączna Liczba wszystkich elementów: {cartState.totalLength}</div>
         </div>
     );
 };

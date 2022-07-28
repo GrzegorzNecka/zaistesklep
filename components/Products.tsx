@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Rating } from "./Raiting";
 import { NextSeo } from "next-seo";
 import Markdown from "./Markdown";
-import { MarkdownResult } from "utils/types";
+import { MarkdownResult } from "types";
 import { useCartState } from "./Cart/CartContext";
 import { ProductListItemProps } from "./types";
 
@@ -29,7 +29,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
             <div className="mt-4 flex justify-between">
                 <div>
                     <h3 className="text-sm text-gray-700">
-                        <Link href={`/product/${data.id}`}>
+                        <Link href={`/product/${data.slug}`}>
                             <a className="hover:underline">
                                 <span aria-hidden="true" className="">
                                     {data.title}
@@ -38,16 +38,16 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
                         </Link>
                     </h3>
                 </div>
-                <p className="text-sm font-medium text-gray-900">20zł</p>
+                <p className="text-sm font-medium text-gray-900">{data.priceWithCurrency}</p>
             </div>
             <div className="pt-4">{/* <Rating rating={data.rating}></Rating> */}</div>
             <div className="pt-4">
                 <button
-                    className=" w-full mb-8 bg-transparent hover:bg-black text-blackfont-semibold hover:text-white py-2 px-4 border-2 border-black hover:border-transparent rounded"
+                    className=" w-full  text-blackfont-semibold btn-custom-primary"
                     onClick={() =>
                         cartState.addItemToCart({
                             id: data.id,
-                            price: 12.37,
+                            price: data.price,
                             title: data.title,
                             count: 1,
                         })

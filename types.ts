@@ -1,6 +1,10 @@
+/* --- MarkdownResult --- */
+
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
 export type MarkdownResult = MDXRemoteSerializeResult<Record<string, unknown>>;
+
+/* --- InferGetStaticPathsType --- */
 
 import type { GetStaticPropsContext } from "next";
 import type { ParsedUrlQuery } from "querystring";
