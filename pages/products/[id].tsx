@@ -22,7 +22,8 @@ const ProductListIdPage = ({ data }: InferGetStaticPropsType<typeof getStaticPro
                         <li key={product.slug} className={`className="group relative" ${product.slug}`}>
                             <ProductListItem
                                 data={{
-                                    id: product.slug,
+                                    id: product.id,
+                                    slug: product.slug,
                                     title: product.name,
                                     thumbnailUrl: product.images[0].url,
                                     thumbnailAlt: product.images[0].id,
