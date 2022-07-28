@@ -21,11 +21,7 @@ const FormInput = ({ name, type, placeholder, useForm: { register, formState }, 
         return (
             <>
                 <div className="flex ">
-                    <input
-                        {...register(name, {})}
-                        type={type}
-                        className="mr-3 form-checkbox  border-gray-300 rounded "
-                    />
+                    <input {...register(name)} type={type} className="mr-3 form-checkbox  border-gray-300 rounded " />
                     <label htmlFor={name} className="block mb-3 text-sm font-semibold text-gray-500">
                         {children}
                     </label>
@@ -44,7 +40,7 @@ const FormInput = ({ name, type, placeholder, useForm: { register, formState }, 
                 {children}
             </label>
             <input
-                {...register(name, {})}
+                {...register(name)}
                 type={type}
                 placeholder={placeholder}
                 className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"

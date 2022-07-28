@@ -10,51 +10,48 @@ import * as yup from "yup";
 
 //https://www.youtube.com/watch?v=cTY_L1X_oC4
 
+yup.setLocale({
+    mixed: {
+        required: "to pole jest wymagane",
+        oneOf: "to pole wymaga wartości: ${values}",
+    },
+    string: {
+        email: "email jest wymagany w odpowiednim formacie ",
+        min: "minimalna liczna znaków ${min}",
+        length: "to pole wymaga ${length} znaków",
+    },
+});
+
 const checkoutFormSchema = yup
     .object({
-        firstName: yup
-            .string()
-            .required("first name  is required")
-            .min(3, "first Name has to be longer than 3 characters!"),
-        lastName: yup
-            .string()
-            .required("last name  is required")
-            .min(3, "last Name has to be longer than 3 characters!"),
-        emailAdress: yup
-            .string()
-            .required("email adress is required")
-            .email("the email must have a specific format like @ etc"),
-        address: yup.string().required("adress  is required"),
-        city: yup.string().required("city is required"),
+        firstName: yup.string().required().min(3).trim(),
+        lastName: yup.string().required().min(3).trim(),
+        emailAdress: yup.string().required().email().trim(),
+        address: yup.string().required().trim(),
+        city: yup.string().required().trim(),
         postalCode: yup
             .string()
-            .required("post code is required")
-            .matches(/^[0-9]{2}-[0-9]{3}/, "post code should only contain numbers and look like 00-000"),
+            .required()
+            .matches(/^[0-9]{2}-[0-9]{3}/, "kod pocztowy powienien posiadać zapid: 00-000")
+            .trim(),
 
         note: yup.string(),
-        // nameOnCard: yup.string().required("name on card is required"),
-        nameOnCard: yup
-            .string()
-            .oneOf(["VISA", "MASTERCARD"], "this must be one of the following values: VISA, MASTERCARD"),
-        cardNumber: yup
-            .string()
-            .required("card number is required")
-            .length(26, "card number must be exactly 26 characters"),
-
-        // expirationDate: yup.string().required("expiration date is required"),
+        nameOnCard: yup.string().oneOf(["VISA", "MASTERCARD"], "to pole przyjmuje tylko: VISA, MASTERCARD"),
+        cardNumber: yup.string().required().length(26),
         expirationDate: yup
             .string()
-            .required("expiration date is required")
+            .required()
             .matches(
                 validateCreditCardDate(),
-                "enter month as MM, separator / and years as YY. The year may be 4 years longer than today"
-            ),
+                "użyj dokładnie zapisu: MM/YY. wartość YY to maksymalnie obecby rok + 4 lata"
+            )
+            .trim(),
         cvc: yup
             .string()
-            .required("CVC number is required")
-            .matches(/^[0-9]{4}/, "cvc must be exactly 4 numbers"),
-
-        acceptTerms: yup.boolean().oneOf([true], "Accept terms is required"),
+            .required()
+            .matches(/^[0-9]{4}/, "numer CVC składa się z 4 cyfr")
+            .trim(),
+        acceptTerms: yup.string().oneOf(["true"], "potwierdzenie warunków jest obowiązkowe"),
     })
     .required();
 
@@ -86,7 +83,7 @@ const CheckoutForm = () => {
                         <div className="w-full lg:w-1/2 ">
                             <FormInput
                                 type="text"
-                                placeholder="First Name"
+                                placeholder="Last Name"
                                 name="lastName"
                                 useForm={{ register, formState }}
                             >
@@ -178,7 +175,6 @@ const CheckoutForm = () => {
                             </FormInput>
                         </div>
                     </div>
-                    {/* //----------------------- */}
                     <div className="flex  flex-col  items-start  mt-4">
                         <FormInput type="checkbox" name="acceptTerms" useForm={{ register, formState }}>
                             Accept Terms & Conditions
