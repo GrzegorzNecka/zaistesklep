@@ -8,49 +8,18 @@ import { MarkdownResult } from "types";
 import { useCartState } from "./Cart/CartContext";
 import { ProductDetailsProps } from "./types";
 
-const SeoProvider = ({ data: { thumbnailAlt, thumbnailUrl, description, title, id } }: ProductDetailsProps) => {
+export const ProductDetails = ({ data }: ProductDetailsProps) => {
+    const cartState = useCartState();
     return (
         <>
-            <NextSeo
-                title={` produkt ${title}`}
-                description={`${description}`}
-                canonical={`https://naszsklep.vercel.app/products/${id}`}
-                openGraph={{
-                    url: `https://naszsklep.vercel.app/products/${id}`,
-                    title,
-                    description,
-                    images: [
-                        {
-                            url: thumbnailUrl,
-                            alt: thumbnailAlt,
-                            type: "image/jpeg",
-                        },
-                    ],
-                    site_name: "naszsklep",
-                }}
-                twitter={{
-                    handle: "@handle",
-                    site: "@site",
-                    cardType: "summary_large_image",
-                }}
-            />
-        </>
-    );
-};
-
-export const ProductDetails = ({
-    data: { thumbnailAlt, thumbnailUrl, description, title, longDescription, id },
-}: ProductDetailsProps) => {
-    return (
-        <>
-            <SeoProvider data={{ thumbnailAlt, thumbnailUrl, description, title, id, longDescription }} />
+            <SeoProvider data={data} />
 
             <div className="font-mono ">
                 <div className="grid grid-cols-2 gap">
                     <div>
                         <Image
-                            src={thumbnailUrl}
-                            alt={thumbnailAlt}
+                            src={data.thumbnailUrl}
+                            alt={data.thumbnailAlt}
                             className=""
                             layout="responsive"
                             width={16}
@@ -62,18 +31,60 @@ export const ProductDetails = ({
 
                     <div className="">
                         <div className="flex justify-between pb-8">
-                            <h2 className="font-bold text-xl ">{title}</h2>
-                            <span className=" font-medium text-xl justify-self-end">23zł</span>
+                            <h2 className="font-bold text-xl ">{data.title}</h2>
+                            <span className=" font-medium text-xl justify-self-end">{data.priceWithCurrency}</span>
                         </div>
 
-                        <button className="btn-custom-primary">Dodaj do kosza</button>
+                        <button
+                            onClick={() =>
+                                cartState.addItemToCart({
+                                    id: data.id,
+                                    price: data.price,
+                                    title: data.title,
+                                    count: 1,
+                                })
+                            }
+                            className="btn-custom-primary"
+                        >
+                            Dodaj do kosza
+                        </button>
 
                         <article className="">
-                            <Markdown>{longDescription}</Markdown>
+                            <Markdown>{data.longDescription}</Markdown>
                         </article>
                     </div>
                 </div>
             </div>
+        </>
+    );
+};
+
+const SeoProvider = ({ data }: ProductDetailsProps) => {
+    return (
+        <>
+            <NextSeo
+                title={` produkt ${data.title}`}
+                description={`${data.description}`}
+                canonical={`https://naszsklep.vercel.app/products/${data.id}`}
+                openGraph={{
+                    url: `https://naszsklep.vercel.app/products/${data.id}`,
+                    title: data.title,
+                    description: data.description,
+                    images: [
+                        {
+                            url: data.thumbnailUrl,
+                            alt: data.thumbnailAlt,
+                            type: "image/jpeg",
+                        },
+                    ],
+                    site_name: "naszsklep",
+                }}
+                twitter={{
+                    handle: "@handle",
+                    site: "@site",
+                    cardType: "summary_large_image",
+                }}
+            />
         </>
     );
 };

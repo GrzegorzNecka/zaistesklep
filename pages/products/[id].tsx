@@ -8,6 +8,7 @@ import { countOfProducts, fetchProducts } from "services/pages/products";
 import { gql } from "@apollo/client";
 import { apolloClient } from "graphql/apolloClient";
 import { GetProductsListDocument, GetProductsListQuery } from "generated/graphql";
+import { validateCurrency } from "utils/currency";
 
 const ProductListIdPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
     if (!data) {
@@ -27,6 +28,8 @@ const ProductListIdPage = ({ data }: InferGetStaticPropsType<typeof getStaticPro
                                     title: product.name,
                                     thumbnailUrl: product.images[0].url,
                                     thumbnailAlt: product.images[0].id,
+                                    price: product.price / 100,
+                                    priceWithCurrency: validateCurrency(product.price / 100),
                                     // rating: product.rating.rate,
                                 }}
                             />

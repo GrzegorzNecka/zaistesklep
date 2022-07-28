@@ -38,7 +38,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
                         </Link>
                     </h3>
                 </div>
-                <p className="text-sm font-medium text-gray-900">20zł</p>
+                <p className="text-sm font-medium text-gray-900">{data.priceWithCurrency}</p>
             </div>
             <div className="pt-4">{/* <Rating rating={data.rating}></Rating> */}</div>
             <div className="pt-4">
@@ -47,7 +47,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
                     onClick={() =>
                         cartState.addItemToCart({
                             id: data.id,
-                            price: 12.37,
+                            price: data.price,
                             title: data.title,
                             count: 1,
                         })

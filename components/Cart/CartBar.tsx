@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { useCartState } from "./CartContext";
+import { CartItem } from "./types";
 
 export default function CartBar() {
     const cartState = useCartState();
+
     return (
         <div>
             <Link href="/cart">
                 <a>
                     <div className=" flex">
-                        <span> {cartState?.items.length}</span>
+                        <span> {cartState?.totalLength}</span>
 
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
