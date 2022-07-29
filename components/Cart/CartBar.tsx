@@ -10,7 +10,7 @@ export default function CartBar() {
             <Link href="/cart">
                 <a>
                     <div className=" flex">
-                        <span> {cartState?.totalLength}</span>
+                        <span> {cartState.totalCount}</span>
 
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

@@ -50,6 +50,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
                             price: data.price,
                             title: data.title,
                             count: 1,
+                            imgUrl: data.thumbnailUrl,
                         })
                     }
                 >

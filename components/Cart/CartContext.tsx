@@ -13,7 +13,7 @@ export const CartStateContextProvider = ({ children }: { children: React.ReactNo
         <CartStateContext.Provider
             value={{
                 items: cartItems || [],
-
+                totalCount: 0,
                 addItemToCart: (item) => {
                     addItems(item);
                 },
@@ -29,11 +29,19 @@ export const useCartState = () => {
     const cartState = useContext(CartStateContext);
 
     const itemsCount = cartState?.items.map((obj) => obj.count);
-    const totalLength = itemsCount?.reduce((prev, current) => prev + current, 0);
+    const totalCount = itemsCount?.reduce((prev, current) => prev + current, 0);
+
+    const getFullPrice = cartState?.items.map((obj) => {
+        const price = obj.price * 100;
+
+        return price;
+    });
+
+    console.log("🚀 ~ file: CartContext.tsx ~ line 37 ~ getFullPrice ~ getFullPrice ", getFullPrice);
 
     if (!cartState) {
         throw new Error("you forgot CartStateContextProvider");
     }
 
-    return { ...cartState, totalLength };
+    return { ...cartState, totalCount: totalCount };
 };
