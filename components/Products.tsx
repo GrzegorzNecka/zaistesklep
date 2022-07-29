@@ -51,6 +51,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
                             title: data.title,
                             count: 1,
                             imgUrl: data.thumbnailUrl,
+                            slug: data.slug,
                         })
                     }
                 >

@@ -1,7 +1,8 @@
 import { useCartState } from "components/Cart/CartContext";
 import { XIcon } from "@heroicons/react/solid";
 import Image from "next/image";
-import { validateCurrency } from "utils/currency";
+import { changeToCurrency, moveTheComa } from "utils/currency";
+import Link from "next/link";
 
 const CheckoutSummary = () => {
     const cartState = useCartState();
@@ -29,10 +30,17 @@ const CheckoutSummary = () => {
                                                 />
                                             </div>
                                             <div className="grow">
-                                                <h2 className="text-xl font-bold">{item.title}</h2>
+                                                <h3 className="text-xl font-bold">
+                                                    {
+                                                        <Link href={`/product/${item.slug}`}>
+                                                            <a className="hover:underline">{item.title}</a>
+                                                        </Link>
+                                                    }
+                                                </h3>
+
                                                 <p className="text-sm">count : {item.count} </p>
                                                 <span className="text-red-600">
-                                                    price: {validateCurrency(item.price)}
+                                                    price: {changeToCurrency(moveTheComa(item.price))}
                                                 </span>
                                             </div>
                                             <button onClick={() => cartState.removeItemFromCart(item.id)}>

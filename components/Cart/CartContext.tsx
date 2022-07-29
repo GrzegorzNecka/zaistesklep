@@ -27,6 +27,7 @@ export const CartStateContextProvider = ({ children }: { children: React.ReactNo
 
 export const useCartState = () => {
     const cartState = useContext(CartStateContext);
+    console.log("🚀 ~ file: CartContext.tsx ~ line 30 ~ useCartState ~ cartState", cartState);
 
     const itemsCount = cartState?.items.map((obj) => obj.count);
     const totalCount = itemsCount?.reduce((prev, current) => prev + current, 0);

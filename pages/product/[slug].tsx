@@ -12,7 +12,7 @@ import {
     GetProductsSlugsDocument,
     GetProductsSlugsQuery,
 } from "generated/graphql";
-import { validateCurrency } from "utils/currency";
+import { changeToCurrency, moveTheComa } from "utils/currency";
 
 const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
     if (!product) {
@@ -31,8 +31,8 @@ const ProductIdPage = ({ product }: InferGetStaticPropsType<typeof getStaticProp
                     slug: product.slug,
                     // rating: product.rating.rate,
                     longDescription: product.longDescription,
-                    price: product.price / 100,
-                    priceWithCurrency: validateCurrency(product.price / 100),
+                    price: product.price,
+                    priceWithCurrency: changeToCurrency(moveTheComa(product.price)),
                 }}
             />
         </Main>

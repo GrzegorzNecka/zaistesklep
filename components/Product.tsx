@@ -43,6 +43,7 @@ export const ProductDetails = ({ data }: ProductDetailsProps) => {
                                     title: data.title,
                                     count: 1,
                                     imgUrl: data.thumbnailUrl,
+                                    slug: data.slug,
                                 })
                             }
                             className="btn-custom-primary"

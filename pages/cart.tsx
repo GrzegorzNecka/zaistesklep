@@ -1,5 +1,7 @@
 import { useCartState } from "components/Cart/CartContext";
 import { Main } from "components/Main";
+import Link from "next/link";
+import { changeToCurrency, moveTheComa } from "utils/currency";
 
 const CartContent = () => {
     const cartState = useCartState();
@@ -11,11 +13,14 @@ const CartContent = () => {
                         <li key={index}>
                             <div className="flex justify-between">
                                 <div>
-                                    {/* {item.title} {item.count ? `x ${item.count + 1}` : ""} */}
-                                    {item.title} x {item.count}
+                                    <Link href={`/product/${item.slug}`}>
+                                        <a className="hover:underline">
+                                            {item.title} {`x  ${item.count}`}
+                                        </a>
+                                    </Link>
                                 </div>
                                 <div>
-                                    {item.price}
+                                    {changeToCurrency(moveTheComa(item.price))}
                                     <button
                                         onClick={() => cartState.removeItemFromCart(item.id)}
                                         className="ml-4 text-red-500"

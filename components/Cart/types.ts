@@ -4,6 +4,7 @@ export interface CartItem {
     readonly title: string;
     readonly count: number;
     readonly imgUrl: string;
+    readonly slug: string;
 }
 
 export interface CartState {
