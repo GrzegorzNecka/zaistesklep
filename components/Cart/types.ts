@@ -12,4 +12,6 @@ export interface CartState {
     readonly addItemToCart: (item: CartItem) => void;
     readonly removeItemFromCart: (id: CartItem["id"]) => void;
     readonly totalCount: number;
+    readonly fullPrice: number;
+    readonly shippingTax: number;
 }

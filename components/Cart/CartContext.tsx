@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { createContext } from "react";
 import { CartState } from "components/Cart/types";
 import { useCartItems } from "./useCartItems";
+import { changeToCurrency, moveTheComa } from "utils/currency";
 
 export const CartStateContext = createContext<CartState | null>(null);
 
@@ -14,6 +15,8 @@ export const CartStateContextProvider = ({ children }: { children: React.ReactNo
             value={{
                 items: cartItems || [],
                 totalCount: 0,
+                fullPrice: 0,
+                shippingTax: 1000, //10zł
                 addItemToCart: (item) => {
                     addItems(item);
                 },
@@ -27,22 +30,23 @@ export const CartStateContextProvider = ({ children }: { children: React.ReactNo
 
 export const useCartState = () => {
     const cartState = useContext(CartStateContext);
-    console.log("🚀 ~ file: CartContext.tsx ~ line 30 ~ useCartState ~ cartState", cartState);
 
     const itemsCount = cartState?.items.map((obj) => obj.count);
     const totalCount = itemsCount?.reduce((prev, current) => prev + current, 0);
 
-    const getFullPrice = cartState?.items.map((obj) => {
-        const price = obj.price * 100;
+    // getFullPrice
 
-        return price;
+    const getFullItemsPrice = cartState?.items.map((obj) => {
+        const price = obj.price;
+        const count = obj.count;
+        return count * price;
     });
 
-    console.log("🚀 ~ file: CartContext.tsx ~ line 37 ~ getFullPrice ~ getFullPrice ", getFullPrice);
+    const totalPrice = getFullItemsPrice?.reduce((prev, current) => prev + current, 0) || 0;
 
     if (!cartState) {
         throw new Error("you forgot CartStateContextProvider");
     }
 
-    return { ...cartState, totalCount: totalCount };
+    return { ...cartState, totalCount, totalPrice };
 };

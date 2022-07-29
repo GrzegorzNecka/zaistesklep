@@ -57,13 +57,18 @@ const CheckoutSummary = () => {
                     <h2 className="text-xl font-bold">ITEMS : {cartState.totalCount}</h2>
                 </div>
                 <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
-                    Subtotal<span className="ml-2">$40.00</span>
+                    Subtotal<span className="ml-2">{changeToCurrency(moveTheComa(cartState.totalPrice))}</span>
                 </div>
                 <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
-                    Shipping Tax<span className="ml-2">$10</span>
+                    Shipping Tax<span className="ml-2"> {changeToCurrency(moveTheComa(cartState.shippingTax))} </span>
                 </div>
                 <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
-                    Total<span className="ml-2">$50.00</span>
+                    Total
+                    <span className="ml-2">
+                        {changeToCurrency(
+                            moveTheComa(cartState.totalPrice && cartState.totalPrice + cartState.shippingTax)
+                        )}
+                    </span>
                 </div>
             </div>
         </div>

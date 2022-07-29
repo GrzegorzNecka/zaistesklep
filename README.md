@@ -10,13 +10,14 @@
 
 1. paginacja - dokończ
 2. koszyk zadanie dokończ
-3. cena z serwera
-4. strona z produktem -> dodaj do koszyka
-5. wyszukiwarka produktów
-6. dodaj ulubione produkty
-7. globalne style kolory i buttony
-8. dodaj memo do komponentów tj. bradcrums / home , page ...
-9. strona 2 języczna
+3. włącz rating
+4. cena z serwera
+5. strona z produktem -> dodaj do koszyka
+6. wyszukiwarka produktów
+7. dodaj ulubione produkty
+8. globalne style kolory i buttony
+9. dodaj memo do komponentów tj. bradcrums / home , page ...
+10. strona 2 języczna
 
 ## demo blog
 
