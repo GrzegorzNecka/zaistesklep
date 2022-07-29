@@ -16,7 +16,7 @@
 6. dodaj ulubione produkty
 7. globalne style kolory i buttony
 8. dodaj memo do komponentów tj. bradcrums / home , page ...
-9.
+9. strona 2 języczna
 
 ## demo blog
 
