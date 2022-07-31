@@ -22,7 +22,6 @@ const isTokenExist = (state: Session[], token: string) => {
 export default function handler(req: NextApiRequest, res: NextApiResponse<Session>) {
     switch (req.method) {
         case "POST": {
-            // ?co jeśli token instnieje
             try {
                 const payload = req.body;
 

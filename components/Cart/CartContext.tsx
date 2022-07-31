@@ -31,7 +31,17 @@ export const CartStateContextProvider = ({ children }: { children: React.ReactNo
 export const useCartState = () => {
     const cartState = useContext(CartStateContext);
 
-    const itemsCount = cartState?.items.map((obj) => obj.count);
+    if (cartState.items.length) {
+        const totalCount = 0;
+        const totalPrice = 0;
+
+        if (!cartState) {
+            throw new Error("you forgot CartStateContextProvider");
+        }
+        return { ...cartState, totalCount, totalPrice };
+    }
+
+    const itemsCount = cartState?.items.map((obj) => obj.count || 0);
     const totalCount = itemsCount?.reduce((prev, current) => prev + current, 0);
 
     // getFullPrice

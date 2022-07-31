@@ -37,18 +37,22 @@ export const useCartItems = () => {
     }, []);
 
     useEffect(() => {
+        console.log(cartToken);
+        // console.log(cartItems.length);
         if (!cartToken) {
             return;
         }
 
-        if (!cartItems.length) {
-            return;
-        }
+        // if (!cartItems.length) {
+        //     return;
+        // }
 
         const fetchCartSession = async () => {
             const cartState = await getCartSession(cartToken, cartItems);
             setCartItems(cartState);
         };
+
+        console.log("s");
 
         fetchCartSession();
     }, [cartToken]);
@@ -66,11 +70,11 @@ export const useCartItems = () => {
         };
 
         updateCartSession();
-    }, [cartItems]);
+    }, [cartToken, cartItems]);
 
     const addItems = (item: CartItem) => {
         setCartItems((prevState = []) => {
-            const existingItem = prevState.find((prevItem) => prevItem.id === item.id);
+            const existingItem = prevState.find((prevItem) => prevItem?.id === item?.id);
 
             if (!existingItem) {
                 return [...prevState, item];
