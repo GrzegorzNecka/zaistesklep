@@ -21,7 +21,7 @@ POST http://localhost:3000/api/cartSession
 content-type: application/json
 
 {
-  "token": "3d9e81dead71a34f6e392e98e0e08924e7935afe4dd6921995b528f48cb63d1c2d9ae764f098072264defe7717f52c8aafdbb314f49d873e0db42a52c24df0aa",
+  "token": "1ww29e81dead71a34f6e392e98e0e08924e7935afe4dd6921995b528f48cb63d1c2d9ae764f098072264defe7717f52c8aafdbb314f49d873e0db42a52c24df0aa",
   "cartItems": [
     {
         "id": "ckdu44mn40gxh010405uwgbtw",
@@ -30,7 +30,8 @@ content-type: application/json
         "count": 1,
         "imgUrl": "https://media.graphassets.com/TSPnQGujTFC8nwtYMXmz",
         "slug": "unisex-long-sleeve-tee"
-    }
+    },
+
 ]
 
 }
@@ -39,7 +40,7 @@ content-type: application/json
 ###
 GET http://localhost:3000/api/cartSession
 content-type: application/json
-token: "3d9e81dead71a34f6e392e98e0e08924e7935afe4dd6921995b528f48cb63d1c2d9ae764f098072264defe7717f52c8aafdbb314f49d873e0db42a52c24df0aa" 
+session-cart-token: 1ww2d9e81dead71a34f6e392e98e0e08924e7935afe4dd6921995b528f48cb63d1c2d9ae764f098072264defe7717f52c8aafdbb314f49d873e0db42a52c24df0aa
 
 
 # {

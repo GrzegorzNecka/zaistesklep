@@ -3,10 +3,21 @@ import { getCartItemsFromStorage, setCartItemsInStorage, getCartSessionToken } f
 import { CartItem } from "components/Cart/types";
 import { useQuery, useQueryClient } from "react-query";
 
-// const fetchCartState = async () => {
-//     const data = await getCartItemsFromStorage();
-//     return data;
-// };
+const getCartSession = async (cartToken: string, cartItems: CartItem[]) => {
+    const payload = { token: cartToken, cartItems: cartItems };
+
+    const data = await fetch("/api/cartSession", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    const res = await data.json();
+
+    return res;
+};
 
 export const useCartItems = () => {
     const [cartToken, setCartToken] = useState<string>();
@@ -26,8 +37,6 @@ export const useCartItems = () => {
     }, []);
 
     useEffect(() => {
-        //?! dlaczego nie mogęużyć && wtedy są2 requesty
-        //! co z przypadkiem kiedy cartToken !== ""
         if (!cartToken) {
             return;
         }
@@ -36,39 +45,28 @@ export const useCartItems = () => {
             return;
         }
 
-        const getCartState = async () => {
-            const data = await fetch("/api/cartSession", {
-                method: "POST",
-                body: JSON.stringify({ token: cartToken, cartItems: cartItems }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            const res = await data.json();
-            console.log("🚀 ~ file: useCartItems.tsx ~ line 38 ~ getCartState ~ res", res);
+        const fetchCartSession = async () => {
+            const cartState = await getCartSession(cartToken, cartItems);
+            setCartItems(cartState);
         };
 
-        getCartState();
-    }, [cartToken, cartItems]);
-
-    // ----------------------- cart State
-
-    // const { data } = useQuery("cartState", fetchCartState);
+        fetchCartSession();
+    }, [cartToken]);
 
     useEffect(() => {
-        // if (!data) {
-        //     return;
-        // }
+        if (!cartToken) {
+            return;
+        }
 
-        setCartItems(getCartItemsFromStorage());
-    }, []);
+        if (!cartItems.length) {
+            return;
+        }
+        const updateCartSession = async () => {
+            const cartState = await getCartSession(cartToken, cartItems);
+        };
 
-    useEffect(() => {
-        setCartItemsInStorage(cartItems);
+        updateCartSession();
     }, [cartItems]);
-
-    //-------------------
 
     const addItems = (item: CartItem) => {
         setCartItems((prevState = []) => {

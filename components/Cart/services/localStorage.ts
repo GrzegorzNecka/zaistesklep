@@ -36,5 +36,5 @@ export const getCartSessionToken = async (): Promise<string> => {
         }
     }
 
-    return token;
+    return JSON.parse(token);
 };
