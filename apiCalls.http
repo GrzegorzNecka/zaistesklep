@@ -3,7 +3,45 @@
 http://localhost:3000/api/hello
 # Cookie: {{sessionToken}}
 
+
+
+
+
 ###
-http://localhost:3000/api/products?page=1
+GET http://localhost:3000/api/createCartSessionToken
 
 
+
+
+
+
+###
+
+POST http://localhost:3000/api/cartSession
+content-type: application/json
+
+{
+  "token": "3d9e81dead71a34f6e392e98e0e08924e7935afe4dd6921995b528f48cb63d1c2d9ae764f098072264defe7717f52c8aafdbb314f49d873e0db42a52c24df0aa",
+  "cartItems": [
+    {
+        "id": "ckdu44mn40gxh010405uwgbtw",
+        "price": 1999,
+        "title": "Unisex Long Sleeve Tee",
+        "count": 1,
+        "imgUrl": "https://media.graphassets.com/TSPnQGujTFC8nwtYMXmz",
+        "slug": "unisex-long-sleeve-tee"
+    }
+]
+
+}
+
+
+###
+GET http://localhost:3000/api/cartSession
+content-type: application/json
+token: "3d9e81dead71a34f6e392e98e0e08924e7935afe4dd6921995b528f48cb63d1c2d9ae764f098072264defe7717f52c8aafdbb314f49d873e0db42a52c24df0aa" 
+
+
+# {
+#   "token": "2d9e81dead71a34f6e392e98e0e08924e7935afe4dd6921995b528f48cb63d1c2d9ae764f098072264defe7717f52c8aafdbb314f49d873e0db42a52c24df0aa",
+# }

@@ -8,7 +8,7 @@ export const getCartItemsFromStorage = () => {
     }
 
     try {
-        const items = JSON.parse(itemsFromLocalStorage);
+        const items: CartItem[] = JSON.parse(itemsFromLocalStorage);
         return items;
     } catch (error) {
         console.error(error);
@@ -18,4 +18,23 @@ export const getCartItemsFromStorage = () => {
 
 export const setCartItemsInStorage = (cartItems: CartItem[]) => {
     localStorage.setItem("ZAISTE_SHOPPING_CART", JSON.stringify(cartItems));
+};
+
+export const getCartSessionToken = async (): Promise<string> => {
+    let token = localStorage.getItem("ZAISTE_CART_TOKEN");
+
+    if (!token) {
+        const newToken = await fetch("/api/createCartSessionToken");
+
+        try {
+            const { data } = await newToken.json();
+            localStorage.setItem("ZAISTE_CART_TOKEN", JSON.stringify(data));
+            return data;
+        } catch (error) {
+            console.error(error);
+            return "";
+        }
+    }
+
+    return token;
 };

@@ -1,17 +1,74 @@
 import { useState, useEffect } from "react";
-import { getCartItemsFromStorage, setCartItemsInStorage } from "./services/localStorage";
+import { getCartItemsFromStorage, setCartItemsInStorage, getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
+import { useQuery, useQueryClient } from "react-query";
+
+// const fetchCartState = async () => {
+//     const data = await getCartItemsFromStorage();
+//     return data;
+// };
 
 export const useCartItems = () => {
+    const [cartToken, setCartToken] = useState<string>();
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
+    /**
+     *  ------- token -------
+     */
+
     useEffect(() => {
+        const token = async () => {
+            const data = await getCartSessionToken();
+            setCartToken(data);
+        };
+
+        token();
+    }, []);
+
+    useEffect(() => {
+        //?! dlaczego nie mogęużyć && wtedy są2 requesty
+        //! co z przypadkiem kiedy cartToken !== ""
+        if (!cartToken) {
+            return;
+        }
+
+        if (!cartItems.length) {
+            return;
+        }
+
+        const getCartState = async () => {
+            const data = await fetch("/api/cartSession", {
+                method: "POST",
+                body: JSON.stringify({ token: cartToken, cartItems: cartItems }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const res = await data.json();
+            console.log("🚀 ~ file: useCartItems.tsx ~ line 38 ~ getCartState ~ res", res);
+        };
+
+        getCartState();
+    }, [cartToken, cartItems]);
+
+    // ----------------------- cart State
+
+    // const { data } = useQuery("cartState", fetchCartState);
+
+    useEffect(() => {
+        // if (!data) {
+        //     return;
+        // }
+
         setCartItems(getCartItemsFromStorage());
     }, []);
 
     useEffect(() => {
         setCartItemsInStorage(cartItems);
     }, [cartItems]);
+
+    //-------------------
 
     const addItems = (item: CartItem) => {
         setCartItems((prevState = []) => {

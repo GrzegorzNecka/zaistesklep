@@ -7,21 +7,24 @@ import SEO from "next-seo.config";
 import { CartStateContextProvider } from "components/Cart/CartContext";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "graphql/apolloClient";
+import { useEffect } from "react";
+import { getCartSessionToken } from "components/Cart/services/localStorage";
 
 const client = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <ApolloProvider client={apolloClient}>
-            <CartStateContextProvider>
-                <Layout>
-                    <DefaultSeo {...SEO} />
-                    <QueryClientProvider client={client}>
+        <QueryClientProvider client={client}>
+            <ApolloProvider client={apolloClient}>
+                <CartStateContextProvider>
+                    <Layout>
+                        <DefaultSeo {...SEO} />
+
                         <Component {...pageProps} />
-                    </QueryClientProvider>
-                </Layout>
-            </CartStateContextProvider>
-        </ApolloProvider>
+                    </Layout>
+                </CartStateContextProvider>
+            </ApolloProvider>
+        </QueryClientProvider>
     );
 }
 
