@@ -2,10 +2,28 @@ import { useState, useEffect } from "react";
 import { getCartItemsFromStorage, setCartItemsInStorage } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
 
+const testApiState = async () => {
+    const data = await fetch("/api/hello", {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    const res = await data.json();
+    return res;
+};
+
 export const useCartItems = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
     useEffect(() => {
+        const checkApiState = async () => {
+            const result = await testApiState();
+            console.log("🚀 ~ result", result);
+        };
+
+        checkApiState();
+
         setCartItems(getCartItemsFromStorage());
     }, []);
 
