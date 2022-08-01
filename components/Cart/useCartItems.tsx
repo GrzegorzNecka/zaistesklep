@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { getCartItemsFromStorage, setCartItemsInStorage } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
 
-const testApiState = async () => {
-    const data = await fetch("/api/hello", {
+const testApiState = async (token: string) => {
+    const data = await fetch("/api/cartSessionState", {
         headers: {
             "Content-Type": "application/json",
+            "Cart-Session-Token": JSON.stringify({ token: token }),
         },
     });
 
@@ -18,8 +19,12 @@ export const useCartItems = () => {
 
     useEffect(() => {
         const checkApiState = async () => {
-            const result = await testApiState();
+            const result = await testApiState("ssssssss");
             console.log("🚀 ~ result", result);
+            const result2 = await testApiState("sssdddd");
+            console.log("🚀 ~ result2", result2);
+            const result1 = await testApiState("ssssssss");
+            console.log("🚀 ~ result", result1);
         };
 
         checkApiState();

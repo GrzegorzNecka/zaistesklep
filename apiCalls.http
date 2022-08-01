@@ -7,3 +7,13 @@ http://localhost:3000/api/hello
 http://localhost:3000/api/products?page=1
 
 
+###
+http://localhost:3000/api/cartSessionState
+content-type: application/json
+cart-session-token: "{token: qbwertyhgddfghbvf12345}"
+
+
+###
+http://localhost:3000/api/cartSessionState
+content-type: application/json
+cart-session-token: "{token: dfdfyhgddfghbvf12345}"
