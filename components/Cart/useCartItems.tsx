@@ -1,17 +1,44 @@
 import { useState, useEffect } from "react";
-import { getCartItemsFromStorage, setCartItemsInStorage } from "./services/localStorage";
+// import { getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
+import { fetchCartItems, updateCartItems } from "./services/cartItems";
+import { useCartToken } from "./useCartToken";
+
+//dodaj RactQuery
 
 export const useCartItems = () => {
+    const token = useCartToken(null);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
     useEffect(() => {
-        setCartItems(getCartItemsFromStorage());
-    }, []);
+        if (!token) {
+            return;
+        }
+
+        const getCartItemsSessionState = async () => {
+            const { status, cartItems } = await fetchCartItems(token);
+            console.log("🚀 ~ 1 status, cartItems", status, cartItems);
+
+            if (!cartItems) {
+                return;
+            }
+
+            setCartItems(cartItems);
+        };
+
+        getCartItemsSessionState();
+    }, [token]);
 
     useEffect(() => {
-        setCartItemsInStorage(cartItems);
-    }, [cartItems]);
+        if (!token) {
+            return;
+        }
+        const updateCartItemsSessionState = async () => {
+            const data = await updateCartItems(token, cartItems);
+            console.log("🚀 ~ 2 status, cartItems", data);
+        };
+        updateCartItemsSessionState();
+    }, [cartItems, token]);
 
     const addItems = (item: CartItem) => {
         setCartItems((prevState = []) => {

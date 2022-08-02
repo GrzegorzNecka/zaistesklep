@@ -19,6 +19,23 @@
 9. dodaj memo do komponentów tj. bradcrums / home , page ...
 10. strona 2 języczna
 
+---
+
+11. obsługa zapytania do serwera:
+
+Jak zrobisz zapytanie do api to dostaniesz odpowiedź w postaci koszyka
+Ale serwer musi wiedzieć kim Ty jesteś
+Aby wiedział, możesz dołączyć nagłówek z jakimś tokenem lub ciastko
+Zazwyczaj działa to tak:
+
+1. Sprawdzasz czy w localstorage jest token koszyka, sprawdzasz czy jest poprawny etc
+2. Jeśli jest, to wysyłasz do api zapytanie żeby api zwróciło Ci koszyk (token dołączasz jako nagłówek lub ciastko lub po prostu w treści zapytania)
+3. Jeśli nie, to wysyłasz do api zapytanie aby api stworzyło nowy koszyk i zwróciło Ci token, który gdzieś sobie zapiszesz
+
+Nie musi być to zewnętrzny serwis, może być to pages/api
+Tak naprawdę żeby to symulować nie musisz mieć nawet bazy danych
+Możesz wszystkie koszyki trzymać w pamięci w API
+
 ## demo blog
 
 [ActiveLink](https://zaiste.net/programming/reactjs/howtos/create-activelink-nextjs/)
