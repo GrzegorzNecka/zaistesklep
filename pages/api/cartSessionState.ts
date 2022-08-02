@@ -1,20 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { CartItem } from "components/Cart/types";
+import { CartItem, ResCartItems, State, Token } from "components/Cart/types";
 import type { NextApiRequest, NextApiResponse } from "next";
-
-type Token = {
-    token: string;
-};
-
-interface Data {
-    status: string;
-    cartItems?: CartItem[];
-    error?: string;
-}
-interface State {
-    token: string;
-    cartItems: CartItem[];
-}
 
 const STATE: State[] = [];
 
@@ -25,9 +11,9 @@ const addItemsToState = (token: string, cartItems: CartItem[]) => {
     });
 };
 
-const isTokenExist = (state: State[], token: string) => state.filter((elem) => elem.token === token); // czy ten STATE tutaj powinien być podany
+const existToken = (state: State[], token: string) => state.filter((elem) => elem.token === token); // czy ten STATE tutaj powinien być podany
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<ResCartItems>) {
     /* 
         - create token or check if existing token is correct. Return cartItems arraay
     */
@@ -44,7 +30,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 
             const { token }: Token = JSON.parse(json);
 
-            if (!STATE.length || !isTokenExist(STATE, token).length) {
+            if (!STATE.length || !existToken(STATE, token).length) {
                 addItemsToState(token, []);
             }
 
@@ -72,7 +58,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
     }
 
     /* 
-        - check token , update STATE and return current cartItems array
+        - check token, update STATE and return current cartItems array
     */
 
     if (req.headers["cart-session-payload"]) {
@@ -89,10 +75,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 
             const { token, cartItems }: State = JSON.parse(json);
             console.log("🚀  ~ cartItems", cartItems);
-            console.log("🚀  ~  token", token);
             console.log("🚀  ~  STATE", STATE);
 
-            if (!isTokenExist(STATE, token).length) {
+            if (!existToken(STATE, token).length) {
                 res.status(400).json({
                     status: "The token from request is not exist on the server",
                     error: "token_is_not_exist",
@@ -107,12 +92,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
                 }
             });
 
-            if (typeof currentStateElem !== "undefined") {
-                res.status(200).json({
-                    status: `updated_cart_items_for_token_${token}`,
-                    cartItems: currentStateElem.cartItems,
-                });
+            if (!currentStateElem) {
+                return;
             }
+
+            res.status(200).json({
+                status: `updated_cart_items_for_token_${token}`,
+                cartItems: currentStateElem.cartItems,
+            });
         } catch (err) {
             let message = "server is unable to process the request for some reason.";
             if (err instanceof Error) {

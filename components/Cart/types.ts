@@ -15,3 +15,20 @@ export interface CartState {
     readonly fullPrice: number;
     readonly shippingTax: number;
 }
+
+//--------- API --------------
+
+export interface Token {
+    token: string;
+}
+
+export interface ResCartItems {
+    status: string;
+    cartItems?: CartItem[];
+    error?: string;
+}
+
+export interface State {
+    token: string;
+    cartItems: CartItem[];
+}

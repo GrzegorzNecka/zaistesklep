@@ -1,4 +1,6 @@
-import { CartItem } from "../types";
+import { CartItem, ResCartItems } from "../types";
+
+//dodaj walidacjeYup
 
 export const fetchCartItems = async (token: string) => {
     const data = await fetch("/api/cartSessionState", {
@@ -8,13 +10,11 @@ export const fetchCartItems = async (token: string) => {
         },
     });
 
-    const res = await data.json();
+    const res: ResCartItems = await data.json();
     return res;
 };
 
 export const updateCartItems = async (token: string, cartItems: CartItem[]) => {
-    console.log("🚀 ~  updateCartItems ~ cartItems", cartItems);
-    console.log("🚀 ~  updateCartItems ~ token", token);
     const data = await fetch("/api/cartSessionState", {
         headers: {
             "Content-Type": "application/json",
@@ -22,6 +22,6 @@ export const updateCartItems = async (token: string, cartItems: CartItem[]) => {
         },
     });
 
-    const res = await data.json();
+    const res: ResCartItems = await data.json();
     return res;
 };
