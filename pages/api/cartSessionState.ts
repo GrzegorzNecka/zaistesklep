@@ -6,42 +6,122 @@ type Token = {
     token: string;
 };
 
+interface Data {
+    status: string;
+    cartItems?: CartItem[];
+    error?: string;
+}
 interface State {
-    token?: string;
+    token: string;
     cartItems: CartItem[];
 }
-const state: State[] = [];
+
+const STATE: State[] = [];
 
 const addItemsToState = (token: string, cartItems: CartItem[]) => {
-    state.push({
+    STATE.push({
         token,
         cartItems,
     });
 };
-// czy ten state tutaj powinien być podany
-const isTokenExist = (state: State[], token: string) => state.filter((elem) => elem.token === token);
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<State>) {
+const isTokenExist = (state: State[], token: string) => state.filter((elem) => elem.token === token); // czy ten STATE tutaj powinien być podany
+
+export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+    /* 
+        - create token or check if existing token is correct. Return cartItems arraay
+    */
     if (req.headers["cart-session-token"]) {
-        const json = req.headers["cart-session-token"];
+        try {
+            const json = req.headers["cart-session-token"];
+            if (typeof json !== "string") {
+                res.status(400).json({
+                    status: "The request could not be understood by the server due to incorrect syntax",
+                    error: "bad_request_syntax",
+                });
+                return;
+            }
 
-        if (typeof json !== "string") {
+            const { token }: Token = JSON.parse(json);
+
+            if (!STATE.length || !isTokenExist(STATE, token).length) {
+                addItemsToState(token, []);
+            }
+
+            const currentStateElem = STATE.find((elem) => elem.token === token);
+
+            if (typeof currentStateElem !== "undefined") {
+                res.status(200).json({
+                    status: `token_${token}_is_correct`,
+                    cartItems: currentStateElem.cartItems,
+                });
+            }
+        } catch (err) {
+            let message = "server is unable to process the request for some reason.";
+            if (err instanceof Error) {
+                message = err.message;
+            }
+
+            res.status(422).json({
+                status: "unknown_request_problem",
+                error: message,
+            });
+
             return;
-            //zwróć res
         }
+    }
 
-        const { token }: Token = JSON.parse(json);
+    /* 
+        - check token , update STATE and return current cartItems array
+    */
 
-        if (!state.length || !isTokenExist(state, token).length) {
-            addItemsToState(token, []);
-        }
+    if (req.headers["cart-session-payload"]) {
+        try {
+            const json = req.headers["cart-session-payload"];
 
-        const currentStateElem = state.find((elem) => elem.token === token);
+            if (typeof json !== "string") {
+                res.status(400).json({
+                    status: "The request could not be understood by the server due to incorrect syntax",
+                    error: "bad_request_syntax",
+                });
+                return;
+            }
 
-        console.log(state);
+            const { token, cartItems }: State = JSON.parse(json);
 
-        if (typeof currentStateElem !== "undefined") {
-            res.status(200).json({ cartItems: currentStateElem.cartItems });
+            if (!isTokenExist(STATE, token).length) {
+                res.status(400).json({
+                    status: "The token from request is not exist on the server",
+                    error: "token_is_not_exist",
+                });
+                return;
+            }
+
+            const currentStateElem = STATE.find((elem) => {
+                if (elem.token === token) {
+                    elem.cartItems = cartItems;
+                    return elem;
+                }
+            });
+
+            if (typeof currentStateElem !== "undefined") {
+                res.status(200).json({
+                    status: `updated_cart_items_for_token_${token}`,
+                    cartItems: currentStateElem.cartItems,
+                });
+            }
+        } catch (err) {
+            let message = "server is unable to process the request for some reason.";
+            if (err instanceof Error) {
+                message = err.message;
+            }
+
+            res.status(422).json({
+                status: "unknown_request_problem",
+                error: message,
+            });
+
+            return;
         }
     }
 }

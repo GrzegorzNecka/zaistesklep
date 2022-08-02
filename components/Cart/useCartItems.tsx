@@ -14,17 +14,32 @@ const testApiState = async (token: string) => {
     return res;
 };
 
+const updateCartItems = async (token: string, cartItems: CartItem[]) => {
+    const data = await fetch("/api/cartSessionState", {
+        headers: {
+            "Content-Type": "application/json",
+            "Cart-Session-Payload": JSON.stringify({ token, cartItems }),
+        },
+    });
+
+    const res = await data.json();
+    return res;
+};
+
 export const useCartItems = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
     useEffect(() => {
         const checkApiState = async () => {
-            const result = await testApiState("ssssssss");
+            const localStorageToken = "ssssssss";
+            const result = await testApiState(localStorageToken);
             console.log("🚀 ~ result", result);
             const result2 = await testApiState("sssdddd");
             console.log("🚀 ~ result2", result2);
             const result1 = await testApiState("ssssssss");
             console.log("🚀 ~ result", result1);
+            const result3 = await testApiState("ssssssss");
+            console.log("🚀 ~ result", result3);
         };
 
         checkApiState();
@@ -33,6 +48,13 @@ export const useCartItems = () => {
     }, []);
 
     useEffect(() => {
+        const postCartItem = async () => {
+            const localStorageToken = "ssssssss";
+            const result = await updateCartItems(localStorageToken, cartItems);
+            console.log("🚀 ~ file: useCartItems.tsx ~ line 52 ~ postCartItem ~ result", result);
+        };
+        postCartItem();
+
         setCartItemsInStorage(cartItems);
     }, [cartItems]);
 
