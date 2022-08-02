@@ -88,6 +88,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
             }
 
             const { token, cartItems }: State = JSON.parse(json);
+            console.log("🚀  ~ cartItems", cartItems);
+            console.log("🚀  ~  token", token);
+            console.log("🚀  ~  STATE", STATE);
 
             if (!isTokenExist(STATE, token).length) {
                 res.status(400).json({

@@ -1,32 +1,54 @@
 import { useState, useEffect } from "react";
-import { getCartItemsFromStorage, setCartItemsInStorage } from "./services/localStorage";
+import { getCartItemsFromStorage, getCartSessionToken, setCartItemsInStorage } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
 import { fetchCartItems, updateCartItems } from "./services/cartItems";
 
 export const useCartItems = () => {
+    const [token, setToken] = useState("");
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
     useEffect(() => {
-        const getCartItmes = async () => {
-            const localStorageToken = "ssssssss";
-            const result = await fetchCartItems(localStorageToken);
+        const getToken = async () => {
+            const localStorageToken = await getCartSessionToken();
+            console.log("🚀 ~ file: useCartItems.tsx ~ line 13 ~ getToken ~ localStorageToken", localStorageToken);
+            if (!localStorageToken.length) {
+                return;
+            }
+            setToken(localStorageToken);
         };
 
-        getCartItmes();
+        getToken();
 
-        setCartItems(getCartItemsFromStorage());
+        // setCartItems(getCartItemsFromStorage());
     }, []);
 
     useEffect(() => {
         const getCartItmes = async () => {
-            const localStorageToken = "ssssssss";
-            const result = await updateCartItems(localStorageToken, cartItems);
-            console.log("🚀 ~ file: useCartItems.tsx ~ line 52 ~ postCartItem ~ result", result);
+            const data = await fetchCartItems(token);
+            setCartItems(data.cartItems);
+            console.log("1", data);
         };
+
         getCartItmes();
 
-        setCartItemsInStorage(cartItems);
-    }, [cartItems]);
+        // setCartItems(getCartItemsFromStorage());
+    }, [token]);
+
+    useEffect(() => {
+        const getCartItmes = async () => {
+            // const localStorageToken = await getCartSessionToken();
+
+            if (!token.length) {
+                return;
+            }
+            console.log("🚀 ~ file: useCartItems.tsx ~ line 37 ~ getCartItmes ~ token", token);
+            const data = await updateCartItems(token, cartItems);
+
+            console.log("2", data);
+        };
+        getCartItmes();
+        // setCartItemsInStorage(cartItems);
+    }, [cartItems, token]);
 
     const addItems = (item: CartItem) => {
         setCartItems((prevState = []) => {
