@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 // import { getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
 import { fetchCartItems, updateCartItems } from "./services/cartItems";
@@ -9,6 +9,7 @@ import { useCartToken } from "./useCartToken";
 export const useCartItems = () => {
     const token = useCartToken(null);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [dispatchCartItems, setDispatchCartItems] = useState(false);
 
     useEffect(() => {
         if (!token) {
@@ -17,7 +18,7 @@ export const useCartItems = () => {
 
         const getCartItemsSessionState = async () => {
             const { status, cartItems } = await fetchCartItems(token);
-            console.log("🚀 ~ 1 status, cartItems", status, cartItems);
+            console.log("🚀 ~ 1 fetch data from serwer", status, cartItems);
 
             if (!cartItems) {
                 return;
@@ -33,14 +34,23 @@ export const useCartItems = () => {
         if (!token) {
             return;
         }
+
+        if (!dispatchCartItems) {
+            return;
+        }
+
         const updateCartItemsSessionState = async () => {
             const data = await updateCartItems(token, cartItems);
-            console.log("🚀 ~ 2 status, cartItems", data);
+            console.log("🚀 ~ 2 dispatch data to server", data);
         };
         updateCartItemsSessionState();
-    }, [cartItems, token]);
+    }, [cartItems, token, dispatchCartItems]);
 
     const addItems = (item: CartItem) => {
+        if (!dispatchCartItems) {
+            setDispatchCartItems(true);
+        }
+
         setCartItems((prevState = []) => {
             const existingItem = prevState.find((prevItem) => prevItem.id === item.id);
 
@@ -62,6 +72,9 @@ export const useCartItems = () => {
     };
 
     const removeItems = (id: CartItem["id"]) => {
+        if (!dispatchCartItems) {
+            setDispatchCartItems(true);
+        }
         setCartItems((prevState = []) => {
             const existingItem = prevState.find((eItem) => eItem.id === id);
 
