@@ -18,7 +18,6 @@ export const useCartItems = () => {
 
         const getCartItemsSessionState = async () => {
             const { status, cartItems } = await fetchCartItems(token);
-            console.log("🚀 ~ 1 fetch data from serwer", status, cartItems);
 
             if (!cartItems) {
                 return;
@@ -41,7 +40,6 @@ export const useCartItems = () => {
 
         const updateCartItemsSessionState = async () => {
             const data = await updateCartItems(token, cartItems);
-            console.log("🚀 ~ 2 dispatch data to server", data);
         };
         updateCartItemsSessionState();
     }, [cartItems, token, dispatchCartItems]);

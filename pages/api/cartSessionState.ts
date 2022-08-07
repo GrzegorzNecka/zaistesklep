@@ -75,8 +75,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<ResCar
 
             const { token, cartItems }: State = JSON.parse(json);
 
-            console.log("🚀  ~  STATE", STATE);
-
             if (!existToken(STATE, token).length) {
                 res.status(400).json({
                     status: "The token from request is not exist on the server",
