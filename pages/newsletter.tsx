@@ -1,6 +1,6 @@
 // import CheckoutForm from "components/CheckoutForm/CheckoutForm";
 
-import NewsletterForm from "components/NewsletterForm";
+import NewsletterForm from "components/NewslwtterForm/NewsletterForm";
 import { Main } from "components/Main";
 import React from "react";
 

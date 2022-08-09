@@ -16,7 +16,7 @@ const handler: NextApiHandler = async (req, res) => {
     }
 
     const json = JSON.parse(req.body);
-    const email = json.email;
+    const { email, name } = json;
 
     if (typeof email !== "string") {
         return res.status(400).end();
@@ -30,24 +30,25 @@ const handler: NextApiHandler = async (req, res) => {
             "Content-Type": "application/json",
             "X-MailerLite-ApiKey": MAILERLITE_API_KEY,
         },
-        body: JSON.stringify({ email: email, resubscribe: false, autoresponders: true, type: "null" }),
+        body: JSON.stringify({
+            email: email,
+            fields: {
+                name: name,
+                last_name: "Testerson",
+            },
+            groups: [MAILERLITE_GROUP_ID],
+            resubscribe: false,
+            autoresponders: true,
+        }),
     };
 
-    const mailerLiteResponse = await fetch(
-        `https://api.mailerlite.com/api/v2/groups/${MAILERLITE_GROUP_ID}/subscribers`,
-        options
-    );
-
-    console.log(
-        "🚀 ~ file: mailerLite.ts ~ line 40 ~ consthandler:NextApiHandler= ~ mailerLiteResponse ",
-        mailerLiteResponse
-    );
+    const mailerLiteResponse = await fetch(`https://api.mailerlite.com/api/v2/subscribers`, options);
 
     if (!mailerLiteResponse.ok) {
         return res.status(mailerLiteResponse.status).json({ error: mailerLiteResponse.statusText });
     }
 
-    return res.status(201).json({});
+    return res.status(201).json({ statusText: mailerLiteResponse.statusText });
 };
 
 export default handler;
