@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiHandler } from "next";
+//https://developers.mailerlite.com/reference/add-single-subscriber
 
 const handler: NextApiHandler = async (req, res) => {
     if (req.method !== "POST") {
@@ -14,7 +15,9 @@ const handler: NextApiHandler = async (req, res) => {
         return res.status(500).json({ error: "Nie podano zmiennych środowiskowych" });
     }
 
-    const email = req.body.email;
+    const json = JSON.parse(req.body);
+    const email = json.email;
+
     if (typeof email !== "string") {
         return res.status(400).end();
     }
@@ -27,7 +30,7 @@ const handler: NextApiHandler = async (req, res) => {
             "Content-Type": "application/json",
             "X-MailerLite-ApiKey": MAILERLITE_API_KEY,
         },
-        body: JSON.stringify({ email: "null", resubscribe: false, autoresponders: true, type: "null" }),
+        body: JSON.stringify({ email: email, resubscribe: false, autoresponders: true, type: "null" }),
     };
 
     const mailerLiteResponse = await fetch(
@@ -35,8 +38,13 @@ const handler: NextApiHandler = async (req, res) => {
         options
     );
 
+    console.log(
+        "🚀 ~ file: mailerLite.ts ~ line 40 ~ consthandler:NextApiHandler= ~ mailerLiteResponse ",
+        mailerLiteResponse
+    );
+
     if (!mailerLiteResponse.ok) {
-        return res.status(500).json({ error: `Pojawił się problem przy zapisie newslettera` });
+        return res.status(mailerLiteResponse.status).json({ error: mailerLiteResponse.statusText });
     }
 
     return res.status(201).json({});
