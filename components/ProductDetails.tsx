@@ -7,6 +7,7 @@ import Markdown from "./Markdown";
 import { MarkdownResult } from "types";
 import { useCartState } from "./Cart/CartContext";
 import { ProductDetailsProps } from "./types";
+import ProductReviewContainer from "./ProductReview/ProductReviewContainer";
 
 export const ProductDetails = ({ data }: ProductDetailsProps) => {
     const cartState = useCartState();
@@ -54,6 +55,8 @@ export const ProductDetails = ({ data }: ProductDetailsProps) => {
                         <article className="">
                             <Markdown>{data.longDescription}</Markdown>
                         </article>
+
+                        <ProductReviewContainer productSlug={data.slug} />
                     </div>
                 </div>
             </div>

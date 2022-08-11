@@ -1,4 +1,4 @@
-import { ProductListItem } from "components/Products";
+import { ProductListItem } from "components/ProductList";
 import { InferGetStaticPropsType } from "next";
 import { InferGetStaticPathsType } from "types";
 import Pagination from "components/Pagination/Pagination";

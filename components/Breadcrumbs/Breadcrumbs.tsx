@@ -12,6 +12,7 @@ const Breadcrumbs = () => {
         if (!router.isReady) {
             return;
         }
+
         setNastedPaths("");
 
         if (router.route.endsWith("]")) {
