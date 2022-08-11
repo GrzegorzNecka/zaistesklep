@@ -3,7 +3,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import FormInput from "components/CheckoutForm/FormInput";
-import { GetReviewsForProductSlugDocument, useCreateProductReviewMutation } from "generated/graphql";
+import {
+    GetReviewsForProductSlugDocument,
+    GetReviewsForProductSlugQuery,
+    useCreateProductReviewMutation,
+} from "generated/graphql";
 
 interface ProductReviewFormProps {
     productSlug: string;
@@ -31,7 +35,27 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
     // -----------
 
     const [createReview, { data, loading, error, client }] = useCreateProductReviewMutation({
-        refetchQueries: [{ query: GetReviewsForProductSlugDocument, variables: { slug: productSlug } }],
+        // refetchQueries: [{ query: GetReviewsForProductSlugDocument, variables: { slug: productSlug } }],
+        update(cashe) {
+            const originakReviewsQuery = cashe.readQuery<GetReviewsForProductSlugQuery>({
+                query: GetReviewsForProductSlugDocument,
+                variables: { slug: productSlug },
+            });
+
+            if (!originakReviewsQuery) {
+                // ...
+                return;
+            }
+
+            // originakReviewsQuery.product?.reviews.push({
+            //     __typename?: "Review" | undefined;
+            //     content: string;
+            //     headline: string;
+            //     id: string;
+            //     name: string;
+            //     rating?: number | null | undefined;
+            // });
+        },
     });
 
     const onSubmit = handleSubmit((data) => {
@@ -47,8 +71,16 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
                     },
                 },
             },
+            optimisticResponse: {
+                __typename: "Mutation",
+
+                review: {
+                    __typename: "Review",
+                },
+            },
         });
     });
+
     //useCreateProductReviewMutation
 
     // const { mutate, isLoading, isSuccess } = useAddToNewsletterMutation();
