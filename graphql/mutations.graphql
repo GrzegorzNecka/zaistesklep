@@ -3,10 +3,3 @@ mutation CreateProductReview($review: ReviewCreateInput!) {
         ...reviewContent
     }
 }
-
-mutation CreateCheckout($checkout: CheckoutCreateInput!) {
-    review: createReview(data: $checkout) {
-        id
-        stage
-    }
-}
