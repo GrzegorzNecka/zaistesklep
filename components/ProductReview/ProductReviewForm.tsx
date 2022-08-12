@@ -8,6 +8,8 @@ import {
     GetReviewsForProductSlugQuery,
     useCreateProductReviewMutation,
 } from "generated/graphql";
+import { concatAST } from "graphql";
+import { RaitingFormInput } from "components/ProductRating/AddRating";
 
 interface ProductReviewFormProps {
     productSlug: string;
@@ -28,17 +30,17 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
 
     type formData = yup.InferType<typeof formSchema>;
 
-    const { register, handleSubmit, formState } = useForm<formData>({
+    const { register, handleSubmit, formState, setValue } = useForm<formData>({
         resolver: yupResolver(formSchema),
     });
 
     // -----------
 
     const [createReview, { data, loading, error, client }] = useCreateProductReviewMutation({
-        // // --3 dane z  optimisticResponse trafiuają do funkcji update->result
+        // --3 dane z  optimisticResponse trafiuają do funkcji update->result
         update(cashe, result) {
             result.errors;
-            console.log("🚀 ~ file: ProductReviewForm.tsx ~ line 41 ~ update ~  result.errors", result.errors);
+
             // --3.1 ręcznie bierzemy z cashe query na podstawie  query i zmiennych
             const originalReviewsQuery = cashe.readQuery<GetReviewsForProductSlugQuery>({
                 query: GetReviewsForProductSlugDocument,
@@ -59,8 +61,6 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
                 },
             };
 
-            console.log("🚀 ~ file: ProductReviewForm.tsx ~ line 55 ~ update ~   newReviewsQuery", newReviewsQuery);
-
             cashe.writeQuery({
                 query: GetReviewsForProductSlugDocument,
                 variables: { slug: productSlug },
@@ -72,6 +72,8 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
     // -----------
 
     const onSubmit = handleSubmit((data) => {
+        console.log("🚀 ~ onSubmit ~ data", data);
+
         //--1.  wywaołujemy mutację graphQl  "CreateProductReview/createReview" z pewnymi danymi
         createReview({
             variables: {
@@ -96,33 +98,60 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
         });
     });
 
-    // -----------
+    // ----------- REFETCH
+
+    // const [createReview, { data, loading, error, client }] = useCreateProductReviewMutation({
+    //     refetchQueries: [{ query: GetReviewsForProductSlugDocument, variables: { slug: productSlug } }],
+    // });
+
+    // const onSubmit = handleSubmit((data) => {
+    //     createReview({
+
+    //         variables: {
+    //             review: {
+    //                 ...data,
+    //                 product: {
+    //                     connect: {
+    //                         slug: productSlug,
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     });
+    // });
+
+    //------------
 
     return (
         <div className="flex flex-col md:w-full">
             <h2 className="mb-4 font-bold md:text-xl text-heading ">dodaj komentarz</h2>
+
             <form onSubmit={onSubmit} className="justify-center w-full mx-auto">
                 <div className="mt-4">
                     <div className="w-full">
-                        <FormInput type="text" placeholder="name" name="name" useForm={{ register, formState }}>
-                            name
-                        </FormInput>
-                        <FormInput type="text" placeholder="content" name="content" useForm={{ register, formState }}>
-                            content
-                        </FormInput>
                         <FormInput type="text" placeholder="headline" name="headline" useForm={{ register, formState }}>
-                            headline
+                            nagłówek
+                        </FormInput>
+                        <FormInput type="text" placeholder="imię" name="name" useForm={{ register, formState }}>
+                            imię
+                        </FormInput>
+                        <FormInput
+                            type="text"
+                            placeholder="komezntarz"
+                            name="content"
+                            useForm={{ register, formState }}
+                        >
+                            treść komentarza
                         </FormInput>
                         <FormInput type="email" placeholder=" email" name="email" useForm={{ register, formState }}>
                             email
                         </FormInput>
-                        <FormInput type="number" name="rating" useForm={{ register, formState }}>
-                            rating
-                        </FormInput>
+
+                        <RaitingFormInput useForm={{ register, formState, setValue }} />
                     </div>
                 </div>
 
-                <button className="w-full btn-custom-primary">dodaj komentarz</button>
+                <button className=" my-12 w-full btn-custom-primary">dodaj komentarz</button>
 
                 {/* {!isSuccess ? (
                     <div className="mt-4">

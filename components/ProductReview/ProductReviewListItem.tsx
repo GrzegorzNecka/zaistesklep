@@ -1,4 +1,4 @@
-import { Rating } from "components/Raiting";
+import { Rating } from "components/ProductRating/Raiting";
 import { ReviewContentFragment } from "generated/graphql";
 
 interface ProductReviewItemProps {
@@ -10,14 +10,11 @@ const ProductReviewListItem = ({ review }: ProductReviewItemProps) => {
 
     return (
         <>
-            <li className={`border mt-4 bg-white p-2 max-w-md shadow-md ${isOptimistic ? "opacity-50" : ""}`}>
-                <h3 className="font-bold">{review.headline}</h3>
-
-                <p>content: {review.content}</p>
-
+            <li className={`border mt-4 bg-white p-2   ${isOptimistic ? "opacity-50" : ""}`}>
+                <h3 className="font-bold">nagłówek: {review.headline}</h3>
+                <p>klient: {review.name}</p>
+                <p>komentarz: {review.content}</p>
                 {review.rating && <Rating rating={review.rating}></Rating>}
-
-                <footer>{review.name}</footer>
             </li>
         </>
     );

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import Link from "next/link";
-import { Rating } from "./Raiting";
+import { Rating } from "./ProductRating/Raiting";
 import { NextSeo } from "next-seo";
 import Markdown from "./Markdown";
 import { MarkdownResult } from "types";

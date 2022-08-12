@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import Link from "next/link";
-import { Rating } from "./Raiting";
+import { Rating } from "./ProductRating/Raiting";
 import { NextSeo } from "next-seo";
 import Markdown from "./Markdown";
 import { MarkdownResult } from "types";
@@ -55,9 +55,11 @@ export const ProductDetails = ({ data }: ProductDetailsProps) => {
                         <article className="">
                             <Markdown>{data.longDescription}</Markdown>
                         </article>
-
-                        <ProductReviewContainer productSlug={data.slug} />
                     </div>
+                </div>
+                <hr />
+                <div className="w-3/4 my-16 mx-auto">
+                    <ProductReviewContainer productSlug={data.slug} />
                 </div>
             </div>
         </>
