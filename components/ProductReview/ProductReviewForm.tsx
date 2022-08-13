@@ -9,7 +9,7 @@ import {
     useCreateProductReviewMutation,
 } from "generated/graphql";
 import { concatAST } from "graphql";
-import { RaitingFormInput } from "components/ProductRating/AddRating";
+import { RaitingFormInput } from "components/CheckoutForm/RaitingFormInput";
 
 interface ProductReviewFormProps {
     productSlug: string;
@@ -24,13 +24,13 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
             headline: yup.string().required(),
             name: yup.string().required(),
             email: yup.string().email().required(),
-            rating: yup.number().min(1).max(5).required(),
+            rating: yup.number().required().min(1, "to pole jest wymagane").max(5),
         })
         .required();
 
-    type formData = yup.InferType<typeof formSchema>;
+    type formReviewData = yup.InferType<typeof formSchema>;
 
-    const { register, handleSubmit, formState, setValue } = useForm<formData>({
+    const { register, handleSubmit, formState, setValue } = useForm<formReviewData>({
         resolver: yupResolver(formSchema),
     });
 
