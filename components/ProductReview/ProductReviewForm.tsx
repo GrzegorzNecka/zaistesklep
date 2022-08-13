@@ -147,7 +147,7 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
                             email
                         </FormInput>
 
-                        <RaitingFormInput useForm={{ register, formState, setValue }} />
+                        <RaitingFormInput name="rating" useForm={{ register, formState, setValue }} />
                     </div>
                 </div>
 

@@ -1,9 +1,9 @@
 import { StarIcon } from "@heroicons/react/solid";
 import { useState } from "react";
-import { FieldValues, FormState, Path, UseFormRegister, UseFormSetValue } from "react-hook-form";
+import { FieldValues, FormState, Path, PathValue, UseFormRegister, UseFormSetValue } from "react-hook-form";
 
 interface FormInputProps<FormData extends FieldValues> {
-    // name: Path<FormData>;
+    name: Path<FormData>;
     useForm: {
         register: UseFormRegister<FormData>;
         formState: FormState<FormData>;
@@ -15,10 +15,10 @@ type Stars = 1 | 2 | 3 | 4 | 5;
 
 export const RaitingFormInput = <FormData extends FieldValues>({
     useForm: { register, formState, setValue },
+    name,
 }: FormInputProps<FormData>) => {
     //----------
 
-    const name = "rating";
     const type = "number";
     const maybeErrorMessage = formState.errors[name]?.message;
     const errorMessage = typeof maybeErrorMessage === "string" ? maybeErrorMessage : null;
@@ -32,7 +32,12 @@ export const RaitingFormInput = <FormData extends FieldValues>({
 
     const handleRating = (star: Stars) => {
         setRating(star);
-        setValue(name, star, {
+
+        type StarsRecord = Record<string, any>;
+        type StarValue = PathValue<StarsRecord, Path<StarsRecord>>;
+        const value: StarValue = star;
+
+        setValue(name, value, {
             shouldValidate: true,
             shouldDirty: true,
         });
