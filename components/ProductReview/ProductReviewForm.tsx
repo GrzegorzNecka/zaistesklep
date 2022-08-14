@@ -1,4 +1,3 @@
-import React from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -8,14 +7,15 @@ import {
     GetReviewsForProductSlugQuery,
     useCreateProductReviewMutation,
 } from "generated/graphql";
-import { concatAST } from "graphql";
-import { RaitingFormInput } from "components/CheckoutForm/RaitingFormInput";
+import { RaitingFormInput } from "components/ProductReview/RaitingFormInput";
 
 interface ProductReviewFormProps {
     productSlug: string;
 }
 
 const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
+    // -----------
+
     // -----------
 
     const formSchema = yup
@@ -71,8 +71,12 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
 
     // -----------
 
-    const onSubmit = handleSubmit((data) => {
-        console.log("🚀 ~ onSubmit ~ data", data);
+    const onSubmit = handleSubmit((data, e) => {
+        console.log("🚀 ~ file: ProductReviewForm.tsx ~ line 75 ~ onSubmit ~ data", data);
+        // setValue("rating", 2, {
+        //     shouldValidate: true,
+        //     shouldDirty: true,
+        // });
 
         //--1.  wywaołujemy mutację graphQl  "CreateProductReview/createReview" z pewnymi danymi
         createReview({
@@ -97,30 +101,6 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
             },
         });
     });
-
-    // ----------- REFETCH
-
-    // const [createReview, { data, loading, error, client }] = useCreateProductReviewMutation({
-    //     refetchQueries: [{ query: GetReviewsForProductSlugDocument, variables: { slug: productSlug } }],
-    // });
-
-    // const onSubmit = handleSubmit((data) => {
-    //     createReview({
-
-    //         variables: {
-    //             review: {
-    //                 ...data,
-    //                 product: {
-    //                     connect: {
-    //                         slug: productSlug,
-    //                     },
-    //                 },
-    //             },
-    //         },
-    //     });
-    // });
-
-    //------------
 
     return (
         <div className="flex flex-col md:w-full">
@@ -147,21 +127,15 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
                             email
                         </FormInput>
 
-                        <RaitingFormInput name="rating" useForm={{ register, formState, setValue }} />
+                        <RaitingFormInput useForm={{ register, formState, setValue }} />
                     </div>
                 </div>
-
-                <button className=" my-12 w-full btn-custom-primary">dodaj komentarz</button>
-
-                {/* {!isSuccess ? (
-                    <div className="mt-4">
-                        <button disabled={isLoading} className="w-full btn-custom-primary">
-                            dodaj komentarz
-                        </button>
-                    </div>
-                ) : (
-                    <span>komentarz dodany pomyślnie</span>
-                )} */}
+                <div className="mt-4">
+                    <button disabled={loading} className="w-full btn-custom-primary">
+                        {loading ? "dodawanie" : "dodaj komentarz"}
+                    </button>
+                </div>
+                {data ? <div></div> : <div>komentarz dodany pomyślnie</div>}
             </form>
         </div>
     );

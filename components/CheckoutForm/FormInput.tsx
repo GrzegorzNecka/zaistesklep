@@ -1,4 +1,3 @@
-import { RaitingFormInput } from "components/ProductRating/AddRating";
 import { useState } from "react";
 import { FieldValues, FormState, Path, UseFormRegister } from "react-hook-form";
 
@@ -40,26 +39,6 @@ const FormInput = <FormData extends FieldValues>({
             </>
         );
     }
-
-    // if (type === "number" && name === "rating") {
-    //     return (
-    //         <>
-    //             <label htmlFor={name} className="block my-3 text-sm font-semibold text-gray-500">
-    //                 {children}
-    //             </label>
-
-    //             <input
-    //                 {...register(name)}
-    //                 type={type}
-    //                 className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-black"
-    //             />
-
-    //             <span role="alert" className="w-full inline-bloc text-xs text-rose-600">
-    //                 {errorMessage}
-    //             </span>
-    //         </>
-    //     );
-    // }
 
     // text
     return (
