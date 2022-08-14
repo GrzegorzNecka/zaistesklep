@@ -7,6 +7,7 @@ import Markdown from "./Markdown";
 import { MarkdownResult } from "types";
 import { useCartState } from "./Cart/CartContext";
 import { ProductListItemProps } from "./types";
+import ProductArithmeticRating from "./ProductRating/ProductArithmeticRating";
 
 export const ProductListItem = ({ data }: ProductListItemProps) => {
     const cartState = useCartState();
@@ -40,7 +41,9 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
                 </div>
                 <p className="text-sm font-medium text-gray-900">{data.priceWithCurrency}</p>
             </div>
-            <div className="pt-4">{/* <Rating rating={data.rating}></Rating> */}</div>
+            <div className="pt-4">
+                <ProductArithmeticRating productSlug={data.slug} />
+            </div>
             <div className="pt-4">
                 <button
                     className=" w-full  text-blackfont-semibold btn-custom-primary"

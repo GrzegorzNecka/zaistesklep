@@ -8,6 +8,7 @@ import { MarkdownResult } from "types";
 import { useCartState } from "./Cart/CartContext";
 import { ProductDetailsProps } from "./types";
 import ProductReviewContainer from "./ProductReview/ProductReviewContainer";
+import ProductArithmeticRating from "./ProductRating/ProductArithmeticRating";
 
 export const ProductDetails = ({ data }: ProductDetailsProps) => {
     const cartState = useCartState();
@@ -34,6 +35,7 @@ export const ProductDetails = ({ data }: ProductDetailsProps) => {
                         <div className="flex justify-between pb-8">
                             <h2 className="font-bold text-xl ">{data.title}</h2>
                             <span className=" font-medium text-xl justify-self-end">{data.priceWithCurrency}</span>
+                            <ProductArithmeticRating productSlug={data.slug} />
                         </div>
 
                         <button
@@ -65,6 +67,8 @@ export const ProductDetails = ({ data }: ProductDetailsProps) => {
         </>
     );
 };
+
+//tutaj należy zastosować typ generyczny
 
 const SeoProvider = ({ data }: ProductDetailsProps) => {
     return (

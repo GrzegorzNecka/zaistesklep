@@ -1,6 +1,5 @@
 import { StarIcon } from "@heroicons/react/solid";
-import { useEffect, useState } from "react";
-import { FieldValues, FormState, UseFormRegister, UseFormSetValue } from "react-hook-form";
+import { useState } from "react";
 import { Stars, RaitingFormInputProps } from "../ProductReview/types";
 
 export const RaitingFormInput = ({ useForm: { register, formState, setValue } }: RaitingFormInputProps) => {
@@ -14,7 +13,6 @@ export const RaitingFormInput = ({ useForm: { register, formState, setValue } }:
 
     const handleRating = (star: Stars) => {
         setRating(star);
-
         setValue("rating", star, {
             shouldValidate: true,
             shouldDirty: true,
