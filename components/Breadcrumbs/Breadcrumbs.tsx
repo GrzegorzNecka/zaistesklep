@@ -3,10 +3,13 @@ import { useRouter } from "next/router";
 import { CurrentPaths } from "./types";
 import { Home } from "./Home";
 import { Page } from "./Page";
+import setQueryPaths from "./services/setQueryPaths";
 
 const Breadcrumbs = () => {
     const router = useRouter();
     const [nastedPaths, setNastedPaths] = useState<string>("");
+
+    //------
 
     useEffect(() => {
         if (!router.isReady) {
@@ -20,6 +23,8 @@ const Breadcrumbs = () => {
         }
     }, [router.route, router.isReady]);
 
+    //------
+
     const [currentPaths, setCurrentPaths] = useState<CurrentPaths[]>([]);
 
     useEffect(() => {
@@ -27,49 +32,7 @@ const Breadcrumbs = () => {
             return;
         }
 
-        let prevPath = "";
-
-        const paths = router.asPath
-            .split("/")
-            .filter((path) => path !== "")
-            .map((path, index) => {
-                const title = path.charAt(0).toUpperCase() + path.substring(1).toLowerCase();
-                const url = `/${path}`;
-
-                switch (nastedPaths) {
-                    case "/products/[id]":
-                        if (index === 0) {
-                            return { url: `/products/1`, title };
-                        }
-
-                        if (index === 1) {
-                            return { url: ``, title: `Site ${title}` };
-                        }
-
-                    case "/product/[slug]":
-                        if (index === 0) {
-                            return { url: `/products/1`, title: "Products" };
-                        }
-
-                        if (index === 1) {
-                            return { url: ``, title: `product: ${title}` };
-                        }
-
-                    default:
-                        if (index === 0) {
-                            prevPath = path;
-                            return { url, title };
-                        }
-
-                        if (index === 1) {
-                            return { url: `/${prevPath}/${path}`, title };
-                        }
-                }
-                // typescript krzyczał - że zwraca undefined
-                return { url, title };
-            });
-
-        prevPath = "";
+        const paths = setQueryPaths(router.asPath, nastedPaths);
 
         if (!paths) {
             return;
@@ -77,6 +40,8 @@ const Breadcrumbs = () => {
 
         setCurrentPaths(paths);
     }, [router, nastedPaths]);
+
+    //------
 
     return (
         <div>

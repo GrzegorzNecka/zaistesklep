@@ -163,7 +163,7 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
                         {loading ? "dodawanie" : "dodaj komentarz"}
                     </button>
                 </div>
-                {data ? <div></div> : <div>komentarz dodany pomyślnie</div>}
+                {!data ? <div></div> : <div>komentarz dodany pomyślnie</div>}
             </form>
         </div>
     );
