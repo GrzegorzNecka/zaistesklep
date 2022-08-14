@@ -27,7 +27,7 @@ export const RaitingFormInput = ({ useForm: { register, formState, setValue } }:
                 ocena
             </label>
 
-            <input {...register(name)} defaultValue={0} type={type} className="" />
+            <input {...register(name)} defaultValue={0} type={type} className="hidden" />
 
             <div className="flex items-center">
                 {stars.map((star) => (

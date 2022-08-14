@@ -11,10 +11,16 @@ const ProductReviewListItem = ({ review }: ProductReviewItemProps) => {
     return (
         <>
             <li className={`border mt-4 bg-white p-2   ${isOptimistic ? "opacity-50" : ""}`}>
-                <h3 className="font-bold">nagłówek: {review.headline}</h3>
+                {/* <h3 className="font-bold">nagłówek: {review.headline}</h3> */}
                 <p>klient: {review.name}</p>
                 <p>komentarz: {review.content}</p>
-                {review.rating && <Rating rating={review.rating}></Rating>}
+                <p>
+                    {review.rating && (
+                        <span>
+                            ocena: <Rating rating={review.rating}></Rating>
+                        </span>
+                    )}
+                </p>
             </li>
         </>
     );

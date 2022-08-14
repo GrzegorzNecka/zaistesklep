@@ -21,7 +21,7 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
     const formSchema = yup
         .object({
             content: yup.string().required(),
-            headline: yup.string().required(),
+            headline: yup.string().default(productSlug),
             name: yup.string().required(),
             email: yup.string().email().required(),
             rating: yup.number().required().min(1, "to pole jest wymagane").max(5),
@@ -109,21 +109,26 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
             <form onSubmit={onSubmit} className="justify-center w-full mx-auto">
                 <div className="mt-4">
                     <div className="w-full">
-                        <FormInput type="text" placeholder="headline" name="headline" useForm={{ register, formState }}>
+                        {/* <FormInput type="text" placeholder="headline" name="headline" useForm={{ register, formState }}>
                             nagłówek
-                        </FormInput>
+                        </FormInput> */}
                         <FormInput type="text" placeholder="imię" name="name" useForm={{ register, formState }}>
                             imię
                         </FormInput>
                         <FormInput
                             type="text"
-                            placeholder="komezntarz"
+                            placeholder="dodaj swoją opinię"
                             name="content"
                             useForm={{ register, formState }}
                         >
                             treść komentarza
                         </FormInput>
-                        <FormInput type="email" placeholder=" email" name="email" useForm={{ register, formState }}>
+                        <FormInput
+                            type="email"
+                            placeholder="adres email"
+                            name="email"
+                            useForm={{ register, formState }}
+                        >
                             email
                         </FormInput>
 
