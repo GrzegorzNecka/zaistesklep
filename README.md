@@ -8,6 +8,9 @@
 
 ## do zrobienia
 
+0 - api z cashem koszyka zmień poprawne restowe api czyli ustaw metodę put
+2
+
 1. paginacja - dokończ
 2. koszyk zadanie dokończ
 3. włącz rating
@@ -19,7 +22,7 @@
 9. dodaj memo do komponentów tj. bradcrums / home , page ...
 10. strona 2 języczna
 
----
+## [fajny sklep](https://shopmrbeast.com/shop/credit-card-hoodie)
 
 11. obsługa zapytania do serwera:
 

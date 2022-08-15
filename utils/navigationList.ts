@@ -3,6 +3,7 @@ const navigationList = [
     { name: "About", href: "/about" },
     { name: "Products", href: "/products/1" },
     { name: "Checkout", href: "/checkout" },
+    { name: "Newsletter", href: "/newsletter" },
     // { name: "ProductsCSR", href: "/products-csr" },
 ];
 

@@ -11,17 +11,3 @@ export interface CheckoutFormData {
     expirationDate: string;
     cvc: string;
 }
-
-/**
- * nameOnCard
- * cardNumber
- * expirationDate
- * cvc
- * address
- * apartment
- * city
- * region
- * postalCode
- * sameAsShipping
- *
- */

@@ -1,22 +1,29 @@
-import { FormState, UseFormRegister } from "react-hook-form";
-// import { validateCreditCardDate } from "utils/validations";
+import { useState } from "react";
+import { FieldValues, FormState, Path, UseFormRegister } from "react-hook-form";
 
-import { CheckoutFormData } from "./CheckoutForm";
-
-type Props = keyof CheckoutFormData;
-
-interface FormInputProps {
-    name: Props;
+interface FormInputProps<FormData extends FieldValues> {
+    name: Path<FormData>;
     type: string;
+
     placeholder?: string;
     useForm: {
-        register: UseFormRegister<CheckoutFormData>;
-        formState: FormState<CheckoutFormData>;
+        register: UseFormRegister<FormData>;
+        formState: FormState<FormData>;
     };
     children: React.ReactNode;
 }
 
-const FormInput = ({ name, type, placeholder, useForm: { register, formState }, children }: FormInputProps) => {
+const FormInput = <FormData extends FieldValues>({
+    name,
+    type,
+
+    placeholder,
+    useForm: { register, formState },
+    children,
+}: FormInputProps<FormData>) => {
+    const maybeErrorMessage = formState.errors[name]?.message;
+    const errorMessage = typeof maybeErrorMessage === "string" ? maybeErrorMessage : null;
+
     if (type === "checkbox") {
         return (
             <>
@@ -27,7 +34,7 @@ const FormInput = ({ name, type, placeholder, useForm: { register, formState }, 
                     </label>
                 </div>
                 <span role="alert" className="w-full inline-bloc text-xs text-rose-600">
-                    {formState.errors[name]?.message}
+                    {errorMessage}
                 </span>
             </>
         );
@@ -36,7 +43,7 @@ const FormInput = ({ name, type, placeholder, useForm: { register, formState }, 
     // text
     return (
         <>
-            <label htmlFor={name} className="block mb-3 text-sm font-semibold text-gray-500">
+            <label htmlFor={name} className="block my-3 text-sm font-semibold text-gray-500">
                 {children}
             </label>
             <input
@@ -47,7 +54,7 @@ const FormInput = ({ name, type, placeholder, useForm: { register, formState }, 
             />
 
             <span role="alert" className="w-full inline-bloc text-xs text-rose-600">
-                {formState.errors[name]?.message}
+                {errorMessage}
             </span>
         </>
     );

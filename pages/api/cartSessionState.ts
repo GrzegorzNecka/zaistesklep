@@ -14,6 +14,8 @@ const addItemsToState = (token: string, cartItems: CartItem[]) => {
 const existToken = (state: State[], token: string) => state.filter((elem) => elem.token === token); // czy ten STATE tutaj powinien być podany
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<ResCartItems>) {
+    // console.log("🚀 ~ file: cartSessionState.ts ~ line 6 ~ STATE", STATE);
+
     /* 
         - create token or check if existing token is correct. Return cartItems arraay
     */

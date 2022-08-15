@@ -1,5 +1,5 @@
 import { Main } from "components/Main";
-import { ProductDetails } from "components/Product";
+import { ProductDetails } from "components/ProductDetails";
 import { InferGetStaticPropsType } from "next";
 import { serialize } from "next-mdx-remote/serialize";
 import { InferGetStaticPathsType } from "types";
@@ -81,7 +81,7 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
         query: GetProductDetailsBySlugDocument,
     });
 
-    if (!data || !data.product) {
+    if (!data.product) {
         return {
             props: {},
             notFound: true,
