@@ -2,38 +2,38 @@
 
 -   node:
 -   npm:
--   react: 17.4
+-   react: -.4
 -   yarn:
 -   next:
 
 ## do zrobienia
 
-2. koszyk graphQl - zadanie dokończ!!!
-   2.1. stworzenie order z api/checkout w graphCMS, a kiedy ktośkliknie zapłać to w graphCMS powstaje zamówienie ze statusem - status sięzmienia potem
-   lub przekaż koszyk, a potem przypisz do niego order
-
-1.api z cashem koszyka zmień poprawne restowe api czyli ustaw metodę put
-
-1. paginacja - dokończ
-1. włącz rating
-1. cena z serwera
-1. strona z produktem -> dodaj do koszyka
-1. wyszukiwarka produktów
-1. dodaj ulubione produkty
-1. globalne style kolory i buttony
-1. dodaj memo do komponentów tj. bradcrums / home , page ...
-1. strona 2 języczna
+-   koszyk graphQl - zadanie dokończ!!!
+    -   stworzenie order z api/checkout w graphCMS, a kiedy ktośkliknie zapłać to w graphCMS powstaje zamówienie ze statusem - status sięzmienia potem
+        lub przekaż koszyk, a potem przypisz do niego order
+-   api z cashem koszyka zmień poprawne restowe api czyli ustaw metodę put
+-   paginacja - dokończ
+-   włącz rating
+-   cena z serwera
+-   strona z produktem -> dodaj do koszyka
+-   wyszukiwarka produktów
+-   dodaj ulubione produkty
+-   globalne style kolory i buttony
+-   dodaj memo do komponentów tj. bradcrums / home , page ...
+-   strona 2 języczna
+-   stwórz kategorie produktów
 
 ## [fajny sklep](https://shopmrbeast.com/shop/credit-card-hoodie)
 
-11. obsługa zapytania do serwera:
+-   obsługa zapytania do serwera:
 
 Jak zrobisz zapytanie do api to dostaniesz odpowiedź w postaci koszyka
 Ale serwer musi wiedzieć kim Ty jesteś
 Aby wiedział, możesz dołączyć nagłówek z jakimś tokenem lub ciastko
 Zazwyczaj działa to tak:
 
-1. Sprawdzasz czy w localstorage jest token koszyka, sprawdzasz czy jest poprawny etc
+-   Sprawdzasz czy w localstorage jest token koszyka, sprawdzasz czy jest poprawny etc
+
 2. Jeśli jest, to wysyłasz do api zapytanie żeby api zwróciło Ci koszyk (token dołączasz jako nagłówek lub ciastko lub po prostu w treści zapytania)
 3. Jeśli nie, to wysyłasz do api zapytanie aby api stworzyło nowy koszyk i zwróciło Ci token, który gdzieś sobie zapiszesz
 
@@ -78,3 +78,14 @@ uruchamia generator: `yarn generate-graphql`
 [tailwind-forms](https://github.com/tailwindlabs/tailwindcss-forms)
 [rhf](https://react-hook-form.com/get-started#IntegratingControlledInputs)
 [yup](https://github.com/jquense/yup)
+
+### Stripe
+
+`stripe listen --forward-to localhost:3000/api/stripe-webhook`
+`stripe trigger checkout.session.completed`
+
+[cli](https://stripe.com/docs/stripe-cli)
+[cli-doc](https://stripe.com/docs/cli/trigger#trigger-event-checkout_session_completed)
+
+https://szkola.zaisteprogramuj.pl/courses/1668919/lectures/39572535
+06
