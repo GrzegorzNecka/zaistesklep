@@ -9,7 +9,11 @@
 ## do zrobienia
 
 2. koszyk graphQl - zadanie dokończ!!!
-   0 - api z cashem koszyka zmień poprawne restowe api czyli ustaw metodę put
+   2.1. stworzenie order z api/checkout w graphCMS, a kiedy ktośkliknie zapłać to w graphCMS powstaje zamówienie ze statusem - status sięzmienia potem
+   lub przekaż koszyk, a potem przypisz do niego order
+
+1.api z cashem koszyka zmień poprawne restowe api czyli ustaw metodę put
+
 1. paginacja - dokończ
 1. włącz rating
 1. cena z serwera

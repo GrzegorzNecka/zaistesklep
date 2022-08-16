@@ -63,10 +63,10 @@ const CartSummary = () => {
             method: "POST",
             headers: { "Content-Type": "application/json;" },
             body: JSON.stringify(
-                cartState.items.map((item) => {
+                cartState.items.map((cartItem) => {
                     return {
-                        slug: item.slug,
-                        count: item.count,
+                        slug: cartItem.slug,
+                        count: cartItem.count,
                         // price_data: {
                         //     currency: "PLN",
                         //     unit_amount: item.price,
