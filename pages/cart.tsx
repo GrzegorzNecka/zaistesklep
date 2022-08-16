@@ -50,6 +50,7 @@ const CartContent = () => {
 
 const CartSummary = () => {
     const cartState = useCartState();
+    console.log("🚀 ~ file: cart.tsx ~ line 53 ~ CartSummary ~ cartState", cartState);
 
     const pay = async () => {
         const stripe = await stripePromise;
@@ -64,14 +65,16 @@ const CartSummary = () => {
             body: JSON.stringify(
                 cartState.items.map((item) => {
                     return {
-                        price_data: {
-                            currency: "PLN",
-                            unit_amount: item.price,
-                            product_data: {
-                                name: item.title,
-                            },
-                        },
-                        quantity: item.count,
+                        slug: item.slug,
+                        count: item.count,
+                        // price_data: {
+                        //     currency: "PLN",
+                        //     unit_amount: item.price,
+                        //     product_data: {
+                        //         name: item.title,
+                        //     },
+                        // },
+                        // quantity: item.count,
                     };
                 })
             ),

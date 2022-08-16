@@ -8,19 +8,17 @@
 
 ## do zrobienia
 
-0 - api z cashem koszyka zmień poprawne restowe api czyli ustaw metodę put
-2
-
+2. koszyk graphQl - zadanie dokończ!!!
+   0 - api z cashem koszyka zmień poprawne restowe api czyli ustaw metodę put
 1. paginacja - dokończ
-2. koszyk zadanie dokończ
-3. włącz rating
-4. cena z serwera
-5. strona z produktem -> dodaj do koszyka
-6. wyszukiwarka produktów
-7. dodaj ulubione produkty
-8. globalne style kolory i buttony
-9. dodaj memo do komponentów tj. bradcrums / home , page ...
-10. strona 2 języczna
+1. włącz rating
+1. cena z serwera
+1. strona z produktem -> dodaj do koszyka
+1. wyszukiwarka produktów
+1. dodaj ulubione produkty
+1. globalne style kolory i buttony
+1. dodaj memo do komponentów tj. bradcrums / home , page ...
+1. strona 2 języczna
 
 ## [fajny sklep](https://shopmrbeast.com/shop/credit-card-hoodie)
 

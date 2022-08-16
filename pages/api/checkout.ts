@@ -10,6 +10,11 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
         return;
     }
 
+    const body = req.body as {
+        slug: string;
+        count: number;
+    };
+
     // const stripe = new Stripe(stripeKey, { apiVersion: "2020-08-27" });
 
     const stripe = new Stripe(stripeKey, { apiVersion: "2022-08-01" });
@@ -17,7 +22,7 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
     const stripeCheckoutSession = await stripe.checkout.sessions.create({
         locale: "pl",
         payment_method_types: ["p24", "card"],
-        success_url: `${process.env.NEXT_PUBLIC_HOST}/checkout/sucess?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${process.env.NEXT_PUBLIC_HOST}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.NEXT_PUBLIC_HOST}/checkout/cancel`,
         line_items: JSON.parse(req.body),
         mode: "payment",
