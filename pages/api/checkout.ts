@@ -41,9 +41,9 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
 
     // console
 
-    const stripe = new Stripe(stripeKey, { apiVersion: "2020-08-27" });
+    // const stripe = new Stripe(stripeKey, { apiVersion: "2020-08-27" });
 
-    // const stripe = new Stripe(stripeKey, { apiVersion: "2022-08-01" });
+    const stripe = new Stripe(stripeKey, { apiVersion: "2022-08-01" });
 
     const stripeCheckoutSession = await stripe.checkout.sessions.create({
         locale: "pl",
