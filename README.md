@@ -6,6 +6,11 @@
 -   yarn:
 -   next:
 
+## do zrobienia stripe:
+
+1. wyślij testowe zapytanie checkout do graphQl z fakowej strony checkout na next.js - obczaj jak to działa
+2.
+
 ## do zrobienia
 
 -   koszyk graphQl - zadanie dokończ!!!
@@ -87,5 +92,7 @@ uruchamia generator: `yarn generate-graphql`
 [cli](https://stripe.com/docs/stripe-cli)
 [cli-doc](https://stripe.com/docs/cli/trigger#trigger-event-checkout_session_completed)
 
-https://szkola.zaisteprogramuj.pl/courses/1668919/lectures/39572535
-06
+https://dashboard.stripe.com/test/webhooks
+https://dashboard.stripe.com/test/webhooks/create?endpoint_location=local
+https://stripe.com/docs/webhooks
+https://labs.fullstak.pl/courses/take/fullstack-react-w-next-js/lessons/23302817-obsluga-webhooks-w-stripe
