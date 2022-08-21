@@ -8,8 +8,11 @@
 
 ## do zrobienia stripe:
 
-1. wyślij testowe zapytanie checkout do graphQl z fakowej strony checkout na next.js - obczaj jak to działa
-2.
+1. klient komunikuje się ze stripe
+2. stripe rpzetwarza płątności
+   3 stripe wysyła zdarzenia do naszej aplikacji (Webhook)
+3. nasza aplikacja upewnia się, że wiadomość pochodzi ze stripe
+4. aplikacja przetwarza zdarzenia wysłane przez stripe i aktualizuje stan w graphQl a potem pobiera z grapQl informację do strony z success.
 
 ## do zrobienia
 
@@ -86,6 +89,7 @@ uruchamia generator: `yarn generate-graphql`
 
 ### Stripe
 
+`stripe listen --forward-to 83a0-176-111-121-143.ngrok.io/api/stripe-webhook`
 `stripe listen --forward-to localhost:3000/api/stripe-webhook`
 `stripe trigger checkout.session.completed`
 
@@ -96,3 +100,5 @@ https://dashboard.stripe.com/test/webhooks
 https://dashboard.stripe.com/test/webhooks/create?endpoint_location=local
 https://stripe.com/docs/webhooks
 https://labs.fullstak.pl/courses/take/fullstack-react-w-next-js/lessons/23302817-obsluga-webhooks-w-stripe
+
+[ngrok](https://dashboard.ngrok.com/get-started/setup)

@@ -8,8 +8,8 @@ import { NextApiHandler } from "next/types";
 import Stripe from "stripe";
 
 const checkoutHandler: NextApiHandler = async (req, res) => {
-    console.log("🚀 ~ file: checkout.ts ~ line 5 ~ constcheckoutHandler:NextApiHandler= ~ req", req.body);
     const stripeKey = process.env.STRIPE_SECRET_KEY;
+    console.log("🚀 ~ file: checkout.ts - stripeKey", stripeKey);
 
     if (!stripeKey) {
         res.status(500).json({ message: "Missing STRIPE_SECRET_KEY!" });
@@ -21,7 +21,7 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
         count: number;
     }[];
 
-    console.log("🚀 ~ file: checkout.ts ~ line 20 ~ constcheckoutHandler:NextApiHandler= ~ body", body);
+    console.log("🚀 ~ file: checkout.ts ~ line 23 ~ body ~ body", body);
 
     const products = await Promise.all(
         body.map(async (cartItem) => {
@@ -30,18 +30,12 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
                 variables: { slug: cartItem.slug },
             });
 
-            // product.data.product
-
             return {
                 product,
                 count: cartItem.count,
             };
         })
     );
-
-    // console
-
-    // const stripe = new Stripe(stripeKey, { apiVersion: "2020-08-27" });
 
     const stripe = new Stripe(stripeKey, { apiVersion: "2022-08-01" });
 
@@ -50,7 +44,6 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
         payment_method_types: ["p24", "card"],
         success_url: `${process.env.NEXT_PUBLIC_HOST}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.NEXT_PUBLIC_HOST}/checkout/cancel`,
-        // line_items: JSON.parse(req.body),
         line_items: products.map((product) => {
             return {
                 adjustable_quantity: {
@@ -70,12 +63,11 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
                         },
                     },
                 },
+
                 quantity: product.count,
             };
         }),
         mode: "payment",
-
-        // stworzenie order z tego miejsca w graphCMS
     });
 
     res.status(201).json({ session: stripeCheckoutSession });
