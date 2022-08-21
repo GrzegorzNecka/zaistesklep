@@ -9,7 +9,7 @@ const Breadcrumbs = () => {
     const router = useRouter();
     const [nastedPaths, setNastedPaths] = useState<string>("");
 
-    //------
+    //------ usuń use effect - to zła praktyka
 
     useEffect(() => {
         if (!router.isReady) {

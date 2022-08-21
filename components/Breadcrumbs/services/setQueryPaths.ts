@@ -17,6 +17,7 @@ const setQueryPaths = (queryPath: string, nastedPaths: string) => {
                     if (index === 1) {
                         return { url: ``, title: `Site ${title}` };
                     }
+                    break;
 
                 case "/product/[slug]":
                     if (index === 0) {
@@ -26,21 +27,27 @@ const setQueryPaths = (queryPath: string, nastedPaths: string) => {
                     if (index === 1) {
                         return { url: ``, title: `product: ${title}` };
                     }
-
+                    break;
                 default:
                     if (index === 0) {
                         prevPath = path;
+                        console.log(title);
                         return { url, title };
                     }
 
                     if (index === 1) {
+                        if (title.startsWith("Success?")) {
+                            const newTitle = "Payment Status";
+                            return { url: `/${prevPath}/${path}`, title: newTitle };
+                        }
+
                         return { url: `/${prevPath}/${path}`, title };
                     }
             }
 
             return { url, title };
         });
-    prevPath = "";
+
     return paths;
 };
 

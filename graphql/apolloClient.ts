@@ -5,18 +5,3 @@ export const apolloClient = new ApolloClient({
     // uri: "https://api-eu-central-1.hygraph.com/v2/cl5s794280vvm01tbegxz5w9c/master",
     cache: new InMemoryCache(),
 });
-
-// apolloClient
-//     .query({
-//         query: gql`
-//             query GetProductsList {
-//                 products {
-//                     id
-//                     slug
-//                     name
-//                     price
-//                 }
-//             }
-//         `,
-//     })
-//     .then((result) => console.log(result));
