@@ -78,3 +78,16 @@ query GetProductBySlug($slug: String!) {
         }
     }
 }
+
+fragment OrderFragment on Order {
+    email
+    id
+    total
+    stripeCheckoutId
+}
+
+query GetOrder($id: ID) {
+    order(where: { id: $id }) {
+        ...OrderFragment
+    }
+}

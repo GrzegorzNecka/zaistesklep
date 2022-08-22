@@ -10426,6 +10426,15 @@ export type GetProductBySlugQueryVariables = Exact<{
 
 export type GetProductBySlugQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, slug: string, price: number, name: string, images: Array<{ __typename?: 'Asset', url: string }> } | null };
 
+export type OrderFragmentFragment = { __typename?: 'Order', email: string, id: string, total: number, stripeCheckoutId: string };
+
+export type GetOrderQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type GetOrderQuery = { __typename?: 'Query', order?: { __typename?: 'Order', email: string, id: string, total: number, stripeCheckoutId: string } | null };
+
 export const ReviewContentFragmentDoc = gql`
     fragment reviewContent on Review {
   content
@@ -10433,6 +10442,14 @@ export const ReviewContentFragmentDoc = gql`
   id
   name
   rating
+}
+    `;
+export const OrderFragmentFragmentDoc = gql`
+    fragment OrderFragment on Order {
+  email
+  id
+  total
+  stripeCheckoutId
 }
     `;
 export const CreateProductReviewDocument = gql`
@@ -10806,3 +10823,38 @@ export function useGetProductBySlugLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetProductBySlugQueryHookResult = ReturnType<typeof useGetProductBySlugQuery>;
 export type GetProductBySlugLazyQueryHookResult = ReturnType<typeof useGetProductBySlugLazyQuery>;
 export type GetProductBySlugQueryResult = Apollo.QueryResult<GetProductBySlugQuery, GetProductBySlugQueryVariables>;
+export const GetOrderDocument = gql`
+    query GetOrder($id: ID) {
+  order(where: {id: $id}) {
+    ...OrderFragment
+  }
+}
+    ${OrderFragmentFragmentDoc}`;
+
+/**
+ * __useGetOrderQuery__
+ *
+ * To run a query within a React component, call `useGetOrderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrderQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetOrderQuery(baseOptions?: Apollo.QueryHookOptions<GetOrderQuery, GetOrderQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOrderQuery, GetOrderQueryVariables>(GetOrderDocument, options);
+      }
+export function useGetOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrderQuery, GetOrderQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOrderQuery, GetOrderQueryVariables>(GetOrderDocument, options);
+        }
+export type GetOrderQueryHookResult = ReturnType<typeof useGetOrderQuery>;
+export type GetOrderLazyQueryHookResult = ReturnType<typeof useGetOrderLazyQuery>;
+export type GetOrderQueryResult = Apollo.QueryResult<GetOrderQuery, GetOrderQueryVariables>;
