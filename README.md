@@ -8,11 +8,8 @@
 
 ## do zrobienia stripe:
 
-1. klient komunikuje się ze stripe
-2. stripe rpzetwarza płątności
-3. stripe wysyła zdarzenia do naszej aplikacji (Webhook)
-4. nasza aplikacja upewnia się, że wiadomość pochodzi ze stripe
-5. aplikacja przetwarza zdarzenia wysłane przez stripe i aktualizuje stan w graphQl a potem pobiera z grapQl informację do strony z success.
+1. wyślij testowe zapytanie checkout do graphQl z fakowej strony checkout na next.js - obczaj jak to działa
+2.
 
 ## do zrobienia
 
