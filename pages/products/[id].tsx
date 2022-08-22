@@ -1,10 +1,10 @@
 import { ProductListItem } from "components/ProductList";
 import { InferGetStaticPropsType } from "next";
 import { InferGetStaticPathsType } from "types";
-import Pagination from "components/Pagination/Pagination";
+import Pagination from "components/zadanie_Pagination/Pagination";
 import { Main } from "components/Main";
 import { useQuery } from "react-query";
-import { countOfProducts, fetchProducts } from "services/pages/products";
+import { countOfProducts, fetchProducts } from "services/products";
 import { gql } from "@apollo/client";
 import { apolloClient } from "graphql/apolloClient";
 import { GetProductsListDocument, GetProductsListQuery } from "generated/graphql";

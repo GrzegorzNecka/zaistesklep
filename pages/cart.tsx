@@ -60,7 +60,7 @@ const CartSummary = () => {
             throw new Error("something went wrong");
         }
 
-        const res = await fetch("/api/checkout", {
+        const res = await fetch("/api/checkout/stripeCheckoutSessionCreate", {
             method: "POST",
             headers: { "Content-Type": "application/json;" },
             body: JSON.stringify(

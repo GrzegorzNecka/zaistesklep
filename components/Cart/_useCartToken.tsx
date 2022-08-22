@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getCartSessionToken } from "./services/localStorage";
+import { getCartSessionToken } from "./_services/_localStorage";
 // nie wiem czy zamiast tego nie lepsze by było memo
 export const useCartToken = (initialState: string | null) => {
     const [token, setToken] = useState(initialState);

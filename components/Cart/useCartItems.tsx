@@ -1,48 +1,51 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 // import { getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
-import { fetchCartItems, updateCartItems } from "./services/cartItems";
-import { useCartToken } from "./useCartToken";
+// import { fetchCartItems, updateCartItems } from "./_services/cartItems";
+import { useCartToken } from "./_useCartToken";
+// import { useCreateItemOrderMutation } from "generated/graphql";
 
 //dodaj RactQuery
 
 export const useCartItems = () => {
     const token = useCartToken(null);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    console.log("🚀 ~ file: useCartItems.tsx ~ line 12 ~ useCartItems ~ cartItems", cartItems);
     const [dispatchCartItems, setDispatchCartItems] = useState(false);
 
-    useEffect(() => {
-        if (!token) {
-            return;
-        }
+    useEffect(() => {}, [cartItems]);
+    // useEffect(() => {
+    //     if (!token) {
+    //         return;
+    //     }
 
-        const getCartItemsSessionState = async () => {
-            const { status, cartItems } = await fetchCartItems(token);
+    //     const getCartItemsSessionState = async () => {
+    //         const { status, cartItems } = await fetchCartItems(token);
 
-            if (!cartItems) {
-                return;
-            }
+    //         if (!cartItems) {
+    //             return;
+    //         }
 
-            setCartItems(cartItems);
-        };
+    //         setCartItems(cartItems);
+    //     };
 
-        getCartItemsSessionState();
-    }, [token]);
+    //     getCartItemsSessionState();
+    // }, [token]);
 
-    useEffect(() => {
-        if (!token) {
-            return;
-        }
+    // useEffect(() => {
+    //     if (!token) {
+    //         return;
+    //     }
 
-        if (!dispatchCartItems) {
-            return;
-        }
+    //     if (!dispatchCartItems) {
+    //         return;
+    //     }
 
-        const updateCartItemsSessionState = async () => {
-            const data = await updateCartItems(token, cartItems);
-        };
-        updateCartItemsSessionState();
-    }, [cartItems, token, dispatchCartItems]);
+    //     const updateCartItemsSessionState = async () => {
+    //         const data = await updateCartItems(token, cartItems);
+    //     };
+    //     updateCartItemsSessionState();
+    // }, [cartItems, token, dispatchCartItems]);
 
     const addItems = (item: CartItem) => {
         if (!dispatchCartItems) {
