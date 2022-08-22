@@ -10369,6 +10369,20 @@ export type CreateProductReviewMutationVariables = Exact<{
 
 export type CreateProductReviewMutation = { __typename?: 'Mutation', review?: { __typename?: 'Review', content: string, headline?: string | null, id: string, name: string, rating?: number | null } | null };
 
+export type CreateItemOrderMutationVariables = Exact<{
+  orderItemData: OrderItemCreateInput;
+}>;
+
+
+export type CreateItemOrderMutation = { __typename?: 'Mutation', createOrderItem?: { __typename?: 'OrderItem', id: string } | null };
+
+export type CreateOrderMutationVariables = Exact<{
+  orderData: OrderCreateInput;
+}>;
+
+
+export type CreateOrderMutation = { __typename?: 'Mutation', createOrder?: { __typename?: 'Order', id: string } | null };
+
 export type GetProductsSlugsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -10454,6 +10468,72 @@ export function useCreateProductReviewMutation(baseOptions?: Apollo.MutationHook
 export type CreateProductReviewMutationHookResult = ReturnType<typeof useCreateProductReviewMutation>;
 export type CreateProductReviewMutationResult = Apollo.MutationResult<CreateProductReviewMutation>;
 export type CreateProductReviewMutationOptions = Apollo.BaseMutationOptions<CreateProductReviewMutation, CreateProductReviewMutationVariables>;
+export const CreateItemOrderDocument = gql`
+    mutation CreateItemOrder($orderItemData: OrderItemCreateInput!) {
+  createOrderItem(data: $orderItemData) {
+    id
+  }
+}
+    `;
+export type CreateItemOrderMutationFn = Apollo.MutationFunction<CreateItemOrderMutation, CreateItemOrderMutationVariables>;
+
+/**
+ * __useCreateItemOrderMutation__
+ *
+ * To run a mutation, you first call `useCreateItemOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateItemOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createItemOrderMutation, { data, loading, error }] = useCreateItemOrderMutation({
+ *   variables: {
+ *      orderItemData: // value for 'orderItemData'
+ *   },
+ * });
+ */
+export function useCreateItemOrderMutation(baseOptions?: Apollo.MutationHookOptions<CreateItemOrderMutation, CreateItemOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateItemOrderMutation, CreateItemOrderMutationVariables>(CreateItemOrderDocument, options);
+      }
+export type CreateItemOrderMutationHookResult = ReturnType<typeof useCreateItemOrderMutation>;
+export type CreateItemOrderMutationResult = Apollo.MutationResult<CreateItemOrderMutation>;
+export type CreateItemOrderMutationOptions = Apollo.BaseMutationOptions<CreateItemOrderMutation, CreateItemOrderMutationVariables>;
+export const CreateOrderDocument = gql`
+    mutation CreateOrder($orderData: OrderCreateInput!) {
+  createOrder(data: $orderData) {
+    id
+  }
+}
+    `;
+export type CreateOrderMutationFn = Apollo.MutationFunction<CreateOrderMutation, CreateOrderMutationVariables>;
+
+/**
+ * __useCreateOrderMutation__
+ *
+ * To run a mutation, you first call `useCreateOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrderMutation, { data, loading, error }] = useCreateOrderMutation({
+ *   variables: {
+ *      orderData: // value for 'orderData'
+ *   },
+ * });
+ */
+export function useCreateOrderMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrderMutation, CreateOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(CreateOrderDocument, options);
+      }
+export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMutation>;
+export type CreateOrderMutationResult = Apollo.MutationResult<CreateOrderMutation>;
+export type CreateOrderMutationOptions = Apollo.BaseMutationOptions<CreateOrderMutation, CreateOrderMutationVariables>;
 export const GetProductsSlugsDocument = gql`
     query GetProductsSlugs {
   products {
