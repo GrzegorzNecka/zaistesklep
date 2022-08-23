@@ -13,3 +13,5 @@ const handler: NextApiHandler<Data> = (req, res) => {
 
     res.status(200).json({ name: "Jhon" });
 };
+
+export default handler;

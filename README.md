@@ -2,33 +2,43 @@
 
 -   node:
 -   npm:
--   react: 17.4
+-   react: -.4
 -   yarn:
 -   next:
 
+## do zrobienia stripe:
+
+1. wyślij testowe zapytanie checkout do graphQl z fakowej strony checkout na next.js - obczaj jak to działa
+2.
+
 ## do zrobienia
 
-1. paginacja - dokończ
-2. koszyk zadanie dokończ
-3. włącz rating
-4. cena z serwera
-5. strona z produktem -> dodaj do koszyka
-6. wyszukiwarka produktów
-7. dodaj ulubione produkty
-8. globalne style kolory i buttony
-9. dodaj memo do komponentów tj. bradcrums / home , page ...
-10. strona 2 języczna
+-   koszyk graphQl - zadanie dokończ!!!
+    -   stworzenie order z api/checkout w graphCMS, a kiedy ktośkliknie zapłać to w graphCMS powstaje zamówienie ze statusem - status sięzmienia potem
+        lub przekaż koszyk, a potem przypisz do niego order
+-   api z cashem koszyka zmień poprawne restowe api czyli ustaw metodę put
+-   paginacja - dokończ
+-   włącz rating
+-   cena z serwera
+-   strona z produktem -> dodaj do koszyka
+-   wyszukiwarka produktów
+-   dodaj ulubione produkty
+-   globalne style kolory i buttony
+-   dodaj memo do komponentów tj. bradcrums / home , page ...
+-   strona 2 języczna
+-   stwórz kategorie produktów
 
----
+## [fajny sklep](https://shopmrbeast.com/shop/credit-card-hoodie)
 
-11. obsługa zapytania do serwera:
+-   obsługa zapytania do serwera:
 
 Jak zrobisz zapytanie do api to dostaniesz odpowiedź w postaci koszyka
 Ale serwer musi wiedzieć kim Ty jesteś
 Aby wiedział, możesz dołączyć nagłówek z jakimś tokenem lub ciastko
 Zazwyczaj działa to tak:
 
-1. Sprawdzasz czy w localstorage jest token koszyka, sprawdzasz czy jest poprawny etc
+-   Sprawdzasz czy w localstorage jest token koszyka, sprawdzasz czy jest poprawny etc
+
 2. Jeśli jest, to wysyłasz do api zapytanie żeby api zwróciło Ci koszyk (token dołączasz jako nagłówek lub ciastko lub po prostu w treści zapytania)
 3. Jeśli nie, to wysyłasz do api zapytanie aby api stworzyło nowy koszyk i zwróciło Ci token, który gdzieś sobie zapiszesz
 
@@ -73,3 +83,16 @@ uruchamia generator: `yarn generate-graphql`
 [tailwind-forms](https://github.com/tailwindlabs/tailwindcss-forms)
 [rhf](https://react-hook-form.com/get-started#IntegratingControlledInputs)
 [yup](https://github.com/jquense/yup)
+
+### Stripe
+
+`stripe listen --forward-to localhost:3000/api/stripe-webhook`
+`stripe trigger checkout.session.completed`
+
+[cli](https://stripe.com/docs/stripe-cli)
+[cli-doc](https://stripe.com/docs/cli/trigger#trigger-event-checkout_session_completed)
+
+https://dashboard.stripe.com/test/webhooks
+https://dashboard.stripe.com/test/webhooks/create?endpoint_location=local
+https://stripe.com/docs/webhooks
+https://labs.fullstak.pl/courses/take/fullstack-react-w-next-js/lessons/23302817-obsluga-webhooks-w-stripe

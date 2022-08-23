@@ -2,10 +2,13 @@ import { useCartState } from "components/Cart/CartContext";
 import { Main } from "components/Main";
 import Link from "next/link";
 import { changeToCurrency, moveTheComa } from "utils/currency";
+import { loadStripe } from "@stripe/stripe-js";
 import { TrashIcon } from "@heroicons/react/outline";
+import Stripe from "stripe";
 
 const CartContent = () => {
     const cartState = useCartState();
+
     return (
         <div className="col-span-2">
             <ul className="divide-y divide-gray-200">
@@ -43,15 +46,53 @@ const CartContent = () => {
     );
 };
 
+const stripeSecret = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
 const CartSummary = () => {
     const cartState = useCartState();
+
+    if (!stripeSecret) {
+        return <div></div>;
+    }
+
+    const stripePromise = loadStripe(stripeSecret);
+
+    const pay = async () => {
+        const stripe = await stripePromise;
+
+        if (!stripe) {
+            throw new Error("something went wrong");
+        }
+
+        const res = await fetch("/api/checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json;" },
+            body: JSON.stringify(
+                cartState.items.map((cartItem) => {
+                    return {
+                        slug: cartItem.slug,
+                        count: cartItem.count,
+                    };
+                })
+            ),
+        });
+
+        const { session }: { session: Stripe.Response<Stripe.Checkout.Session> } = await res.json();
+
+        await stripe.redirectToCheckout({ sessionId: session.id });
+    };
 
     return (
         <div>
             <h2 className="pb-2 font-bold text-lg  divide-gray-200">Podsumowanie koszyka</h2>
             <div>Liczba elementów: {cartState.items.length}</div>
             <div>Łączna Liczba wszystkich elementów: {cartState.totalCount}</div>
-            <div className="pt-2  ">Suma: {changeToCurrency(moveTheComa(cartState.totalPrice))}</div>
+            <div className="pt-2">Suma: {changeToCurrency(moveTheComa(cartState.totalPrice))}</div>
+            <div className="mt-4">
+                <button onClick={pay} type="button" className="w-full btn-custom-primary">
+                    złóż zmówienie
+                </button>
+            </div>
         </div>
     );
 };
