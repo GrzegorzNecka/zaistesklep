@@ -107,10 +107,10 @@ export type StripeWebhookEvents =
     | StripeWebhookEvent<'issuing_transaction.updated', Stripe.Issuing.Transaction>
     | StripeWebhookEvent<'mandate.updated', Stripe.Mandate>
     | StripeWebhookEvent<'order.created', Stripe.Order>
-    | StripeWebhookEvent<'order.payment_failed', Stripe.Order>
-    | StripeWebhookEvent<'order.payment_succeeded', Stripe.Order>
-    | StripeWebhookEvent<'order.updated', Stripe.Order>
-    | StripeWebhookEvent<'order_return.created', Stripe.OrderReturn>
+    // | StripeWebhookEvent<'order.payment_failed', Stripe.Order>
+    // | StripeWebhookEvent<'order.payment_succeeded', Stripe.Order>
+    // | StripeWebhookEvent<'order.updated', Stripe.Order>
+    // | StripeWebhookEvent<'order_return.created', Stripe.OrderReturn>
     | StripeWebhookEvent<'payment_intent.amount_capturable_updated', Stripe.PaymentIntent>
     | StripeWebhookEvent<'payment_intent.canceled', Stripe.PaymentIntent>
     | StripeWebhookEvent<'payment_intent.created', Stripe.PaymentIntent>
@@ -147,9 +147,9 @@ export type StripeWebhookEvents =
     | StripeWebhookEvent<'quote.finalized', Stripe.Quote>
     | StripeWebhookEvent<'radar.early_fraud_warning.created', Stripe.Radar.EarlyFraudWarning>
     | StripeWebhookEvent<'radar.early_fraud_warning.updated', Stripe.Radar.EarlyFraudWarning>
-    | StripeWebhookEvent<'recipient.created', Stripe.Recipient>
-    | StripeWebhookEvent<'recipient.deleted', Stripe.Recipient>
-    | StripeWebhookEvent<'recipient.updated', Stripe.Recipient>
+    // | StripeWebhookEvent<'recipient.created', Stripe.Recipient>
+    // | StripeWebhookEvent<'recipient.deleted', Stripe.Recipient>
+    // | StripeWebhookEvent<'recipient.updated', Stripe.Recipient>
     | StripeWebhookEvent<'reporting.report_run.failed', Stripe.Reporting.ReportRun>
     | StripeWebhookEvent<'reporting.report_run.succeeded', Stripe.Reporting.ReportRun>
     | StripeWebhookEvent<'reporting.report_type.updated', Stripe.Reporting.ReportType>
@@ -186,7 +186,7 @@ export type StripeWebhookEvents =
     | StripeWebhookEvent<'topup.reversed', Stripe.Topup>
     | StripeWebhookEvent<'topup.succeeded', Stripe.Topup>
     | StripeWebhookEvent<'transfer.created', Stripe.Transfer>
-    | StripeWebhookEvent<'transfer.failed', Stripe.Transfer>
-    | StripeWebhookEvent<'transfer.paid', Stripe.Transfer>
+    // | StripeWebhookEvent<'transfer.failed', Stripe.Transfer>
+    // | StripeWebhookEvent<'transfer.paid', Stripe.Transfer>
     | StripeWebhookEvent<'transfer.reversed', Stripe.Transfer>
     | StripeWebhookEvent<'transfer.updated', Stripe.Transfer>

@@ -2,7 +2,7 @@
 
 // import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { useForm } from "react-hook-form";
-import { validateCreditCardDate } from "utils/validations";
+import { validateCreditCardDate } from "utils/zadanie_credit_cart_validation";
 import FormInput from "./FormInput";
 // import { CheckoutFormData } from "./types";
 import { yupResolver } from "@hookform/resolvers/yup";

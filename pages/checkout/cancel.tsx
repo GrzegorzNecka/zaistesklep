@@ -1,5 +1,5 @@
 const CheckoutCancelPage = () => {
-    <div>nie udało się</div>;
+    return <div>nie udało się</div>;
 };
 
 export default CheckoutCancelPage;
