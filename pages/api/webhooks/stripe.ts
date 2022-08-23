@@ -13,13 +13,13 @@ const stripeWebhook: NextApiHandler = async (req, res) => {
     const stripeKey = process.env.STRIPE_SECRET_KEY;
     const StripeEndpointWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-    // console.log(req.headers);
+    console.log(req.headers);
     const buf = await buffer(req);
     const sig = req.headers["stripe-signature"];
 
-    // console.log("stripeKey", stripeKey);
-    // console.log("sig", sig);
-    // console.log("StripeEndpointWebhookSecret", StripeEndpointWebhookSecret);
+    console.log("stripeKey", stripeKey);
+    console.log("sig", sig);
+    console.log("StripeEndpointWebhookSecret", StripeEndpointWebhookSecret);
 
     if (!stripeKey || !StripeEndpointWebhookSecret || !sig) {
         res.status(500).json({ message: "Missing STRIPE_SECRET_KEY!" });

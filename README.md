@@ -12,6 +12,7 @@
 
 ## do zrobienia
 
+-   zamieńzwykły fetche na reactQuery
 -   zapisywanie w stanu koszyka nie działa - dpoiero po 1 odświerzeniu działa !
 -   podziel query na fragmenty
 -   koszyk graphQl - zadanie dokończ!!!
