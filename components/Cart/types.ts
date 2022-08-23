@@ -22,10 +22,11 @@ export interface Token {
     token: string;
 }
 
-export interface ResCartItems {
+export interface ResponseCartItems {
     status: string;
     cartItems?: CartItem[];
     error?: string;
+    message?: string;
 }
 
 export interface State {
