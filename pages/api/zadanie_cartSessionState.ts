@@ -28,6 +28,8 @@ const handler: NextApiHandler = (req, res) => {
          switch request query conditions 
     */
 
+    console.log("🚀 ~ file: zadanie_cartSessionState.ts ~ line 6 ~  STATE", STATE);
+
     switch (req.query.query) {
         case "getToken":
             try {

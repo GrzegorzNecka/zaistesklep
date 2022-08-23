@@ -1,22 +1,41 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 // import { getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
-import { fetchCartItems, updateCartItems } from "./services/zadanie_cartItems";
-import { useCartToken } from "./useCartToken";
+import { fetchCartItems, getCartSessionToken, updateCartItems } from "./services/zadanie_cartItems";
+import { useMutation } from "react-query";
 
 //dodaj RactQuery
 
+const getToken = () => {
+    let token = window.localStorage.getItem("ZAISTE_CART_TOKEN");
+
+    if (!token) {
+        const newToken = Math.random().toString(26).substr(2);
+        window.localStorage.setItem("ZAISTE_CART_TOKEN", JSON.stringify(newToken));
+        return newToken;
+    }
+
+    return JSON.parse(token);
+};
+
 export const useCartItems = () => {
-    const token = useCartToken(null);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [dispatchCartItems, setDispatchCartItems] = useState(false);
 
+    // const token = await getCartSessionToken();
+
+    const mutation = useMutation(() => {
+        const token = getToken();
+        return fetchCartItems(token);
+    });
+
+    console.log("🚀 ~ file: useCartItems.tsx ~ line 17 ~ mutation ~ mutation", mutation);
+
     useEffect(() => {
-        if (!token) {
-            return;
-        }
+        // console.log(token)
 
         const getCartItemsSessionState = async () => {
+            const token = await getCartSessionToken();
             const { status, cartItems } = await fetchCartItems(token);
 
             if (!cartItems) {
@@ -27,22 +46,25 @@ export const useCartItems = () => {
         };
 
         getCartItemsSessionState();
-    }, [token]);
+    }, []);
+
+    /*
+    zadanie_cartSessionState?query=getCart
+*/
 
     useEffect(() => {
-        if (!token) {
-            return;
-        }
-
         if (!dispatchCartItems) {
             return;
         }
 
         const updateCartItemsSessionState = async () => {
+            const token = await getCartSessionToken();
             const data = await updateCartItems(token, cartItems);
+            console.log("🚀 ~ ~ data", data);
         };
+
         updateCartItemsSessionState();
-    }, [cartItems, token, dispatchCartItems]);
+    }, [cartItems, dispatchCartItems]);
 
     const addItems = (item: CartItem) => {
         if (!dispatchCartItems) {

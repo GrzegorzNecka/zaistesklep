@@ -25,3 +25,15 @@ export const updateCartItems = async (token: string, cartItems: CartItem[]) => {
     const res: ResponseCartItems = await data.json();
     return res;
 };
+
+export const getCartSessionToken = async (): Promise<string> => {
+    let token = window.localStorage.getItem("ZAISTE_CART_TOKEN");
+
+    if (!token) {
+        const newToken = Math.random().toString(26).substr(2);
+        window.localStorage.setItem("ZAISTE_CART_TOKEN", JSON.stringify(newToken));
+        return newToken;
+    }
+
+    return JSON.parse(token);
+};
