@@ -57,6 +57,10 @@ export const Navigation = () => {
                                         </a>
                                     </Link>
                                 </div>
+
+                                <div className="flex item items-center">
+                                    <button type="button">zaloguj</button>
+                                </div>
                                 <div className="flex item items-center">
                                     <CartBar />
                                 </div>
