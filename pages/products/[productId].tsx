@@ -1,10 +1,10 @@
 import { ProductListItem } from "components/ProductList";
 import { InferGetStaticPropsType } from "next";
 import { InferGetStaticPathsType } from "types";
-import Pagination from "components/Pagination/Pagination";
+import Pagination from "components/zadanie_Pagination/Pagination";
 import { Main } from "components/Main";
 import { useQuery } from "react-query";
-import { countOfProducts, fetchProducts } from "services/pages/products";
+import { countOfProducts, fetchProducts } from "services/zadanie_pagination/products";
 import { gql } from "@apollo/client";
 import { apolloClient } from "graphql/apolloClient";
 import { GetProductsListDocument, GetProductsListQuery } from "generated/graphql";
@@ -55,7 +55,7 @@ export const getStaticPaths = async () => {
     for (let id = 1; id < 2; id++) {
         paths.push({
             params: {
-                id: `${id}`,
+                productId: `${id}`,
             },
         });
     }
@@ -69,7 +69,7 @@ export const getStaticPaths = async () => {
 // -----------------  getStaticProps  ----------------------
 
 export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof getStaticPaths>) => {
-    if (!params?.id) {
+    if (!params?.productId) {
         return { props: {}, notFound: true };
     }
 

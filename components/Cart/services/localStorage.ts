@@ -4,7 +4,7 @@ export const getCartSessionToken = async (): Promise<string> => {
     let token = localStorage.getItem("ZAISTE_CART_TOKEN");
 
     if (!token) {
-        const newToken = await fetch("/api/createCartSessionToken");
+        const newToken = await fetch("/api/zadanie_createCartSessionToken");
 
         try {
             const { status, data } = await newToken.json();

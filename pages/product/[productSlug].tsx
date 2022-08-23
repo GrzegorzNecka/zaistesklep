@@ -59,7 +59,7 @@ export const getStaticPaths = async () => {
         paths: data.products.map((product) => {
             return {
                 params: {
-                    slug: product.slug,
+                    productSlug: product.slug,
                 },
             };
         }),
@@ -70,13 +70,13 @@ export const getStaticPaths = async () => {
 // -----------------  getStaticProps  ----------------------
 
 export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof getStaticPaths>) => {
-    if (!params?.slug) {
+    if (!params?.productSlug) {
         return { props: {}, notFound: true };
     }
 
     const { data } = await apolloClient.query<GetProductDetailsBySlugQuery, GetProductDetailsBySlugQueryVariables>({
         variables: {
-            slug: params.slug,
+            slug: params.productSlug,
         },
         query: GetProductDetailsBySlugDocument,
     });
