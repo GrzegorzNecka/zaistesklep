@@ -11,31 +11,25 @@ export const useCartItems = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [dispatchCartItems, setDispatchCartItems] = useState(false);
 
-    /*
-     get cart item
-    */
-
-    const getCartItemsSessionState = async () => {
+    useEffect(() => {
         if (!token) {
             return;
         }
 
-        const { status, cartItems } = await fetchCartItems(token);
+        const getCartItemsSessionState = async () => {
+            const { status, cartItems } = await fetchCartItems(token);
 
-        if (!cartItems) {
-            return;
-        }
+            if (!cartItems) {
+                return;
+            }
 
-        setCartItems(cartItems);
-    };
+            setCartItems(cartItems);
+        };
 
-    useMemo(() => getCartItemsSessionState(), [token]);
+        getCartItemsSessionState();
+    }, [token]);
 
-    /*
-     update cart item state
-    */
-
-    const updateCartItemsSessionState = async () => {
+    useEffect(() => {
         if (!token) {
             return;
         }
@@ -44,10 +38,11 @@ export const useCartItems = () => {
             return;
         }
 
-        const data = await updateCartItems(token, cartItems);
-    };
-
-    useMemo(() => updateCartItemsSessionState(), [cartItems, token, dispatchCartItems]);
+        const updateCartItemsSessionState = async () => {
+            const data = await updateCartItems(token, cartItems);
+        };
+        updateCartItemsSessionState();
+    }, [cartItems, token, dispatchCartItems]);
 
     const addItems = (item: CartItem) => {
         if (!dispatchCartItems) {

@@ -1,15 +1,24 @@
 import { useState, useEffect } from "react";
-import { getCartSessionToken } from "./services/zadanie_localStorage";
-// nie wiem czy zamiast tego nie lepsze by było memo
-export const useCartToken = (initialState: string | null) => {
+
+const getCartSessionToken = async (): Promise<string> => {
+    let token = window.localStorage.getItem("ZAISTE_CART_TOKEN");
+
+    if (!token) {
+        const newToken = Math.random().toString(26).substr(2);
+
+        window.localStorage.setItem("ZAISTE_CART_TOKEN", JSON.stringify(newToken));
+        return newToken;
+    }
+
+    return JSON.parse(token);
+};
+
+const useCartToken = (initialState: string | null) => {
     const [token, setToken] = useState(initialState);
 
     useEffect(() => {
         const getToken = async () => {
             const localStorageToken = await getCartSessionToken();
-            if (!localStorageToken.length) {
-                return;
-            }
             setToken(localStorageToken);
         };
 
@@ -18,3 +27,5 @@ export const useCartToken = (initialState: string | null) => {
 
     return token;
 };
+
+export { useCartToken };
