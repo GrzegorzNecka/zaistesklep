@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 // import { getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
-import { fetchCartItems, updateCartItems } from "./services/cartItems";
+import { fetchCartItems, updateCartItems } from "./services/zadanie_cartItems";
 import { useCartToken } from "./useCartToken";
 
 //dodaj RactQuery
