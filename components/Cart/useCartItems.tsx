@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 // import { getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
-import { fetchCartItems, updateCartItems } from "./services/cartItems";
+import { fetchCartItems, updateCartItems } from "./services/zadanie_cartItems";
 import { useCartToken } from "./useCartToken";
 
 //dodaj RactQuery
@@ -11,25 +11,31 @@ export const useCartItems = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [dispatchCartItems, setDispatchCartItems] = useState(false);
 
-    useEffect(() => {
+    /*
+     get cart item
+    */
+
+    const getCartItemsSessionState = async () => {
         if (!token) {
             return;
         }
 
-        const getCartItemsSessionState = async () => {
-            const { status, cartItems } = await fetchCartItems(token);
+        const { status, cartItems } = await fetchCartItems(token);
 
-            if (!cartItems) {
-                return;
-            }
+        if (!cartItems) {
+            return;
+        }
 
-            setCartItems(cartItems);
-        };
+        setCartItems(cartItems);
+    };
 
-        getCartItemsSessionState();
-    }, [token]);
+    useMemo(() => getCartItemsSessionState(), [token]);
 
-    useEffect(() => {
+    /*
+     update cart item state
+    */
+
+    const updateCartItemsSessionState = async () => {
         if (!token) {
             return;
         }
@@ -38,11 +44,10 @@ export const useCartItems = () => {
             return;
         }
 
-        const updateCartItemsSessionState = async () => {
-            const data = await updateCartItems(token, cartItems);
-        };
-        updateCartItemsSessionState();
-    }, [cartItems, token, dispatchCartItems]);
+        const data = await updateCartItems(token, cartItems);
+    };
+
+    useMemo(() => updateCartItemsSessionState(), [cartItems, token, dispatchCartItems]);
 
     const addItems = (item: CartItem) => {
         if (!dispatchCartItems) {

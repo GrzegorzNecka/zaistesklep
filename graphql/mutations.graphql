@@ -3,3 +3,15 @@ mutation CreateProductReview($review: ReviewCreateInput!) {
         ...reviewContent
     }
 }
+
+mutation CreateItemOrder($orderItemData: OrderItemCreateInput!) {
+    createOrderItem(data: $orderItemData) {
+        id
+    }
+}
+
+mutation CreateOrder($orderData: OrderCreateInput!) {
+    createOrder(data: $orderData) {
+        id
+    }
+}
