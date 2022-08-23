@@ -10,6 +10,7 @@ export const fetchCartItems = async (token: string) => {
     });
 
     const res: ResponseCartItems = await data.json();
+    console.log("🚀 ~fetchCartItems ~ res", res);
     return res;
 };
 

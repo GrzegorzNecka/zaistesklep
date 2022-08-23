@@ -32,6 +32,7 @@ const handler: NextApiHandler = (req, res) => {
 
     switch (req.query.query) {
         case "getToken":
+            console.log("getToken");
             try {
                 const { token }: Token = req.body;
 
@@ -64,6 +65,7 @@ const handler: NextApiHandler = (req, res) => {
 
             return;
         case "getCart":
+            console.log("getCart");
             try {
                 const { token, cartItems }: State = req.body;
 

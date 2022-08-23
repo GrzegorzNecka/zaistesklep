@@ -2,69 +2,90 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 // import { getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
 import { fetchCartItems, getCartSessionToken, updateCartItems } from "./services/zadanie_cartItems";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 //dodaj RactQuery
 
-const getToken = () => {
-    let token = window.localStorage.getItem("ZAISTE_CART_TOKEN");
-
-    if (!token) {
-        const newToken = Math.random().toString(26).substr(2);
-        window.localStorage.setItem("ZAISTE_CART_TOKEN", JSON.stringify(newToken));
-        return newToken;
-    }
-
-    return JSON.parse(token);
-};
-
 export const useCartItems = () => {
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [dispatchCartItems, setDispatchCartItems] = useState(false);
 
-    // const token = await getCartSessionToken();
+    const token = "cf0f8ad828a284c84277d22b9dd758b95342dde4621ca3906c44b";
+    // const getInitialState = () => {
+    //     return fetch("/api/zadanie_cartSessionState?query=getToken", {
+    //         method: "POST",
+    //         body: JSON.stringify({ token: token }),
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //     }).then((res) => res.json());
+    // };
 
-    const mutation = useMutation(() => {
-        const token = getToken();
-        return fetchCartItems(token);
-    });
+    // const testState = useQuery(["statQuery", token], () => getInitialState(), { keepPreviousData: true });
 
-    console.log("🚀 ~ file: useCartItems.tsx ~ line 17 ~ mutation ~ mutation", mutation);
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-    useEffect(() => {
-        // console.log(token)
+    // const cartMutation3 = useMutation(
+    //     () =>
+    //         fetch("/api/zadanie_cartSessionState?query=getToken", {
+    //             method: "POST",
+    //             body: JSON.stringify({ token: "cf0f8ad828a284c84277d22b9dd758b95342dde4621ca3906c44b" }),
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //         }).then((res) => res.json()),
+    //     {
+    //         onSuccess(data) {
+    //             console.log("Succesful", { data });
+    //         },
+    //         onError(error) {
+    //             console.log("Failed", { error });
+    //         },
+    //         onSettled() {
+    //             console.log("Mutation completed.");
+    //         },
+    //     }
+    // );
+    // mutation.mutateAsync();
 
-        const getCartItemsSessionState = async () => {
-            const token = await getCartSessionToken();
-            const { status, cartItems } = await fetchCartItems(token);
+    // if (dispatchCartItems) {
+    //     cartMutation3.mutate();
+    // }
 
-            if (!cartItems) {
-                return;
-            }
+    // console.log("🚀 ~ const{data}=useMutation ~ data", cartMutation3);
 
-            setCartItems(cartItems);
-        };
+    // useEffect(() => {
 
-        getCartItemsSessionState();
-    }, []);
+    //     const getCartItemsSessionState = async () => {
+    //         const token = await getCartSessionToken();
+    //         const { status, cartItems } = await fetchCartItems(token);
+
+    //         if (!cartItems) {
+    //             return;
+    //         }
+
+    //         setCartItems(cartItems);
+    //     };
+
+    //     getCartItemsSessionState();
+    // }, []);
 
     /*
     zadanie_cartSessionState?query=getCart
 */
 
-    useEffect(() => {
-        if (!dispatchCartItems) {
-            return;
-        }
+    // useEffect(() => {
+    //     if (!dispatchCartItems) {
+    //         return;
+    //     }
 
-        const updateCartItemsSessionState = async () => {
-            const token = await getCartSessionToken();
-            const data = await updateCartItems(token, cartItems);
-            console.log("🚀 ~ ~ data", data);
-        };
+    //     const updateCartItemsSessionState = async () => {
+    //         const token = await getCartSessionToken();
+    //         const data = await updateCartItems(token, cartItems);
+    //         console.log("🚀 ~ ~ data", data);
+    //     };
 
-        updateCartItemsSessionState();
-    }, [cartItems, dispatchCartItems]);
+    //     updateCartItemsSessionState();
+    // }, [cartItems, dispatchCartItems]);
 
     const addItems = (item: CartItem) => {
         if (!dispatchCartItems) {
