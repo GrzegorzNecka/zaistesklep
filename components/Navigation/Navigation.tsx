@@ -5,10 +5,11 @@ import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import ActiveLink from "./ActiveLink";
+import ActiveLink from "../ActiveLink";
 import { navigationList } from "utils/navigationList";
-import CartBar from "./Cart/CartBar";
+import CartBar from "../Cart/CartBar";
 import Brand from "svg/brand.svg";
+import LoginButton from "./LoginButton";
 
 interface DisclosureProps {
     open: boolean;
@@ -59,7 +60,7 @@ export const Navigation = () => {
                                 </div>
 
                                 <div className="flex item items-center">
-                                    <button type="button">zaloguj</button>
+                                    <LoginButton />
                                 </div>
                                 <div className="flex item items-center">
                                     <CartBar />
