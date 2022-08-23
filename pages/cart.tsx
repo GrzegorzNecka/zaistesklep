@@ -6,8 +6,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import { TrashIcon } from "@heroicons/react/outline";
 import Stripe from "stripe";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-
 const CartContent = () => {
     const cartState = useCartState();
 
@@ -48,9 +46,16 @@ const CartContent = () => {
     );
 };
 
+const stripeSecret = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
 const CartSummary = () => {
     const cartState = useCartState();
-    console.log("🚀 ~ file: cart.tsx ~ line 53 ~ CartSummary ~ cartState", cartState);
+
+    if (!stripeSecret) {
+        return <div></div>;
+    }
+
+    const stripePromise = loadStripe(stripeSecret);
 
     const pay = async () => {
         const stripe = await stripePromise;
@@ -67,23 +72,11 @@ const CartSummary = () => {
                     return {
                         slug: cartItem.slug,
                         count: cartItem.count,
-                        // price_data: {
-                        //     currency: "PLN",
-                        //     unit_amount: item.price,
-                        //     product_data: {
-                        //         name: item.title,
-                        //     },
-                        // },
-                        // quantity: item.count,
                     };
                 })
             ),
         });
 
-        // metadata: {
-        //     slug: item.slug,
-        //     id: item.id,
-        // },
         const { session }: { session: Stripe.Response<Stripe.Checkout.Session> } = await res.json();
 
         await stripe.redirectToCheckout({ sessionId: session.id });
