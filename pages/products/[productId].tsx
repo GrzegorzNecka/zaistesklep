@@ -1,6 +1,6 @@
 import { ProductListItem } from "components/ProductList";
 import { InferGetStaticPropsType } from "next";
-import { InferGetStaticPathsType } from "types";
+import { InferGetStaticPathsType } from "types/types";
 import Pagination from "components/zadanie_Pagination/Pagination";
 import { Main } from "components/Main";
 import { useQuery } from "react-query";

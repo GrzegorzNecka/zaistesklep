@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Rating } from "./ProductRating/Raiting";
 import { NextSeo } from "next-seo";
 import Markdown from "./Markdown";
-import { MarkdownResult } from "types";
+import { MarkdownResult } from "types/types";
 import { useCartState } from "./Cart/CartContext";
 import { ProductListItemProps } from "./types";
 import ProductArithmeticRating from "./ProductRating/ProductArithmeticRating";

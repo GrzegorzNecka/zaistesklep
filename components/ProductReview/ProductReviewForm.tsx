@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import FormInput from "components/CheckoutForm/FormInput";
+import FormInput from "components/Forms/FormInput";
 import {
     GetReviewsForProductSlugDocument,
     GetReviewsForProductSlugQuery,

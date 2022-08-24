@@ -1,7 +1,7 @@
 import { NextApiHandler } from "next/types";
 import Stripe from "stripe";
 import { buffer } from "micro";
-import { StripeWebhookEvents } from "stripeEvents";
+import { StripeWebhookEvents } from "types/stripeEvents";
 
 export const config = {
     api: {

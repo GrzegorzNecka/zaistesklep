@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote";
-import { MarkdownResult } from "types";
+import { MarkdownResult } from "types/types";
 
 const Markdown = ({ children }: { children: MarkdownResult }) => {
     return (

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import FormInput from "../CheckoutForm/FormInput";
+import FormInput from "../Forms/FormInput";
 import { useState } from "react";
 import { useMutation } from "react-query";
 import { useAddToNewsletterMutation } from "./services/useAddToNewsletterMutation";
