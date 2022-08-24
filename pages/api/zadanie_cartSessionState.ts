@@ -28,11 +28,8 @@ const handler: NextApiHandler = (req, res) => {
          switch request query conditions 
     */
 
-    console.log("🚀 ~ file: zadanie_cartSessionState.ts ~ line 6 ~  STATE", STATE);
-
     switch (req.query.query) {
-        case "getToken":
-            console.log("getToken");
+        case "fetchCartItems":
             try {
                 const { token }: Token = req.body;
 
@@ -64,8 +61,7 @@ const handler: NextApiHandler = (req, res) => {
             }
 
             return;
-        case "getCart":
-            console.log("getCart");
+        case "updateCartItems":
             try {
                 const { token, cartItems }: State = req.body;
 
