@@ -2,7 +2,7 @@ import { Main } from "components/Main";
 import { ProductDetails } from "components/ProductDetails";
 import { InferGetStaticPropsType } from "next";
 import { serialize } from "next-mdx-remote/serialize";
-import { InferGetStaticPathsType } from "types";
+import { InferGetStaticPathsType } from "types/types";
 import { apolloClient } from "graphql/apolloClient";
 
 import {
