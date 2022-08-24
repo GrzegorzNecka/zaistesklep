@@ -11,9 +11,9 @@ const addItemsToState = (token: string, cartItems: CartItem[]) => {
     });
 };
 
-const existToken = (state: State[], token: string) => state.filter((elem) => elem.token === token);
+const existToken = (state: State[], token: string) => state.find((elem) => Boolean(elem.token === token));
 
-const handler: NextApiHandler = (req, res) => {
+const handler: NextApiHandler = async (req, res) => {
     if (req.method !== "POST") {
         res.status(405).json({ message: "Method Not Allowed" });
         return;
@@ -32,10 +32,14 @@ const handler: NextApiHandler = (req, res) => {
         case "fetchCartItems":
             try {
                 const { token }: Token = req.body;
+                console.log("🚀 ~ czy token przyszedł z requestu ~ token", token);
 
-                if (!STATE.length || !existToken(STATE, token).length) {
+                if (!STATE.length || !existToken(STATE, token)) {
                     addItemsToState(token, []);
                 }
+
+                console.log("fetchCartItems--existToken", existToken(STATE, token));
+                console.log("fetchCartItems-- STATE", STATE);
 
                 const currentStateElem = STATE.find((elem) => elem.token === token);
 
@@ -64,8 +68,11 @@ const handler: NextApiHandler = (req, res) => {
         case "updateCartItems":
             try {
                 const { token, cartItems }: State = req.body;
+                console.log("🚀 ~ czy token przyszedł z requestu ~ token", token);
+                console.log("updateCartItems--existToken", existToken(STATE, token));
+                console.log("updateCartItems-- STATE", STATE);
 
-                if (!existToken(STATE, token).length) {
+                if (!existToken(STATE, token)) {
                     res.status(400).json({ message: "token is not exist" });
                     return;
                 }

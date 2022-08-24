@@ -2,7 +2,8 @@ import { useSession, signIn, signOut } from "next-auth/react";
 
 const LoginButton = () => {
     const session = useSession();
-    console.log(session.status);
+
+    // console.log(session.status);
     return session.status === "unauthenticated" ? (
         <button type="button" onClick={() => signIn()}>
             zaloguj

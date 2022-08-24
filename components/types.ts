@@ -1,4 +1,4 @@
-import { MarkdownResult } from "types";
+import { MarkdownResult } from "types/types";
 
 /*
  
