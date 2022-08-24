@@ -2,8 +2,8 @@ import { useSession, signIn, signOut } from "next-auth/react";
 
 const LoginButton = () => {
     const session = useSession();
-
-    return session.status === "authenticated" ? (
+    console.log(session.status);
+    return session.status === "unauthenticated" ? (
         <button type="button" onClick={() => signIn()}>
             zaloguj
         </button>
@@ -12,6 +12,12 @@ const LoginButton = () => {
             wyloguj
         </button>
     );
+
+    // return (
+    //     <button type="button" onClick={() => signIn()}>
+    //         zaloguj
+    //     </button>
+    // );
 };
 
 export default LoginButton;

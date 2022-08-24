@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 // import { getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
 import { fetchCartItems, getCartSessionToken, updateCartItems } from "./services/zadanie_cartItems";
-import { useMutation, useQuery } from "react-query";
 
 //dodaj RactQuery
 
@@ -35,11 +34,15 @@ export const useCartItems = () => {
         }
         const updateCartItemsOnSerwerSessionState = async () => {
             const cartToken = await getCartSessionToken();
-            await updateCartItems(cartToken, cartItems);
+            updateCartItems(cartToken, cartItems);
         };
 
         updateCartItemsOnSerwerSessionState();
     }, [cartItems, dispatchCartItems]);
+
+    /*
+    event 
+    */
 
     const addItems = (item: CartItem) => {
         if (!dispatchCartItems) {
