@@ -2,12 +2,7 @@ import { NextApiHandler } from "next";
 import * as yup from "yup";
 import * as bcrypt from "bcrypt";
 import { authorizedApolloClient } from "graphql/apolloClient";
-import {
-    CreateAccountDocument,
-    CreateAccountMutation,
-    CreateAccountMutationVariables,
-    useCreateAccountMutation,
-} from "generated/graphql";
+import { CreateAccountDocument, CreateAccountMutation, CreateAccountMutationVariables } from "generated/graphql";
 
 export const signUpFormSchema = yup
     .object({
