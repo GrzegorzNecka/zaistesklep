@@ -15,3 +15,9 @@ mutation CreateOrder($orderData: OrderCreateInput!) {
         id
     }
 }
+
+mutation CreateAccount($email: String!, $password: String!) {
+    createAccount(data: { email: $email, password: $password }) {
+        id
+    }
+}

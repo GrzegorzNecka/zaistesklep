@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect } from "react";
 // import { getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
 import { fetchCartItems, getCartSessionToken, updateCartItems } from "./services/zadanie_cartItems";

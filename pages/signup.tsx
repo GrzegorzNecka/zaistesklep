@@ -22,7 +22,11 @@ const SignupPage = () => {
     });
 
     const onSubmit = handleSubmit(async (data) => {
-        // mutate({ email: data.email, name: data.name });
+        await fetch("/api/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json;" },
+            body: JSON.stringify(data),
+        });
     });
 
     return (

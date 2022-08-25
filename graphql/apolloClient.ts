@@ -6,17 +6,10 @@ export const apolloClient = new ApolloClient({
     cache: new InMemoryCache(),
 });
 
-// apolloClient
-//     .query({
-//         query: gql`
-//             query GetProductsList {
-//                 products {
-//                     id
-//                     slug
-//                     name
-//                     price
-//                 }
-//             }
-//         `,
-//     })
-//     .then((result) => console.log(result));
+export const authorizedApolloClient = new ApolloClient({
+    uri: process.env.NEXT_PUBLIC_HYGRAPH_CONTENT_API,
+    cache: new InMemoryCache(),
+    headers: {
+        Authorization: `Bearer ${process.env.HYGRAPH_TOKEN_AUTH}`,
+    },
+});
