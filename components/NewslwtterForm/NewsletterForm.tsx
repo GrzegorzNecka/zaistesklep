@@ -2,9 +2,21 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import FormInput from "../Forms/FormInput";
-import { useState } from "react";
 import { useMutation } from "react-query";
-import { useAddToNewsletterMutation } from "./services/useAddToNewsletterMutation";
+
+type NewsletterMutation = {
+    email: string;
+    name: string;
+};
+
+const useAddToNewsletterMutation = () =>
+    useMutation("add-to-newsletter", async ({ email, name }: NewsletterMutation) => {
+        await fetch("http://localhost:3000/api/mailerLite", {
+            method: "POST",
+            headers: { "Cintent-Type": "application/json" },
+            body: JSON.stringify({ email, name }),
+        });
+    });
 
 const NewsletterForm = () => {
     const formSchema = yup
@@ -21,6 +33,7 @@ const NewsletterForm = () => {
     });
 
     const { mutate, isLoading, isSuccess } = useAddToNewsletterMutation();
+    console.log("🚀 ~ file: NewsletterForm.tsx ~  mutate", mutate);
 
     const onSubmit = handleSubmit(async (data) => {
         mutate({ email: data.email, name: data.name });
@@ -29,7 +42,7 @@ const NewsletterForm = () => {
     return (
         <div className="flex flex-col md:w-full">
             <h2 className="mb-4 font-bold md:text-xl text-heading ">subscribe us</h2>
-            <form onSubmit={onSubmit} className="justify-center w-full mx-auto">
+            <form onSubmit={onSubmit} className="justify-center w-full mx-auto max-w-md ">
                 <div className="mt-4">
                     <div className="w-full">
                         <FormInput type="text" placeholder="Name" name="name" useForm={{ register, formState }}>
@@ -43,7 +56,7 @@ const NewsletterForm = () => {
 
                 {!isSuccess ? (
                     <div className="mt-4">
-                        <button disabled={isLoading} className="w-full btn-custom-primary">
+                        <button type="submit" disabled={isLoading} className="w-full btn-custom-primary">
                             subscribe !
                         </button>
                     </div>
