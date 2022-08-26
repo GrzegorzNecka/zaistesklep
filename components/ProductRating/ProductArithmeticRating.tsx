@@ -1,6 +1,6 @@
 import { useGetReviewsForProductSlugQuery } from "generated/graphql";
 import { Rating } from "./Raiting";
-import calculateArithmeticRating from "./services/calculateArithmeticRating";
+import calculateArithmeticRating from "./utils/calculateArithmeticRating";
 
 const ProductArithmeticRating = ({ productSlug }: { productSlug: string }) => {
     const { data } = useGetReviewsForProductSlugQuery({

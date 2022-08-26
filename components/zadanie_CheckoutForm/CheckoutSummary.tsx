@@ -13,11 +13,11 @@ const CheckoutSummary = () => {
                 <div className="mt-8">
                     <div className="flex flex-col space-y-4">
                         <ul className="divide-y divide-gray-200">
-                            {cartState.items.map((item, index) => {
+                            {cartState.items.map((item) => {
                                 return (
                                     <>
                                         <span role="separator" className=" divide-y divide-gray-200"></span>
-                                        <li className=" py-4 flex space-x-3" key={index}>
+                                        <li className=" py-4 flex space-x-3" key={item.id}>
                                             <div className="">
                                                 <Image
                                                     // layout="responsive"

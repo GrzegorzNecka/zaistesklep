@@ -38,9 +38,11 @@ export default NextAuth({
                     return null;
                 }
 
-                return { id: userByEmail.data.account.id, email: userByEmail.data.account.email };
+                const session = { id: userByEmail.data.account.id, email: userByEmail.data.account.email };
+
+                return session;
             },
         }),
     ],
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.NEXT_AUTH_SECRET,
 });

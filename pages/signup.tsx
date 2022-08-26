@@ -3,10 +3,21 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import FormInput from "components/Forms/FormInput";
 import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 // 5:10
 
 const SignupPage = () => {
+    const session = useSession();
+    console.log("🚀 ~ file: signup.tsx ~ session", session);
+
+    const router = useRouter();
+
+    if (session.status === "authenticated") {
+        router.push("/");
+    }
+
     const signUpFormSchema = yup
         .object({
             email: yup.string().required("pole jest wymagane").email(),
@@ -22,11 +33,12 @@ const SignupPage = () => {
     });
 
     const onSubmit = handleSubmit(async (data) => {
-        await fetch("/api/signup", {
+        const user = await fetch("/api/signup", {
             method: "POST",
             headers: { "Content-Type": "application/json;" },
             body: JSON.stringify(data),
         });
+        console.log("🚀 ~ file: signup.tsx  user", user);
     });
 
     return (
