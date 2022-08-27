@@ -6,6 +6,19 @@
 -   yarn:
 -   next:
 
+## do zrobienia checkout - sugestia z lekcji:
+
+ma być robiony w momencie kiedy idzie zapytanie do api route, które tworzy płątności w Stripe
+
+-   wtedy przy okazji tworzę checkout z poziomu API do API
+-   checkout musi być połączony z użytkownikiem , który jest uwierzytekniony
+-   relacja użytkownik < -- > checkout
+
+## do zrobienia checkout na graphCms -
+
+-   zamiast local storage mutuj na hygraphics
+-   potrzebujesz indywidualnego id w związku z sesją
+
 ## do zrobienia stripe:
 
 1. wyślij testowe zapytanie checkout do graphQl z fakowej strony checkout na next.js - obczaj jak to działa

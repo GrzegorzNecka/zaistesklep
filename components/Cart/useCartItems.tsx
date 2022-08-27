@@ -12,13 +12,13 @@ export const useCartItems = () => {
     useEffect(() => {
         const getCartItemsForSerwerSessionState = async () => {
             const cartToken = await getCartSessionToken();
-            const { cartItems } = await fetchCartItems(cartToken);
+            const data = await fetchCartItems(cartToken);
 
-            if (!cartItems) {
+            if (!data.cartItems) {
                 return;
             }
 
-            setCartItems(cartItems);
+            setCartItems(data.cartItems);
         };
 
         getCartItemsForSerwerSessionState();
