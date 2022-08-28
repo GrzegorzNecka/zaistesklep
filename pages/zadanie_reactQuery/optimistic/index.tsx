@@ -41,17 +41,83 @@ function useTodos() {
 
 const OptimisticPage = () => {
     const queryClient = useQueryClient();
-    const [name, setText] = React.useState("");
+    const [name, setName] = React.useState("");
     const { isFetching, ...queryInfo } = useTodos();
+
+    /*
+     * MUTATION
+     */
+
+    const addTodoMutation = useMutation(
+        async (newTodo) => {
+            const res = await fetch("/api/zadanie_reactQuery/optimistic", {
+                method: "POST",
+                headers: { "Content-Type": "application/json;" },
+                body: JSON.stringify({ name: newTodo }),
+            });
+
+            if (res.ok) {
+                return res.json();
+            }
+
+            throw new Error("Network response not ok");
+        },
+        {
+            // When mutate is called:
+            onMutate: async (newTodo: string) => {
+                setName("");
+
+                await queryClient.cancelQueries(["todos"]);
+
+                const previousTodos = queryClient.getQueryData<Todo>(["todos"]);
+
+                if (previousTodos) {
+                    queryClient.setQueryData<Todo>(["todos"], {
+                        ...previousTodos,
+                        items: [...previousTodos.items, { id: Math.random().toString(), name: newTodo }],
+                    });
+                }
+
+                return { previousTodos };
+            },
+
+            onError: (err, variables, context) => {
+                if (context?.previousTodos) {
+                    queryClient.setQueryData<Todo>(["todos"], context.previousTodos);
+                }
+            },
+
+            onSettled: () => {
+                queryClient.invalidateQueries(["todos"]);
+            },
+        }
+    );
 
     return (
         <Main>
             <p>optimistic</p>
-            <ul>
-                {queryInfo?.data?.items.map((item: Items) => (
-                    <li key={item.id}>{item.name}</li>
-                ))}
-            </ul>
+            <br />
+            <br />
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    addTodoMutation.mutate(name);
+                }}
+            >
+                <input type="text" onChange={(event) => setName(event.target.value)} value={name} />
+                <button disabled={addTodoMutation.isLoading}>Create</button>
+            </form>
+            <br />
+            <br />
+            {queryInfo.isSuccess && (
+                <>
+                    <ul>
+                        {queryInfo?.data?.items.map((item: Items) => (
+                            <li key={item.id}>{item.name}</li>
+                        ))}
+                    </ul>
+                </>
+            )}
         </Main>
     );
 };

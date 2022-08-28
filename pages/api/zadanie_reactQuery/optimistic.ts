@@ -8,6 +8,7 @@ type Todo = {
 const items: Todo[] = [{ id: "1", name: "John Doe" }];
 
 const queryTestHandler: NextApiHandler = async (req, res) => {
+    console.log("🚀 ~ ~ items", items);
     if (req.method === "POST") {
         const { name }: { name: string } = JSON.parse(req.body);
 
