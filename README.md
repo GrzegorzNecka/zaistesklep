@@ -114,3 +114,9 @@ https://stripe.com/docs/webhooks
 https://labs.fullstak.pl/courses/take/fullstack-react-w-next-js/lessons/23302817-obsluga-webhooks-w-stripe
 
 [ngrok](https://dashboard.ngrok.com/get-started/setup)
+
+### ReactQuery
+
+[optimistuc update](https://codesandbox.io/s/withered-currying-4lhjx8?file=/pages/api/data.js:55-566)
+[optimistuc update yt](https://www.youtube.com/watch?v=ZbhGXD8KpQ8)
+[mutaion example ](https://daily-dev-tips.com/posts/react-query-and-optimistic-updates/)
