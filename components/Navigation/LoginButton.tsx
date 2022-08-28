@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 const LoginButton = () => {
     const session = useSession();
-    console.log("🚀 ~ file: LoginButton.tsx ~ line 5 ~ LoginButton ~  session", session);
+    // console.log("🚀 ~ file: LoginButton.tsx ~ line 5 ~ LoginButton ~  session", session);
 
     const router = useRouter();
     // console.log(session.status);

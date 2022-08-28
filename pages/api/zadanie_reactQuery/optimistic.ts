@@ -1,16 +1,39 @@
 import type { NextApiHandler } from "next";
 
-const queryTestHandler: NextApiHandler = async (req, res) => {
-    //-
-    // const {
-    //     query: { id },
-    // } = req;
+type Todo = {
+    id: string;
+    name: string;
+};
 
-    // if (typeof id !== "string") {
-    //     res.status(400).json({ message: "bad query" });
-    //     return;
-    // }
-    return res.status(200).json({ id: 1, name: "John Doe", age: 24 });
+const items: Todo[] = [{ id: "1", name: "John Doe" }];
+
+const queryTestHandler: NextApiHandler = async (req, res) => {
+    if (req.method === "POST") {
+        const { name }: { name: string } = JSON.parse(req.body);
+
+        // sometimes it will fail, this will cause a regression on the UI
+
+        if (Math.random() > 0.7) {
+            res.status(500);
+            res.json({ message: "Could not add item!" });
+            return;
+        }
+
+        const newTodo: Todo = { id: Math.random().toString(), name: name.toUpperCase() };
+        items.push(newTodo);
+        res.json(newTodo);
+        return;
+    }
+
+    if (req.method === "GET") {
+        res.json({
+            ts: Date.now(),
+            items,
+        });
+        return;
+    }
+    res.status(400).json({});
+    return;
 };
 
 export default queryTestHandler;
