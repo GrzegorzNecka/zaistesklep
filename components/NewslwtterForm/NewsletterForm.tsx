@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import FormInput from "../Forms/FormInput";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 
 type NewsletterMutation = {
     email: string;
@@ -10,7 +10,7 @@ type NewsletterMutation = {
 };
 
 const useAddToNewsletterMutation = () =>
-    useMutation("add-to-newsletter", async ({ email, name }: NewsletterMutation) => {
+    useMutation(async ({ email, name }: NewsletterMutation) => {
         await fetch("http://localhost:3000/api/mailerLite", {
             method: "POST",
             headers: { "Cintent-Type": "application/json" },

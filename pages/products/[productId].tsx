@@ -3,7 +3,7 @@ import { InferGetStaticPropsType } from "next";
 import { InferGetStaticPathsType } from "types/types";
 import Pagination from "components/zadanie_Pagination/Pagination";
 import { Main } from "components/Main";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { countOfProducts, fetchProducts } from "services/zadanie_pagination/products";
 import { gql } from "@apollo/client";
 import { apolloClient } from "graphql/apolloClient";

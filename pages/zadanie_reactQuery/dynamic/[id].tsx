@@ -1,6 +1,6 @@
 import { Main } from "components/Main";
 import { useRouter } from "next/router";
-import { useQuery, UseQueryResult } from "react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 
 // /https://www.youtube.com/watch?v=KSi7KVc4IDU&list=PLXa8waH0nYsBF5W_cl2LZbw5OmrcyioP3&index=1&t=80s
 // 11
