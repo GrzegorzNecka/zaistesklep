@@ -55,7 +55,8 @@
         "lint": "next lint",
         "ssl:setup": "node scripts/create-ssl-certs.js",
         "start": "next start",
-        "generate-graphql": "graphql-codegen --config codegen.yml"
+        "generate-graphql": "graphql-codegen --config codegen.yml",
+        "cypress:open": "cypress open"
     },
     "version": "0.1.0"
 }

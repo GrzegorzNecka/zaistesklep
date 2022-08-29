@@ -45,10 +45,22 @@ const NewsletterForm = () => {
             <form onSubmit={onSubmit} className="justify-center w-full mx-auto max-w-md ">
                 <div className="mt-4">
                     <div className="w-full">
-                        <FormInput type="text" placeholder="Name" name="name" useForm={{ register, formState }}>
+                        <FormInput
+                            id="newsletter-name"
+                            type="text"
+                            placeholder="Name"
+                            name="name"
+                            useForm={{ register, formState }}
+                        >
                             Name
                         </FormInput>
-                        <FormInput type="email" placeholder="Email" name="email" useForm={{ register, formState }}>
+                        <FormInput
+                            id="newsletter-email"
+                            type="email"
+                            placeholder="Email"
+                            name="email"
+                            useForm={{ register, formState }}
+                        >
                             Email
                         </FormInput>
                     </div>
@@ -56,12 +68,17 @@ const NewsletterForm = () => {
 
                 {!isSuccess ? (
                     <div className="mt-4">
-                        <button type="submit" disabled={isLoading} className="w-full btn-custom-primary">
+                        <button
+                            data-cy="newsletter-submit-btn"
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full btn-custom-primary"
+                        >
                             subscribe !
                         </button>
                     </div>
                 ) : (
-                    <span>subscribe was successed</span>
+                    <span data-cy="newsletter-submit-confetti">subscribe was successed</span>
                 )}
             </form>
         </div>

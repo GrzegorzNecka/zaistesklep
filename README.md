@@ -123,4 +123,6 @@ https://labs.fullstak.pl/courses/take/fullstack-react-w-next-js/lessons/23302817
 
 ### cypress
 
+[docs](https://docs.cypress.io/guides/end-to-end-testing/testing-your-app#Step-2-Visit-your-server)
+
 `yarn cypress open`

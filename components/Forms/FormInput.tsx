@@ -4,7 +4,7 @@ import { FieldValues, FormState, Path, UseFormRegister } from "react-hook-form";
 interface FormInputProps<FormData extends FieldValues> {
     name: Path<FormData>;
     type: string;
-
+    id?: string;
     placeholder?: string;
     useForm: {
         register: UseFormRegister<FormData>;
@@ -16,7 +16,7 @@ interface FormInputProps<FormData extends FieldValues> {
 const FormInput = <FormData extends FieldValues>({
     name,
     type,
-
+    id,
     placeholder,
     useForm: { register, formState },
     children,
@@ -28,7 +28,13 @@ const FormInput = <FormData extends FieldValues>({
         return (
             <>
                 <div className="flex ">
-                    <input {...register(name)} type={type} className="mr-3 form-checkbox  border-gray-300 rounded " />
+                    <input
+                        id={id}
+                        data-cy={id}
+                        {...register(name)}
+                        type={type}
+                        className="mr-3 form-checkbox  border-gray-300 rounded "
+                    />
                     <label htmlFor={name} className="block mb-3 text-sm font-semibold text-gray-500">
                         {children}
                     </label>
@@ -47,6 +53,8 @@ const FormInput = <FormData extends FieldValues>({
                 {children}
             </label>
             <input
+                id={id}
+                data-cy={id}
                 {...register(name)}
                 type={type}
                 placeholder={placeholder}
