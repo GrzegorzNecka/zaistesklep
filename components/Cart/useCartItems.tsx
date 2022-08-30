@@ -2,12 +2,18 @@ import { useState, useEffect } from "react";
 // import { getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
 import { fetchCartItems, getCartSessionToken, updateCartItems } from "./services/zadanie_cartItems";
+import { useSession } from "next-auth/react";
 
 //dodaj RactQuery
 
 export const useCartItems = () => {
     const [dispatchCartItems, setDispatchCartItems] = useState(false);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+    // ---- NextAuth
+    const session = useSession();
+    console.log("🚀 ~ file: useCartItems", session);
+    // ----
 
     useEffect(() => {
         const getCartItemsForSerwerSessionState = async () => {

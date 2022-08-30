@@ -2,7 +2,14 @@ import { NextApiHandler } from "next";
 import * as yup from "yup";
 import * as bcrypt from "bcrypt";
 import { authorizedApolloClient } from "graphql/apolloClient";
-import { CreateAccountDocument, CreateAccountMutation, CreateAccountMutationVariables } from "generated/graphql";
+import {
+    CreateAccountDocument,
+    CreateAccountMutation,
+    CreateAccountMutationVariables,
+    CreateCheckoutIdDocument,
+    CreateCheckoutIdMutation,
+    CreateCheckoutIdMutationVariables,
+} from "generated/graphql";
 
 export const signUpFormSchema = yup
     .object({
@@ -33,13 +40,30 @@ const SignupHandler: NextApiHandler = async (req, res) => {
         mutation: CreateAccountDocument,
         variables: { email, password: passwordHash },
     });
-    console.log("🚀 ~ file: signup.ts ~ line 36 ~ constSignupHandler:NextApiHandler= ~ user", user);
 
+    const userId = user?.data?.createAccount?.id;
+
+    if (!userId) {
+        res.status(500).json({ message: "bad response from Hygraph" });
+        return;
+    }
+
+    const userEmail = user?.data?.createAccount;
+    console.log("🚀 ~ #############################", userEmail);
+    const createCheckoutId = await authorizedApolloClient.mutate<
+        CreateCheckoutIdMutation,
+        CreateCheckoutIdMutationVariables
+    >({
+        mutation: CreateCheckoutIdDocument,
+        variables: { id: userId, email: email },
+    });
+
+    console.log(createCheckoutId);
     // data: {
     //     createAccount: { id: 'cl7fxmxh5fl8g0cuqosw38c04', __typename: 'Account' }
     //   }
 
-    res.json({ userId: user.data?.createAccount?.id });
+    res.json({ userId });
 };
 
 export default SignupHandler;

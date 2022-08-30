@@ -23,7 +23,7 @@ mutation CreateAccount($email: String!, $password: String!) {
 }
 
 mutation CreateCheckoutId($id: String!) {
-    createCheckout(data: { sessionId: $id }) {
-        sessionId
+    createCheckout(data: { accountId: $id }) {
+        accountId
     }
 }

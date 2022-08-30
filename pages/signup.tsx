@@ -5,7 +5,7 @@ import FormInput from "components/Forms/FormInput";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-
+import { signIn } from "next-auth/react";
 // 5:10
 
 const SignupPage = () => {
@@ -13,6 +13,10 @@ const SignupPage = () => {
     console.log("🚀 ~ file: signup.tsx ~ session", session);
 
     const router = useRouter();
+
+    if (session.status === "authenticated") {
+        router.push("/");
+    }
 
     const signUpFormSchema = yup
         .object({
@@ -34,10 +38,9 @@ const SignupPage = () => {
             headers: { "Content-Type": "application/json;" },
             body: JSON.stringify(data),
         });
-        console.log("🚀 ~ file: signup.tsx  user", user);
 
-        if (session.status === "authenticated") {
-            router.push("/");
+        if (user.ok) {
+            signIn();
         }
     });
 
