@@ -55,7 +55,7 @@ const SignupHandler: NextApiHandler = async (req, res) => {
         CreateCheckoutIdMutationVariables
     >({
         mutation: CreateCheckoutIdDocument,
-        variables: { id: userId, email: email },
+        variables: { accountId: userId, email: email },
     });
 
     console.log(createCheckoutId);
