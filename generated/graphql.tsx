@@ -1704,6 +1704,7 @@ export type Checkout = Node & {
   /** User that last published this document */
   publishedBy?: Maybe<User>;
   scheduledIn: Array<ScheduledOperation>;
+  sessionId: Scalars['String'];
   /** System stage field */
   stage: Stage;
   /** The time the document was updated */
@@ -1771,6 +1772,7 @@ export type CheckoutConnection = {
 
 export type CheckoutCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  sessionId: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -2221,6 +2223,25 @@ export type CheckoutManyWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  sessionId?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  sessionId_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  sessionId_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  sessionId_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  sessionId_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  sessionId_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  sessionId_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  sessionId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  sessionId_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  sessionId_starts_with?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -2246,13 +2267,14 @@ export enum CheckoutOrderByInput {
   IdDesc = 'id_DESC',
   PublishedAtAsc = 'publishedAt_ASC',
   PublishedAtDesc = 'publishedAt_DESC',
+  SessionIdAsc = 'sessionId_ASC',
+  SessionIdDesc = 'sessionId_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC'
 }
 
 export type CheckoutUpdateInput = {
-  /** No fields in update input */
-  _?: InputMaybe<Scalars['String']>;
+  sessionId?: InputMaybe<Scalars['String']>;
 };
 
 export type CheckoutUpdateManyInlineInput = {
@@ -2384,6 +2406,25 @@ export type CheckoutWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  sessionId?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  sessionId_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  sessionId_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  sessionId_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  sessionId_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  sessionId_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  sessionId_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  sessionId_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  sessionId_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  sessionId_starts_with?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -2405,6 +2446,7 @@ export type CheckoutWhereInput = {
 /** References Checkout record uniquely */
 export type CheckoutWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
+  sessionId?: InputMaybe<Scalars['String']>;
 };
 
 /** Collection of products, e.g. Winter Sale. */
@@ -12179,6 +12221,13 @@ export type CreateAccountMutationVariables = Exact<{
 
 export type CreateAccountMutation = { __typename?: 'Mutation', createAccount?: { __typename?: 'Account', id: string } | null };
 
+export type CreateCheckoutIdMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type CreateCheckoutIdMutation = { __typename?: 'Mutation', createCheckout?: { __typename?: 'Checkout', sessionId: string } | null };
+
 export type GetProductsSlugsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -12371,6 +12420,39 @@ export function useCreateAccountMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateAccountMutationHookResult = ReturnType<typeof useCreateAccountMutation>;
 export type CreateAccountMutationResult = Apollo.MutationResult<CreateAccountMutation>;
 export type CreateAccountMutationOptions = Apollo.BaseMutationOptions<CreateAccountMutation, CreateAccountMutationVariables>;
+export const CreateCheckoutIdDocument = gql`
+    mutation CreateCheckoutId($id: String!) {
+  createCheckout(data: {sessionId: $id}) {
+    sessionId
+  }
+}
+    `;
+export type CreateCheckoutIdMutationFn = Apollo.MutationFunction<CreateCheckoutIdMutation, CreateCheckoutIdMutationVariables>;
+
+/**
+ * __useCreateCheckoutIdMutation__
+ *
+ * To run a mutation, you first call `useCreateCheckoutIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCheckoutIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCheckoutIdMutation, { data, loading, error }] = useCreateCheckoutIdMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCreateCheckoutIdMutation(baseOptions?: Apollo.MutationHookOptions<CreateCheckoutIdMutation, CreateCheckoutIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCheckoutIdMutation, CreateCheckoutIdMutationVariables>(CreateCheckoutIdDocument, options);
+      }
+export type CreateCheckoutIdMutationHookResult = ReturnType<typeof useCreateCheckoutIdMutation>;
+export type CreateCheckoutIdMutationResult = Apollo.MutationResult<CreateCheckoutIdMutation>;
+export type CreateCheckoutIdMutationOptions = Apollo.BaseMutationOptions<CreateCheckoutIdMutation, CreateCheckoutIdMutationVariables>;
 export const GetProductsSlugsDocument = gql`
     query GetProductsSlugs {
   products {
