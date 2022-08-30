@@ -14,10 +14,6 @@ const SignupPage = () => {
 
     const router = useRouter();
 
-    if (session.status === "authenticated") {
-        router.push("/");
-    }
-
     const signUpFormSchema = yup
         .object({
             email: yup.string().required("pole jest wymagane").email(),
@@ -39,6 +35,10 @@ const SignupPage = () => {
             body: JSON.stringify(data),
         });
         console.log("🚀 ~ file: signup.tsx  user", user);
+
+        if (session.status === "authenticated") {
+            router.push("/");
+        }
     });
 
     return (

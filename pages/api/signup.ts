@@ -33,6 +33,11 @@ const SignupHandler: NextApiHandler = async (req, res) => {
         mutation: CreateAccountDocument,
         variables: { email, password: passwordHash },
     });
+    console.log("🚀 ~ file: signup.ts ~ line 36 ~ constSignupHandler:NextApiHandler= ~ user", user);
+
+    // data: {
+    //     createAccount: { id: 'cl7fxmxh5fl8g0cuqosw38c04', __typename: 'Account' }
+    //   }
 
     res.json({ userId: user.data?.createAccount?.id });
 };
