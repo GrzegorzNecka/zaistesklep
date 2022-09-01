@@ -28,8 +28,15 @@ mutation CreateCheckout($email: String!, $total: Int!) {
     }
 }
 
-mutation CreateCheckoutItem($data: CheckoutItemCreateInput!) {
-    createCheckoutItem(data: $data) {
+mutation CreateCheckoutItem($quantity: Int!, $total: Int!, $email: String!, $slug: String!) {
+    createCheckoutItem(
+        data: {
+            quantity: $quantity
+            total: $total
+            checkout: { connect: { email: $email } }
+            product: { connect: { slug: $slug } }
+        }
+    ) {
         id
     }
 }

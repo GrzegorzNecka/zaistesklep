@@ -16,36 +16,36 @@ export const useCartItems = () => {
     //-----------
     console.log("🚀 ~ file: ~ cartItems", cartItems);
 
-    useEffect(() => {
-        const getCartItemsForSerwerSessionState = async () => {
-            const cartToken = await getCartSessionToken();
-            const data = await fetchCartItems(cartToken);
+    // useEffect(() => {
+    //     const getCartItemsForSerwerSessionState = async () => {
+    //         const cartToken = await getCartSessionToken();
+    //         const data = await fetchCartItems(cartToken);
 
-            if (!data.cartItems) {
-                return;
-            }
+    //         if (!data.cartItems) {
+    //             return;
+    //         }
 
-            setCartItems(data.cartItems);
-        };
+    //         setCartItems(data.cartItems);
+    //     };
 
-        getCartItemsForSerwerSessionState();
-    }, []);
+    //     getCartItemsForSerwerSessionState();
+    // }, []);
 
     /*
     zadanie_cartSessionState?query=getCart
     */
 
-    useEffect(() => {
-        if (!dispatchCartItems) {
-            return;
-        }
-        const updateCartItemsOnSerwerSessionState = async () => {
-            const cartToken = await getCartSessionToken();
-            updateCartItems(cartToken, cartItems);
-        };
+    // useEffect(() => {
+    //     if (!dispatchCartItems) {
+    //         return;
+    //     }
+    //     const updateCartItemsOnSerwerSessionState = async () => {
+    //         const cartToken = await getCartSessionToken();
+    //         updateCartItems(cartToken, cartItems);
+    //     };
 
-        updateCartItemsOnSerwerSessionState();
-    }, [cartItems, dispatchCartItems]);
+    //     updateCartItemsOnSerwerSessionState();
+    // }, [cartItems, dispatchCartItems]);
 
     //* hygraph - update
 
@@ -58,14 +58,13 @@ export const useCartItems = () => {
 
         const update = await fetch("/api/checkout/hygraph/update", {
             method: "POST",
-
             headers: { "Content-Type": "application/json;" },
             body: JSON.stringify(payload),
         });
-        console.log("🚀 ~ file: useCartItems.tsx ~ line 65 ~ updateHygraphChecoutItem ~ update", update);
+        console.log("🚀 ~ file: useCartItems.tsx ~ update", update);
 
         const res = await update.json();
-        console.log("🚀 ~ file: useCartItems.tsx ~ line 68 ~ updateHygraphChecoutItem ~ res", res);
+        console.log("🚀 ~ file: useCartItems.tsx ~ res", res);
         return res;
     };
 

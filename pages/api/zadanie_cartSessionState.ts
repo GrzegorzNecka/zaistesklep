@@ -32,7 +32,7 @@ const handler: NextApiHandler = async (req, res) => {
         case "fetchCartItems":
             try {
                 const { token }: Token = req.body;
-                console.log("🚀 ~ czy token przyszedł z requestu ~ token", token);
+                // console.log("🚀 ~ czy token przyszedł z requestu ~ token", token);
 
                 if (!STATE.length || !existToken(STATE, token)) {
                     addItemsToState(token, []);
@@ -68,9 +68,9 @@ const handler: NextApiHandler = async (req, res) => {
         case "updateCartItems":
             try {
                 const { token, cartItems }: State = req.body;
-                console.log("🚀 ~ czy token przyszedł z requestu ~ token", token);
-                console.log("updateCartItems--existToken", existToken(STATE, token));
-                console.log("updateCartItems-- STATE", STATE);
+                // console.log("🚀 ~ czy token przyszedł z requestu ~ token", token);
+                // console.log("updateCartItems--existToken", existToken(STATE, token));
+                // console.log("updateCartItems-- STATE", STATE);
 
                 if (!existToken(STATE, token)) {
                     res.status(400).json({ message: "token is not exist" });

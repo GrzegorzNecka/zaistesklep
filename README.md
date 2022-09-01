@@ -6,6 +6,10 @@
 -   yarn:
 -   next:
 
+## Mutacje graphQl
+
+1. flow systemu płatności
+
 ## do zrobienia checkout - sugestia z lekcji:
 
 ma być robiony w momencie kiedy idzie zapytanie do api route, które tworzy płątności w Stripe
