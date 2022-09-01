@@ -22,9 +22,14 @@ mutation CreateAccount($email: String!, $password: String!) {
     }
 }
 
-mutation CreateCheckoutId($email: String!, $accountId: String!) {
-    createCheckout(data: { email: $email, accountId: $accountId }) {
-        accountId
+mutation CreateCheckout($email: String!, $total: Int!) {
+    createCheckout(data: { email: $email, total: $total }) {
         email
+    }
+}
+
+mutation CreateCheckoutItem($data: CheckoutItemCreateInput!) {
+    createCheckoutItem(data: $data) {
+        id
     }
 }

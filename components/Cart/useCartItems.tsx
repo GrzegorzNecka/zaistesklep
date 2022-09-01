@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 // import { getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
 import { fetchCartItems, getCartSessionToken, updateCartItems } from "./services/zadanie_cartItems";
 import { useSession } from "next-auth/react";
-
+import { authorizedApolloClient } from "graphql/apolloClient";
 //dodaj RactQuery
 
 export const useCartItems = () => {
@@ -13,7 +13,8 @@ export const useCartItems = () => {
     // ---- NextAuth
     const session = useSession();
     console.log("🚀 ~ file: useCartItems", session);
-    // ----
+    //-----------
+    console.log("🚀 ~ file: ~ cartItems", cartItems);
 
     useEffect(() => {
         const getCartItemsForSerwerSessionState = async () => {
@@ -46,6 +47,30 @@ export const useCartItems = () => {
         updateCartItemsOnSerwerSessionState();
     }, [cartItems, dispatchCartItems]);
 
+    //* hygraph - update
+
+    const updateHygraphChecoutItem = async (item: CartItem) => {
+        if (session.status !== "authenticated") {
+            return;
+        }
+
+        const payload = { item, email: session.data.user.email };
+
+        const update = await fetch("/api/checkout/hygraph/update", {
+            method: "POST",
+
+            headers: { "Content-Type": "application/json;" },
+            body: JSON.stringify(payload),
+        });
+        console.log("🚀 ~ file: useCartItems.tsx ~ line 65 ~ updateHygraphChecoutItem ~ update", update);
+
+        const res = await update.json();
+        console.log("🚀 ~ file: useCartItems.tsx ~ line 68 ~ updateHygraphChecoutItem ~ res", res);
+        return res;
+    };
+
+    //*-----------
+
     /*
     event 
     */
@@ -54,6 +79,8 @@ export const useCartItems = () => {
         if (!dispatchCartItems) {
             setDispatchCartItems(true);
         }
+
+        updateHygraphChecoutItem(item);
 
         setCartItems((prevState = []) => {
             const existingItem = prevState.find((prevItem) => prevItem.id === item.id);

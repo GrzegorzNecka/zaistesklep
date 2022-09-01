@@ -6,9 +6,9 @@ import {
     CreateAccountDocument,
     CreateAccountMutation,
     CreateAccountMutationVariables,
-    CreateCheckoutIdDocument,
-    CreateCheckoutIdMutation,
-    CreateCheckoutIdMutationVariables,
+    CreateCheckoutDocument,
+    CreateCheckoutMutation,
+    CreateCheckoutMutationVariables,
 } from "generated/graphql";
 
 export const signUpFormSchema = yup
@@ -48,20 +48,15 @@ const SignupHandler: NextApiHandler = async (req, res) => {
         return;
     }
 
-    const userEmail = user?.data?.createAccount;
-    console.log("🚀 ~ #############################", userEmail);
-    const createCheckoutId = await authorizedApolloClient.mutate<
-        CreateCheckoutIdMutation,
-        CreateCheckoutIdMutationVariables
-    >({
-        mutation: CreateCheckoutIdDocument,
-        variables: { accountId: userId, email: email },
-    });
+    const CreateCheckout = await authorizedApolloClient.mutate<CreateCheckoutMutation, CreateCheckoutMutationVariables>(
+        {
+            mutation: CreateCheckoutDocument,
+            variables: { email: email, total: 0 },
+        }
+    );
+    
 
-    console.log(createCheckoutId);
-    // data: {
-    //     createAccount: { id: 'cl7fxmxh5fl8g0cuqosw38c04', __typename: 'Account' }
-    //   }
+    console.log("🚀 ~ file: ~ CreateCheckout ", CreateCheckout);
 
     res.json({ userId });
 };
