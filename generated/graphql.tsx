@@ -1660,7 +1660,7 @@ export type CategoryWhereUniqueInput = {
 
 export type Checkout = Node & {
     __typename?: "Checkout";
-    checkoutItemTests: Array<CheckoutItem>;
+    checkoutItem: Array<CheckoutItem>;
     /** The time the document was created */
     createdAt: Scalars["DateTime"];
     /** User that created this document */
@@ -1686,7 +1686,7 @@ export type Checkout = Node & {
     updatedBy?: Maybe<User>;
 };
 
-export type CheckoutCheckoutItemTestsArgs = {
+export type CheckoutCheckoutItemArgs = {
     after?: InputMaybe<Scalars["String"]>;
     before?: InputMaybe<Scalars["String"]>;
     first?: InputMaybe<Scalars["Int"]>;
@@ -1749,7 +1749,7 @@ export type CheckoutConnection = {
 };
 
 export type CheckoutCreateInput = {
-    checkoutItemTests?: InputMaybe<CheckoutItemCreateManyInlineInput>;
+    checkoutItem?: InputMaybe<CheckoutItemCreateManyInlineInput>;
     createdAt?: InputMaybe<Scalars["DateTime"]>;
     email: Scalars["String"];
     total: Scalars["Int"];
@@ -1792,6 +1792,7 @@ export type CheckoutItem = Node & {
     history: Array<Version>;
     /** The unique identifier */
     id: Scalars["ID"];
+    name: Scalars["String"];
     product?: Maybe<Product>;
     /** The time the document was published. Null on documents in draft stage. */
     publishedAt?: Maybe<Scalars["DateTime"]>;
@@ -1870,6 +1871,7 @@ export type CheckoutItemConnection = {
 export type CheckoutItemCreateInput = {
     checkout?: InputMaybe<CheckoutCreateOneInlineInput>;
     createdAt?: InputMaybe<Scalars["DateTime"]>;
+    name: Scalars["String"];
     product?: InputMaybe<ProductCreateOneInlineInput>;
     quantity: Scalars["Int"];
     total: Scalars["Int"];
@@ -1945,6 +1947,25 @@ export type CheckoutItemManyWhereInput = {
     id_not_starts_with?: InputMaybe<Scalars["ID"]>;
     /** All values starting with the given string. */
     id_starts_with?: InputMaybe<Scalars["ID"]>;
+    name?: InputMaybe<Scalars["String"]>;
+    /** All values containing the given string. */
+    name_contains?: InputMaybe<Scalars["String"]>;
+    /** All values ending with the given string. */
+    name_ends_with?: InputMaybe<Scalars["String"]>;
+    /** All values that are contained in given list. */
+    name_in?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+    /** All values that are not equal to given value. */
+    name_not?: InputMaybe<Scalars["String"]>;
+    /** All values not containing the given string. */
+    name_not_contains?: InputMaybe<Scalars["String"]>;
+    /** All values not ending with the given string */
+    name_not_ends_with?: InputMaybe<Scalars["String"]>;
+    /** All values that are not contained in given list. */
+    name_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+    /** All values not starting with the given string. */
+    name_not_starts_with?: InputMaybe<Scalars["String"]>;
+    /** All values starting with the given string. */
+    name_starts_with?: InputMaybe<Scalars["String"]>;
     product?: InputMaybe<ProductWhereInput>;
     publishedAt?: InputMaybe<Scalars["DateTime"]>;
     /** All values greater than the given value. */
@@ -2018,6 +2039,8 @@ export enum CheckoutItemOrderByInput {
     CreatedAtDesc = "createdAt_DESC",
     IdAsc = "id_ASC",
     IdDesc = "id_DESC",
+    NameAsc = "name_ASC",
+    NameDesc = "name_DESC",
     PublishedAtAsc = "publishedAt_ASC",
     PublishedAtDesc = "publishedAt_DESC",
     QuantityAsc = "quantity_ASC",
@@ -2030,6 +2053,7 @@ export enum CheckoutItemOrderByInput {
 
 export type CheckoutItemUpdateInput = {
     checkout?: InputMaybe<CheckoutUpdateOneInlineInput>;
+    name?: InputMaybe<Scalars["String"]>;
     product?: InputMaybe<ProductUpdateOneInlineInput>;
     quantity?: InputMaybe<Scalars["Int"]>;
     total?: InputMaybe<Scalars["Int"]>;
@@ -2146,6 +2170,25 @@ export type CheckoutItemWhereInput = {
     id_not_starts_with?: InputMaybe<Scalars["ID"]>;
     /** All values starting with the given string. */
     id_starts_with?: InputMaybe<Scalars["ID"]>;
+    name?: InputMaybe<Scalars["String"]>;
+    /** All values containing the given string. */
+    name_contains?: InputMaybe<Scalars["String"]>;
+    /** All values ending with the given string. */
+    name_ends_with?: InputMaybe<Scalars["String"]>;
+    /** All values that are contained in given list. */
+    name_in?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+    /** All values that are not equal to given value. */
+    name_not?: InputMaybe<Scalars["String"]>;
+    /** All values not containing the given string. */
+    name_not_contains?: InputMaybe<Scalars["String"]>;
+    /** All values not ending with the given string */
+    name_not_ends_with?: InputMaybe<Scalars["String"]>;
+    /** All values that are not contained in given list. */
+    name_not_in?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
+    /** All values not starting with the given string. */
+    name_not_starts_with?: InputMaybe<Scalars["String"]>;
+    /** All values starting with the given string. */
+    name_starts_with?: InputMaybe<Scalars["String"]>;
     product?: InputMaybe<ProductWhereInput>;
     publishedAt?: InputMaybe<Scalars["DateTime"]>;
     /** All values greater than the given value. */
@@ -2217,6 +2260,7 @@ export type CheckoutItemWhereInput = {
 /** References CheckoutItem record uniquely */
 export type CheckoutItemWhereUniqueInput = {
     id?: InputMaybe<Scalars["ID"]>;
+    name?: InputMaybe<Scalars["String"]>;
 };
 
 /** Identifies documents */
@@ -2229,9 +2273,9 @@ export type CheckoutManyWhereInput = {
     OR?: InputMaybe<Array<CheckoutWhereInput>>;
     /** Contains search across all appropriate fields. */
     _search?: InputMaybe<Scalars["String"]>;
-    checkoutItemTests_every?: InputMaybe<CheckoutItemWhereInput>;
-    checkoutItemTests_none?: InputMaybe<CheckoutItemWhereInput>;
-    checkoutItemTests_some?: InputMaybe<CheckoutItemWhereInput>;
+    checkoutItem_every?: InputMaybe<CheckoutItemWhereInput>;
+    checkoutItem_none?: InputMaybe<CheckoutItemWhereInput>;
+    checkoutItem_some?: InputMaybe<CheckoutItemWhereInput>;
     createdAt?: InputMaybe<Scalars["DateTime"]>;
     /** All values greater than the given value. */
     createdAt_gt?: InputMaybe<Scalars["DateTime"]>;
@@ -2354,7 +2398,7 @@ export enum CheckoutOrderByInput {
 }
 
 export type CheckoutUpdateInput = {
-    checkoutItemTests?: InputMaybe<CheckoutItemUpdateManyInlineInput>;
+    checkoutItem?: InputMaybe<CheckoutItemUpdateManyInlineInput>;
     email?: InputMaybe<Scalars["String"]>;
     total?: InputMaybe<Scalars["Int"]>;
 };
@@ -2433,9 +2477,9 @@ export type CheckoutWhereInput = {
     OR?: InputMaybe<Array<CheckoutWhereInput>>;
     /** Contains search across all appropriate fields. */
     _search?: InputMaybe<Scalars["String"]>;
-    checkoutItemTests_every?: InputMaybe<CheckoutItemWhereInput>;
-    checkoutItemTests_none?: InputMaybe<CheckoutItemWhereInput>;
-    checkoutItemTests_some?: InputMaybe<CheckoutItemWhereInput>;
+    checkoutItem_every?: InputMaybe<CheckoutItemWhereInput>;
+    checkoutItem_none?: InputMaybe<CheckoutItemWhereInput>;
+    checkoutItem_some?: InputMaybe<CheckoutItemWhereInput>;
     createdAt?: InputMaybe<Scalars["DateTime"]>;
     /** All values greater than the given value. */
     createdAt_gt?: InputMaybe<Scalars["DateTime"]>;
@@ -11989,11 +12033,34 @@ export type CreateCheckoutItemMutationVariables = Exact<{
     total: Scalars["Int"];
     email: Scalars["String"];
     slug: Scalars["String"];
+    name: Scalars["String"];
 }>;
 
 export type CreateCheckoutItemMutation = {
     __typename?: "Mutation";
     createCheckoutItem?: { __typename?: "CheckoutItem"; id: string } | null;
+};
+
+export type UpdateCheckoutMutationVariables = Exact<{
+    email: Scalars["String"];
+    name: Scalars["String"];
+    total?: InputMaybe<Scalars["Int"]>;
+    quantity?: InputMaybe<Scalars["Int"]>;
+    slug?: InputMaybe<Scalars["String"]>;
+}>;
+
+export type UpdateCheckoutMutation = {
+    __typename?: "Mutation";
+    updateCheckout?: {
+        __typename?: "Checkout";
+        checkoutItem: Array<{
+            __typename?: "CheckoutItem";
+            id: string;
+            total: number;
+            quantity: number;
+            product?: { __typename?: "Product"; name: string; slug: string } | null;
+        }>;
+    } | null;
 };
 
 export type GetProductsSlugsQueryVariables = Exact<{ [key: string]: never }>;
@@ -12115,6 +12182,30 @@ export type GetAccountByEmailQueryVariables = Exact<{
 export type GetAccountByEmailQuery = {
     __typename?: "Query";
     account?: { __typename?: "Account"; id: string; email: string; password: string } | null;
+};
+
+export type GetAllCheckoutByEmailQueryVariables = Exact<{
+    email: Scalars["String"];
+}>;
+
+export type GetAllCheckoutByEmailQuery = {
+    __typename?: "Query";
+    checkout?: {
+        __typename?: "Checkout";
+        createdAt: any;
+        email: string;
+        id: string;
+        total: number;
+        stage: Stage;
+        checkoutItem: Array<{
+            __typename?: "CheckoutItem";
+            name: string;
+            id: string;
+            total: number;
+            quantity: number;
+            product?: { __typename?: "Product"; id: string; slug: string; name: string; price: number } | null;
+        }>;
+    } | null;
 };
 
 export const ReviewContentFragmentDoc = gql`
@@ -12329,9 +12420,10 @@ export type CreateCheckoutMutationOptions = Apollo.BaseMutationOptions<
     CreateCheckoutMutationVariables
 >;
 export const CreateCheckoutItemDocument = gql`
-    mutation CreateCheckoutItem($quantity: Int!, $total: Int!, $email: String!, $slug: String!) {
+    mutation CreateCheckoutItem($quantity: Int!, $total: Int!, $email: String!, $slug: String!, $name: String!) {
         createCheckoutItem(
             data: {
+                name: $name
                 quantity: $quantity
                 total: $total
                 checkout: { connect: { email: $email } }
@@ -12364,6 +12456,7 @@ export type CreateCheckoutItemMutationFn = Apollo.MutationFunction<
  *      total: // value for 'total'
  *      email: // value for 'email'
  *      slug: // value for 'slug'
+ *      name: // value for 'name'
  *   },
  * });
  */
@@ -12381,6 +12474,66 @@ export type CreateCheckoutItemMutationResult = Apollo.MutationResult<CreateCheck
 export type CreateCheckoutItemMutationOptions = Apollo.BaseMutationOptions<
     CreateCheckoutItemMutation,
     CreateCheckoutItemMutationVariables
+>;
+export const UpdateCheckoutDocument = gql`
+    mutation UpdateCheckout($email: String!, $name: String!, $total: Int, $quantity: Int, $slug: String) {
+        updateCheckout(
+            where: { email: $email }
+            data: {
+                checkoutItem: {
+                    update: {
+                        where: { name: $name }
+                        data: { quantity: $quantity, total: $total, product: { connect: { slug: $slug } } }
+                    }
+                }
+            }
+        ) {
+            checkoutItem {
+                id
+                total
+                quantity
+                product {
+                    name
+                    slug
+                }
+            }
+        }
+    }
+`;
+export type UpdateCheckoutMutationFn = Apollo.MutationFunction<UpdateCheckoutMutation, UpdateCheckoutMutationVariables>;
+
+/**
+ * __useUpdateCheckoutMutation__
+ *
+ * To run a mutation, you first call `useUpdateCheckoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCheckoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCheckoutMutation, { data, loading, error }] = useUpdateCheckoutMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      name: // value for 'name'
+ *      total: // value for 'total'
+ *      quantity: // value for 'quantity'
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useUpdateCheckoutMutation(
+    baseOptions?: Apollo.MutationHookOptions<UpdateCheckoutMutation, UpdateCheckoutMutationVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useMutation<UpdateCheckoutMutation, UpdateCheckoutMutationVariables>(UpdateCheckoutDocument, options);
+}
+export type UpdateCheckoutMutationHookResult = ReturnType<typeof useUpdateCheckoutMutation>;
+export type UpdateCheckoutMutationResult = Apollo.MutationResult<UpdateCheckoutMutation>;
+export type UpdateCheckoutMutationOptions = Apollo.BaseMutationOptions<
+    UpdateCheckoutMutation,
+    UpdateCheckoutMutationVariables
 >;
 export const GetProductsSlugsDocument = gql`
     query GetProductsSlugs {
@@ -12771,3 +12924,67 @@ export function useGetAccountByEmailLazyQuery(
 export type GetAccountByEmailQueryHookResult = ReturnType<typeof useGetAccountByEmailQuery>;
 export type GetAccountByEmailLazyQueryHookResult = ReturnType<typeof useGetAccountByEmailLazyQuery>;
 export type GetAccountByEmailQueryResult = Apollo.QueryResult<GetAccountByEmailQuery, GetAccountByEmailQueryVariables>;
+export const GetAllCheckoutByEmailDocument = gql`
+    query GetAllCheckoutByEmail($email: String!) {
+        checkout(where: { email: $email }, stage: DRAFT) {
+            createdAt
+            email
+            id
+            total
+            stage
+            checkoutItem {
+                name
+                id
+                total
+                quantity
+                product {
+                    id
+                    slug
+                    name
+                    price
+                }
+            }
+        }
+    }
+`;
+
+/**
+ * __useGetAllCheckoutByEmailQuery__
+ *
+ * To run a query within a React component, call `useGetAllCheckoutByEmailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllCheckoutByEmailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllCheckoutByEmailQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useGetAllCheckoutByEmailQuery(
+    baseOptions: Apollo.QueryHookOptions<GetAllCheckoutByEmailQuery, GetAllCheckoutByEmailQueryVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useQuery<GetAllCheckoutByEmailQuery, GetAllCheckoutByEmailQueryVariables>(
+        GetAllCheckoutByEmailDocument,
+        options
+    );
+}
+export function useGetAllCheckoutByEmailLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<GetAllCheckoutByEmailQuery, GetAllCheckoutByEmailQueryVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useLazyQuery<GetAllCheckoutByEmailQuery, GetAllCheckoutByEmailQueryVariables>(
+        GetAllCheckoutByEmailDocument,
+        options
+    );
+}
+export type GetAllCheckoutByEmailQueryHookResult = ReturnType<typeof useGetAllCheckoutByEmailQuery>;
+export type GetAllCheckoutByEmailLazyQueryHookResult = ReturnType<typeof useGetAllCheckoutByEmailLazyQuery>;
+export type GetAllCheckoutByEmailQueryResult = Apollo.QueryResult<
+    GetAllCheckoutByEmailQuery,
+    GetAllCheckoutByEmailQueryVariables
+>;

@@ -28,9 +28,10 @@ mutation CreateCheckout($email: String!, $total: Int!) {
     }
 }
 
-mutation CreateCheckoutItem($quantity: Int!, $total: Int!, $email: String!, $slug: String!) {
+mutation CreateCheckoutItem($quantity: Int!, $total: Int!, $email: String!, $slug: String!, $name: String!) {
     createCheckoutItem(
         data: {
+            name: $name
             quantity: $quantity
             total: $total
             checkout: { connect: { email: $email } }
@@ -41,40 +42,19 @@ mutation CreateCheckoutItem($quantity: Int!, $total: Int!, $email: String!, $slu
     }
 }
 
-query GetAllCheckouts {
-    checkouts(where: { email: "strzypior@gmail.com" }) {
-        createdAt
-        email
-        id
-        total
-        stage
-        checkoutItemTests {
-            id
-            total
-            quantity
-            product {
-                id
-                slug
-                name
-                price
-            }
-        }
-    }
-}
-
-mutation UpdateCheckout($email: String!, $id: ID, $total: Int, $quantity: Int, $slug: String) {
+mutation UpdateCheckout($email: String!, $name: String!, $total: Int, $quantity: Int, $slug: String) {
     updateCheckout(
         where: { email: $email }
         data: {
-            checkoutItemTests: {
+            checkoutItem: {
                 update: {
-                    where: { id: $id }
+                    where: { name: $name }
                     data: { quantity: $quantity, total: $total, product: { connect: { slug: $slug } } }
                 }
             }
         }
     ) {
-        checkoutItemTests {
+        checkoutItem {
             id
             total
             quantity

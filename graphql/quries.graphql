@@ -87,22 +87,24 @@ query GetAccountByEmail($email: String!) {
     }
 }
 
-fragment checkoutItemsContent on Checkout {
-    checkoutItems {
-        product {
-            id
-            price
-            slug
+query GetAllCheckoutByEmail($email: String!) {
+    checkout(where: { email: $email }, stage: DRAFT) {
+        createdAt
+        email
+        id
+        total
+        stage
+        checkoutItem {
             name
-            images {
-                url
+            id
+            total
+            quantity
+            product {
+                id
+                slug
+                name
+                price
             }
         }
-    }
-}
-
-query GetCheckoutByEmail($email: String!) {
-    checkout(where: { email: $email }) {
-        ...checkoutItemsContent
     }
 }
