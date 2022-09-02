@@ -30,6 +30,7 @@ const checkoutHygraphHandler: NextApiHandler = async (req, res) => {
     >({
         mutation: CreateCheckoutItemDocument,
         variables: {
+            name: item.title,
             quantity: item.count,
             total: item.count * item.price,
             slug: item.slug,
