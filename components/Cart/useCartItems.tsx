@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 // import { getCartSessionToken } from "./services/localStorage";
 import { CartItem } from "components/Cart/types";
 import { fetchCartItems, getCartSessionToken, updateCartItems } from "./services/zadanie_cartItems";
@@ -74,9 +74,12 @@ export const useCartItems = () => {
     event 
     */
 
+    // const abc = useCallback(() => {
+    //     setDispatchCartItems(true);
+    // }, [CartItem, dispatchCartItems]);
+
     const addItems = (item: CartItem) => {
         if (!dispatchCartItems) {
-            setDispatchCartItems(true);
         }
 
         updateHygraphChecoutItem(item);
