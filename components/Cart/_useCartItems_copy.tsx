@@ -5,8 +5,6 @@ import { fetchCartItems, getCartSessionToken, updateCartItems } from "./services
 import { useSession } from "next-auth/react";
 import { apolloClient } from "graphql/apolloClient";
 import {
-    GetCartIdByAccountIdQuery,
-    GetCartIdByAccountIdQueryVariables,
     GetCartItemsByCartIdDocument,
     useAddProductToCartMutation,
     useClearCartItemsMutation,
@@ -25,60 +23,57 @@ export const useCartItems = () => {
 
     const session = useSession();
 
-    const cartId = session?.data?.user.cartId!;
-
-    if (session.status === "authenticated") {
+    if (session.status !== "unauthenticated") {
+        console.log("unauthenticated");
     }
+
+    //! pobierz cartId przez account
+
+    const { data: user } = useGetCartIdByAccountIdQuery({
+        variables: {
+            id: session.data?.user?.id!,
+        },
+    });
+
+    const cartId = user?.account?.cart?.id!;
 
     //! pobierz cartItems
 
-    const { data, loading, error } = useGetCartItemsByCartIdQuery({
+    const { data: account } = useGetCartItemsByCartIdQuery({
         variables: {
             id: cartId,
         },
     });
 
-    console.log("🚀 ~ useCartItems ~ data", data);
+    const fetchedCartItems = account?.cart?.cartItems;
 
-    //----------------------------------------------------------------------------
+    const [addProductToCart] = useAddProductToCartMutation();
 
-    useEffect(() => {
-        if (!data) return;
+    const [updateProductQuantity] = useUpdateProductQuantityInCartItemMutation();
 
-        if (!data.cart) return;
-
-        const cartItems = data.cart!.cartItems.map((item) => {
-            return {
-                id: item.product!.id,
-                price: item.product!.price,
-                title: item.product!.name,
-                count: item.quantity,
-                imgUrl: item.product!.images[0].url,
-                slug: item.product!.slug,
-            };
-        });
-
-        setCartItems(cartItems);
-    }, [data]);
-
-    //----------------------------------------------------------------------------
-
-    const fetchedCartItems = data?.cart?.cartItems;
-
-    const [addProductToCart] = useAddProductToCartMutation({
-        // refetchQueries: [{ query: GetCartItemsByCartIdDocument, variables: { id: cartId } }],
-    });
-
-    const [updateProductQuantity] = useUpdateProductQuantityInCartItemMutation({
-        // refetchQueries: [{ query: GetCartItemsByCartIdDocument, variables: { id: cartId } }],
+    const [publishCart] = usePublishCartMutation({
+        refetchQueries: [
+            {
+                query: GetCartItemsByCartIdDocument,
+                variables: {
+                    cartId: cartId,
+                },
+            },
+        ],
+        onCompleted: (data) => {
+            console.log("publishCartMutation complete", data);
+        },
     });
 
     const [publishCartItem] = usePublishCartItemMutation({
-        // refetchQueries: [{ query: GetCartItemsByCartIdDocument, variables: { id: cartId } }],
-    });
-
-    const [publishCart] = usePublishCartMutation({
-        refetchQueries: [{ query: GetCartItemsByCartIdDocument, variables: { id: cartId } }],
+        refetchQueries: [
+            {
+                query: GetCartItemsByCartIdDocument,
+                variables: {
+                    cartId: cartId,
+                },
+            },
+        ],
     });
 
     //! aktualizuj Cart ustawiając cartItems jako []
