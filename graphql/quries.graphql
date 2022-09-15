@@ -87,23 +87,45 @@ query GetAccountByEmail($email: String!) {
     }
 }
 
-query GetAllCheckoutByEmail($email: String!) {
-    checkouts(where: { email: $email }, stage: DRAFT) {
-        createdAt
-        email
-        id
-        total
-        stage
-        checkoutItem {
+query GetCartIdByAccountId($id: ID!) {
+    account(where: { id: $id }) {
+        cart {
             id
-            total
-            quantity
-            product {
-                id
-                slug
-                name
-                price
+        }
+    }
+}
+
+fragment cartContentQuery on Cart {
+    __typename
+    id
+    cartItems {
+        __typename
+        id
+        quantity
+        product {
+            __typename
+            id
+            name
+            price
+            images {
+                url
             }
+            slug
+        }
+    }
+}
+
+query GetCartItemsByCartId($id: ID!) {
+    cart(where: { id: $id }) {
+        ...cartContentQuery
+    }
+}
+
+query GetCartItems($id: ID!) {
+    cart(where: { id: $id }) {
+        id
+        cartItems {
+            id
         }
     }
 }

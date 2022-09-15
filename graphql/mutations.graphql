@@ -22,46 +22,82 @@ mutation CreateAccount($email: String!, $password: String!) {
     }
 }
 
-mutation CreateCheckout($email: String!, $total: Int!) {
-    createCheckout(data: { email: $email, total: $total }) {
-        email
-    }
-}
-
-mutation CreateCheckoutItem($quantity: Int!, $total: Int!, $email: String!, $slug: String!, $name: String!) {
-    createCheckoutItem(
-        data: {
-            name: $name
-            quantity: $quantity
-            total: $total
-            checkout: { connect: { email: $email } }
-            product: { connect: { slug: $slug } }
-        }
-    ) {
+mutation CreateCart {
+    createCart(data: {}) {
         id
     }
 }
 
-mutation UpdateCheckout($email: String!, $name: String!, $total: Int, $quantity: Int, $slug: String) {
-    updateCheckout(
-        where: { email: $email }
-        data: {
-            checkoutItem: {
-                update: {
-                    where: { name: $name }
-                    data: { quantity: $quantity, total: $total, product: { connect: { slug: $slug } } }
-                }
-            }
-        }
+mutation ConnectAccountWithCartAndPublish($accountId: ID!, $cartId: ID!) {
+    updateAccount(where: { id: $accountId }, data: { cart: { connect: { id: $cartId } } }) {
+        id
+    }
+    publishAccount(to: PUBLISHED, where: { id: $accountId }) {
+        id
+    }
+    publishCart(to: PUBLISHED, where: { id: $cartId }) {
+        id
+    }
+}
+
+fragment cartContent on Cart {
+    id
+    cartItems {
+        id
+    }
+}
+
+mutation AddProductToCart($cartId: ID!, $productId: ID!, $sign: String!) {
+    updateCart(
+        where: { id: $cartId }
+        data: { cartItems: { create: { sign: $sign, quantity: 1, product: { connect: { id: $productId } } } } }
     ) {
-        checkoutItem {
+        ...cartContent
+    }
+}
+
+mutation UpdateProductQuantityInCartItem($cartId: ID!, $cartItemId: ID!, $quantity: Int!) {
+    updateCart(
+        where: { id: $cartId }
+        data: { cartItems: { update: { where: { id: $cartItemId }, data: { quantity: $quantity } } } }
+    ) {
+        ...cartContent
+    }
+}
+
+mutation ClearCartItems($id: ID!) {
+    updateCart(where: { id: $id }, data: { cartItems: { set: [] } }) {
+        id
+    }
+}
+
+mutation DeleteCartItem($id: ID!) {
+    deleteCartItem(where: { id: $id }) {
+        id
+    }
+}
+
+mutation PublishCartItem($cartItemId: ID!) {
+    publishCartItem(to: PUBLISHED, where: { id: $cartItemId }) {
+        id
+    }
+}
+
+mutation PublishCart($cartId: ID!) {
+    publishCart(to: PUBLISHED, where: { id: $cartId }) {
+        id
+    }
+}
+
+mutation CreateCartItem($cartId: ID!, $productId: ID!, $sign: String!) {
+    create: createCartItem(
+        data: { quantity: 1, sign: $sign, cart: { connect: { id: $cartId } }, product: { connect: { id: $productId } } }
+    ) {
+        quantity
+        id
+        sign
+        product {
             id
-            total
-            quantity
-            product {
-                name
-                slug
-            }
         }
     }
 }

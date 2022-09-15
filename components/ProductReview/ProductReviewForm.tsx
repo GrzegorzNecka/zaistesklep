@@ -36,9 +36,19 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
 
     // -----------
 
+    /*
+      @example
+     const [createProductReviewMutation, { data, loading, error }] = useCreateProductReviewMutation({
+       variables: {
+           review: // value for 'review'
+        },
+      });
+     */
+
     const [createReview, { data, loading, error, client }] = useCreateProductReviewMutation({
         // --3 dane z  optimisticResponse trafiuają do funkcji update->result
         update(cashe, result) {
+            console.log("🚀 ~ file: ProductReviewForm.tsx ~ line 51 ~ update ~ result", result);
             result.errors;
 
             // --3.1 ręcznie bierzemy z cashe query na podstawie  query i zmiennych
@@ -46,6 +56,32 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
                 query: GetReviewsForProductSlugDocument,
                 variables: { slug: productSlug },
             });
+
+            /**
+             
+
+      fragment reviewContent on Review {
+        content
+        headline
+        id
+        name
+        rating
+    }
+
+
+       mutation CreateProductReview($review: ReviewCreateInput!) {
+            review: createReview(data: $review) {
+                   content
+                    headline
+                    id
+                    name
+                    rating
+            }
+        }
+
+        }
+
+             */
 
             if (!originalReviewsQuery?.product?.reviews || !result.data?.review) {
                 // ...
@@ -70,6 +106,25 @@ const ProductReviewForm = ({ productSlug }: ProductReviewFormProps) => {
     });
 
     // -----------
+
+    /*
+                mutation CreateProductReview($review: ReviewCreateInput!) {
+                    review: createReview(data: $review) {
+                        ...reviewContent
+                    }
+                }
+    */
+
+    /*
+                
+        export const CreateProductReviewDocument = gql`
+        mutation CreateProductReview($review: ReviewCreateInput!) {
+        review: createReview(data: $review) {
+            ...reviewContent
+        }
+        }
+
+    */
 
     const onSubmit = handleSubmit((data, e) => {
         console.log("🚀 ~ file: ProductReviewForm.tsx ~ line 75 ~ onSubmit ~ data", data);

@@ -7,12 +7,13 @@ import { changeToCurrency, moveTheComa } from "utils/currency";
 export const CartStateContext = createContext<CartState | null>(null);
 
 export const CartStateContextProvider = ({ children }: { children: React.ReactNode }) => {
-    const [cartItems, addItems, removeItems] = useCartItems();
+    const [cartItems, loader, addItems, removeItems] = useCartItems();
     // const cartState = useCartState();
 
     return (
         <CartStateContext.Provider
             value={{
+                loader: loader,
                 items: cartItems || [],
                 totalCount: 0,
                 fullPrice: 0,

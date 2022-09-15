@@ -7,7 +7,6 @@ import { CartStateContextProvider } from "components/Cart/CartContext";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "graphql/apolloClient";
 import { SessionProvider } from "next-auth/react";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 

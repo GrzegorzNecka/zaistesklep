@@ -3,129 +3,180 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { CartItem } from "components/Cart/types";
 import { fetchCartItems, getCartSessionToken, updateCartItems } from "./services/zadanie_cartItems";
 import { useSession } from "next-auth/react";
-import { authorizedApolloClient } from "graphql/apolloClient";
-//dodaj RactQuery
+import { apolloClient } from "graphql/apolloClient";
+import {
+    AddProductToCartDocument,
+    GetCartIdByAccountIdQuery,
+    GetCartIdByAccountIdQueryVariables,
+    GetCartItemsByCartIdDocument,
+    GetCartItemsByCartIdQuery,
+    GetCartItemsByCartIdQueryVariables,
+    GetCartItemsDocument,
+    GetCartItemsQuery,
+    GetCartItemsQueryVariables,
+    Scalars,
+    useAddProductToCartMutation,
+    useClearCartItemsMutation,
+    useCreateCartItemMutation,
+    useDeleteCartItemMutation,
+    useGetCartIdByAccountIdQuery,
+    useGetCartItemsByCartIdQuery,
+    usePublishCartItemMutation,
+    usePublishCartMutation,
+    useUpdateProductQuantityInCartItemMutation,
+} from "generated/graphql";
+import { gql } from "@apollo/client";
 
 export const useCartItems = () => {
-    const [dispatchCartItems, setDispatchCartItems] = useState(false);
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
-    // ---- NextAuth
     const session = useSession();
-    console.log("🚀 ~ file: useCartItems", session);
-    //-----------
-    console.log("🚀 ~ file: ~ cartItems", cartItems);
 
-    // useEffect(() => {
-    //     const getCartItemsForSerwerSessionState = async () => {
-    //         const cartToken = await getCartSessionToken();
-    //         const data = await fetchCartItems(cartToken);
+    const [permisson, setPermission] = useState(true);
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [loader, setLoader] = useState<boolean>(false);
 
-    //         if (!data.cartItems) {
-    //             return;
-    //         }
+    const { data: cartByAccount, loading } = useGetCartItemsByCartIdQuery({
+        skip: !Boolean(session.data?.user?.cartId),
+        variables: {
+            id: session.data?.user?.cartId!,
+        },
+        onCompleted: (data) => {
+            // console.log("useGetCartItemsByCartIdQuery - data", data);
+            // setLoader(false);
+            // i tutaj publikuj
+        },
+        onError: (error) => {
+            // console.log("useGetCartItemsByCartIdQuery - error", error);
+        },
+    });
 
-    //         setCartItems(data.cartItems);
-    //     };
+    /**
+     *
+     *
+     *
+     */
 
-    //     getCartItemsForSerwerSessionState();
-    // }, []);
+    useEffect(() => {
+        if (session.status !== "authenticated" || !cartByAccount || !cartByAccount.cart) {
+            return;
+        }
+        console.log("useEffect, cartItems", cartByAccount);
+        const cartItems = cartByAccount.cart.cartItems.map((item) => {
+            return {
+                id: item.product!.id,
+                price: item.product!.price,
+                title: item.product!.name,
+                count: item.quantity,
+                imgUrl: item.product!.images[0].url,
+                slug: item.product!.slug,
+            };
+        });
 
-    /*
-    zadanie_cartSessionState?query=getCart
-    */
+        setCartItems(cartItems);
+    }, [cartByAccount, session]);
 
-    // useEffect(() => {
-    //     if (!dispatchCartItems) {
-    //         return;
-    //     }
-    //     const updateCartItemsOnSerwerSessionState = async () => {
-    //         const cartToken = await getCartSessionToken();
-    //         updateCartItems(cartToken, cartItems);
-    //     };
+    /**
+     *
+     *
+     *
+     */
 
-    //     updateCartItemsOnSerwerSessionState();
-    // }, [cartItems, dispatchCartItems]);
+    const [addProduct, { data, loading: load, error, client }] = useAddProductToCartMutation({
+        update(cache, result) {
+            console.log("------result-------", result);
 
-    //* hygraph - update
+            const cartItemsfromCashe = cache.readQuery<GetCartItemsQuery, GetCartItemsQueryVariables>({
+                query: GetCartItemsDocument,
+                variables: { id: session.data?.user?.cartId! },
+            });
 
-    const updateHygraphChecoutItem = async (item: CartItem) => {
-        if (session.status !== "authenticated") {
+            console.log("🚀 ~ cartItemsfromCashe", cartItemsfromCashe?.cart?.cartItems);
+        },
+    });
+
+    //---
+
+    const [createCartItemMutation] = useCreateCartItemMutation({
+        update(cache, result) {
+            console.log("------result-------", result);
+
+            // const cartItemsfromCashe = cache.readQuery<GetCartItemsQuery, GetCartItemsQueryVariables>({
+            //     query: GetCartItemsDocument,
+            //     variables: { id: session.data?.user?.cartId! },
+            // });
+
+            // console.log("🚀 ~ cartItemsfromCashe", cartItemsfromCashe?.cart?.cartItems);
+        },
+    });
+
+    /**
+     *
+     *
+     *
+     */
+
+    const handleAddItems = async (cartId: string, productId: string) => {
+        const add = await addProduct({
+            variables: {
+                cartId,
+                productId,
+                sign: `${session.data?.user.email}_${productId}`,
+            },
+        });
+        // const add = await createCartItemMutation({
+        //     variables: {
+        //         cartId,
+        //         productId,
+        //         sign: `${session.data?.user.email}_${productId}`,
+        //     },
+        // });
+    };
+
+    /**
+     *
+     *
+     *
+     */
+
+    const addItems = async (product: CartItem) => {
+        if (!permisson) {
             return;
         }
 
-        const payload = { item, email: session.data.user.email };
-
-        const update = await fetch("/api/checkout/hygraph/update", {
-            method: "POST",
-            headers: { "Content-Type": "application/json;" },
-            body: JSON.stringify(payload),
-        });
-        console.log("🚀 ~ file: useCartItems.tsx ~ update", update);
-
-        const res = await update.json();
-        console.log("🚀 ~ file: useCartItems.tsx ~ res", res);
-        return res;
-    };
-
-    //*-----------
-
-    /*
-    event 
-    */
-
-    // const abc = useCallback(() => {
-    //     setDispatchCartItems(true);
-    // }, [CartItem, dispatchCartItems]);
-
-    const addItems = (item: CartItem) => {
-        if (!dispatchCartItems) {
+        if (!cartByAccount?.cart?.cartItems || !cartByAccount?.cart?.id) {
+            return;
         }
 
-        updateHygraphChecoutItem(item);
+        const sign = `${session.data?.user.email}_${product.id}`;
+        console.log("🚀 ~ file: useCartItems.tsx ~ line 150 ~ addItems ~  sign", sign);
 
-        setCartItems((prevState = []) => {
-            const existingItem = prevState.find((prevItem) => prevItem.id === item.id);
-
-            if (!existingItem) {
-                return [...prevState, item];
-            }
-
-            return prevState.map((prevItem) => {
-                if (prevItem.id === item.id) {
-                    return {
-                        ...prevItem,
-                        count: prevItem.count + 1,
-                    };
-                }
-
-                return prevItem;
-            });
+        const cache = apolloClient.cache.readQuery<GetCartItemsQuery, GetCartItemsQueryVariables>({
+            query: GetCartItemsDocument,
+            variables: { id: session.data?.user?.cartId! },
         });
+
+        console.log("🚀 ~  cartItemsfromCashe333 ", cache?.cart?.cartItems);
+
+        // const existingItem = cache?.cart?.cartItems.find((prevItem) => prevItem?.product?.id === product.id);
+
+        // const existingItem = cartItemsfromCashe.find((item) => item.id === product.id);
+        // console.log("🚀 ~ file: useCartItems.tsx ~ line 161 ~ addItems ~ existingItem", existingItem);
+
+        // if (!existingItem) {
+        //     const newCartItem = await handleAddItems(data.cart.id, product.id);
+
+        //     return;
+        // }
+
+        const newCartItem = await handleAddItems(cartByAccount.cart.id, product.id);
     };
 
-    const removeItems = (id: CartItem["id"]) => {
-        if (!dispatchCartItems) {
-            setDispatchCartItems(true);
-        }
-        setCartItems((prevState = []) => {
-            const existingItem = prevState.find((eItem) => eItem.id === id);
+    /**
+     *
+     *
+     *
+     */
 
-            if (existingItem && existingItem.count <= 1) {
-                return prevState.filter((eItem) => eItem.id !== id);
-            }
+    const removeItems = (id: CartItem["id"]) => {};
 
-            return prevState.map((eItem) => {
-                if (eItem.id === id) {
-                    return {
-                        ...eItem,
-                        count: eItem.count - 1,
-                    };
-                }
-                return eItem;
-            });
-        });
-    };
-
-    return [cartItems, addItems, removeItems] as const;
+    return [cartItems, loader, addItems, removeItems] as const;
 };
