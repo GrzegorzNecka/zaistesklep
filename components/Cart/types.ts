@@ -14,6 +14,7 @@ export interface CartState {
     readonly totalCount: number;
     readonly fullPrice: number;
     readonly shippingTax: number;
+    readonly loader: boolean;
 }
 
 //--------- API --------------

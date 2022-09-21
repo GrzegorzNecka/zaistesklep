@@ -5,11 +5,23 @@ import { fetchCartItems, getCartSessionToken, updateCartItems } from "./services
 import { useSession } from "next-auth/react";
 import { apolloClient } from "graphql/apolloClient";
 import {
+    AddProductToCartDocument,
     GetCartIdByAccountIdQuery,
     GetCartIdByAccountIdQueryVariables,
     GetCartItemsByCartIdDocument,
+    GetCartItemsByCartIdQuery,
+    GetCartItemsByCartIdQueryVariables,
+    GetCartItemsDocument,
+    GetCartItemsQuery,
+    GetCartItemsQueryVariables,
+    PublishCartDocument,
+    PublishCartItemDocument,
+    PublishCartItemMutation,
+    PublishCartItemMutationVariables,
+    Scalars,
     useAddProductToCartMutation,
     useClearCartItemsMutation,
+    useCreateCartItemMutation,
     useDeleteCartItemMutation,
     useGetCartIdByAccountIdQuery,
     useGetCartItemsByCartIdQuery,
@@ -17,37 +29,32 @@ import {
     usePublishCartMutation,
     useUpdateProductQuantityInCartItemMutation,
 } from "generated/graphql";
-
-//dodaj RactQuery
+import { gql } from "@apollo/client";
 
 export const useCartItems = () => {
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
     const session = useSession();
 
-    const cartId = session?.data?.user.cartId!;
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [loader, setLoader] = useState<boolean>(false);
 
-    if (session.status === "authenticated") {
-    }
-
-    //! pobierz cartItems
-
-    const { data, loading, error } = useGetCartItemsByCartIdQuery({
+    const { data: cartData } = useGetCartItemsByCartIdQuery({
+        skip: !Boolean(session.data?.user?.cartId),
         variables: {
-            id: cartId,
+            id: session.data?.user?.cartId!,
         },
+        onCompleted: (data) => {},
+        onError: (error) => {},
     });
 
-    console.log("🚀 ~ useCartItems ~ data", data);
-
-    //----------------------------------------------------------------------------
-
+    // zaktualizuj  Contenxt
     useEffect(() => {
-        if (!data) return;
+        if (session.status !== "authenticated" || !cartData || !cartData.cart) {
+            return;
+        }
 
-        if (!data.cart) return;
+        console.log("🚀 ~ cartData", cartData);
 
-        const cartItems = data.cart!.cartItems.map((item) => {
+        const cartItems = cartData.cart.cartItems.map((item) => {
             return {
                 id: item.product!.id,
                 price: item.product!.price,
@@ -59,157 +66,153 @@ export const useCartItems = () => {
         });
 
         setCartItems(cartItems);
-    }, [data]);
+    }, [cartData, session]);
 
-    //----------------------------------------------------------------------------
+    // graphQl - dodaj do koszyka
 
-    const fetchedCartItems = data?.cart?.cartItems;
+    // const [addProduct, { data, loading: load, error, client }] = useAddProductToCartMutation({
+    //     update(cache, result) {
+    //         console.log("------addProduct result-------", result);
 
-    const [addProductToCart] = useAddProductToCartMutation({
-        // refetchQueries: [{ query: GetCartItemsByCartIdDocument, variables: { id: cartId } }],
-    });
-
-    const [updateProductQuantity] = useUpdateProductQuantityInCartItemMutation({
-        // refetchQueries: [{ query: GetCartItemsByCartIdDocument, variables: { id: cartId } }],
-    });
-
-    const [publishCartItem] = usePublishCartItemMutation({
-        // refetchQueries: [{ query: GetCartItemsByCartIdDocument, variables: { id: cartId } }],
-    });
-
-    const [publishCart] = usePublishCartMutation({
-        refetchQueries: [{ query: GetCartItemsByCartIdDocument, variables: { id: cartId } }],
-    });
-
-    //! aktualizuj Cart ustawiając cartItems jako []
-    // const [clearCartItemsMutation] = useClearCartItemsMutation({
-    //     refetchQueries: [
-    //         {
-    //             query: GetCartItemsByCartIdDocument,
-    //             variables: {
-    //                 id: cartId,
-    //             },
-    //         },
-    //     ],
-    //     onCompleted: (data) => {
-    //         console.log("clearCartItemsMutation complete", data);
+    //         const cacheCartItems = cache.readQuery<GetCartItemsQuery, GetCartItemsQueryVariables>({
+    //             query: GetCartItemsDocument,
+    //             variables: { id: session.data?.user?.cartId! },
+    //         });
+    //         console.log("------addProduct result-------cacheCartItems", cacheCartItems);
     //     },
     // });
 
-    //! usuń koszyk # refetchQueries
+    //---
 
-    // const [deleteCartItemMutation] = useDeleteCartItemMutation({
-    //     refetchQueries: [
-    //         {
-    //             query: GetCartItemsByCartIdDocument,
-    //             variables: {
-    //                 id: cartId,
-    //             },
-    //         },
-    //     ],
-    //     onCompleted: (data) => {
-    //         console.log("deleteCartItemMutation complete", data);
-    //     },
-    // });
+    const [createCartItem, { data, loading: load, error, client }] = useCreateCartItemMutation({
+        async update(cache, { data }) {
+            console.log("------createCartItemMutation result-------", data);
 
-    const addItems = async (item: CartItem) => {
-        if (!fetchedCartItems) {
+            // cache.modify({
+            //     fields: {
+            //       sessions(exisitingSessions = []) {
+            //         const newSession = data.createSession;
+            //         cache.writeQuery({
+            //           query: GetCartItemsDocument,
+            //           data: { newSession, ...exisitingSessions }
+            //         });
+            //       }
+            //     }
+            //   })
+
+            const createdItem = data?.create;
+
+            await client.mutate<PublishCartItemMutation, PublishCartItemMutationVariables>({
+                mutation: PublishCartItemDocument,
+                variables: {
+                    cartItemId: createdItem?.id!,
+                },
+            });
+
+            const cacheCartItems = cache.readQuery<GetCartItemsQuery, GetCartItemsQueryVariables>({
+                query: GetCartItemsDocument,
+                variables: { id: session.data?.user?.cartId! },
+            });
+            console.log("🚀 ~ file: useCartItems.tsx ~ line 116 ~ update ~ cacheCartItems", cacheCartItems);
+
+            const updatedCashCartItems = {
+                cart: {
+                    id: cacheCartItems?.cart?.id!,
+                    cartItems: [...cacheCartItems?.cart?.cartItems!, { id: data?.create?.id, __typename: "CartItem" }],
+                    __typename: "Cart",
+                },
+            };
+            console.log("🚀 ~ file: useCartItems.tsx ~ line 125 ~ update ~ updatedCashCartItems", updatedCashCartItems);
+
+            const updateCache = cache.writeQuery({
+                query: GetCartItemsDocument,
+                variables: { id: session.data?.user?.cartId! },
+                data: updatedCashCartItems,
+            });
+
+            console.log("🚀 ~ file: useCartItems.tsx ~ line 130 ~ update ~ updateCache", updateCache);
+        },
+        onCompleted: (data) => {
+            setLoader(false);
+        },
+    });
+
+    /**
+     *
+     *
+     *
+     */
+
+    const addItems = async (product: CartItem) => {
+        console.log("🚀 ~ file: useCartItems.tsx ~ line 147 ~ addItems ~ product", product);
+        setLoader(true);
+        console.log("-----addItems------");
+        console.log("cartData?.cart?.cartItems", cartData?.cart?.cartItems);
+        console.log("cartData?.cart?.id", cartData?.cart?.id);
+        if (!cartData?.cart?.cartItems || !cartData?.cart?.id) {
             return;
         }
 
-        const existingItem = fetchedCartItems.find((prevItem) => prevItem?.product?.id === item.id);
+        const sign = `${session.data?.user.email}_${product.id}`;
+
+        const existingItem = cartData.cart.cartItems.find((item) => item?.product?.id === product.id);
+        console.log("~  existingItem", existingItem);
 
         if (!existingItem) {
-            const newCartItem = await addProductToCart({
+            // variables: {
+            //     review: {
+            //         ...data, // --1.1 dane te sąwysłane do serwera
+            //         product: {
+            //             connect: {
+            //                 slug: productSlug, //--1.2 ustawamy zmienną produktu
+            //             },
+            //         },
+            //     },
+            // },
+
+            const newCartItem = await createCartItem({
                 variables: {
-                    cartId: cartId,
-                    productId: item.id,
+                    cartId: cartData.cart.id,
+                    productId: product.id,
+                    sign: sign,
+                },
+
+                optimisticResponse: {
+                    __typename: "Mutation",
+                    create: {
+                        __typename: "CartItem",
+                        sign,
+                        quantity: 1,
+                        ...product,
+                    },
                 },
             });
 
-            const updateCartItems = newCartItem.data?.updateCart?.cartItems;
+            console.log("🚀 ~ file: useCartItems.tsx ~ line 178 ~ addItems ~ newCartItem", newCartItem);
 
-            await publishCartItem({
-                variables: {
-                    cartItemId: updateCartItems?.at(updateCartItems?.length - 1)?.id!,
-                },
-            });
+            // const createdItem = newCartItem?.data?.create;
 
-            await publishCart({
-                variables: {
-                    cartId,
-                },
-            });
-            return;
+            // await client.mutate<PublishCartItemMutation, PublishCartItemMutationVariables>({
+            //     mutation: PublishCartItemDocument,
+            //     variables: {
+            //         cartItemId: createdItem?.id!,
+            //     },
+            // });
         }
 
-        console.log("cartId", cartId);
-        console.log("cartItemId", existingItem.id);
-        console.log("quantity", existingItem?.quantity);
-
-        const incrementProductQuantity = await updateProductQuantity({
-            variables: {
-                cartId: cartId,
-                cartItemId: existingItem.id,
-                quantity: existingItem?.quantity! + 1,
-            },
-        });
-
-        await publishCartItem({
-            variables: {
-                cartItemId: existingItem.id,
-            },
-        });
-
-        await publishCart({
-            variables: {
-                cartId,
-            },
-        });
+        // const cache = apolloClient.cache.readQuery<GetCartItemsQuery, GetCartItemsQueryVariables>({
+        //     query: GetCartItemsDocument,
+        //     variables: { id: session.data?.user?.cartId! },
+        // });
     };
+
+    /**
+     *
+     *
+     *
+     */
 
     const removeItems = (id: CartItem["id"]) => {};
 
-    // const addItems = (item: CartItem) => {
-    //     setCartItems((prevState = []) => {
-    //         const existingItem = prevState.find((prevItem) => prevItem.id === item.id);
-
-    //         if (!existingItem) {
-    //             return [...prevState, item];
-    //         }
-
-    //         return prevState.map((prevItem) => {
-    //             if (prevItem.id === item.id) {
-    //                 return {
-    //                     ...prevItem,
-    //                     count: prevItem.count + 1,
-    //                 };
-    //             }
-
-    //             return prevItem;
-    //         });
-    //     });
-    // };
-
-    // const removeItems = (id: CartItem["id"]) => {
-    //     setCartItems((prevState = []) => {
-    //         const existingItem = prevState.find((eItem) => eItem.id === id);
-
-    //         if (existingItem && existingItem.count <= 1) {
-    //             return prevState.filter((eItem) => eItem.id !== id);
-    //         }
-
-    //         return prevState.map((eItem) => {
-    //             if (eItem.id === id) {
-    //                 return {
-    //                     ...eItem,
-    //                     count: eItem.count - 1,
-    //                 };
-    //             }
-    //             return eItem;
-    //         });
-    //     });
-    // };
-
-    return [cartItems, addItems, removeItems] as const;
+    return [cartItems, loader, addItems, removeItems] as const;
 };

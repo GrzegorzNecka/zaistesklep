@@ -9,6 +9,9 @@ import {
     GetCartIdByAccountIdDocument,
     GetCartIdByAccountIdQuery,
     GetCartIdByAccountIdQueryVariables,
+    GetCartItemsByCartIdDocument,
+    GetCartItemsByCartIdQuery,
+    GetCartItemsByCartIdQueryVariables,
 } from "generated/graphql";
 
 export default NextAuth({
@@ -53,8 +56,9 @@ export default NextAuth({
     ],
     callbacks: {
         async session({ session, user, token }) {
+            //add cart id from server
             if (typeof token.sub == "string") {
-                const cartId = await authApolloClient.query<
+                const cart = await authApolloClient.query<
                     GetCartIdByAccountIdQuery,
                     GetCartIdByAccountIdQueryVariables
                 >({
@@ -62,8 +66,10 @@ export default NextAuth({
                     variables: { id: token.sub },
                 });
 
-                if (cartId?.data?.account?.cart?.id) {
-                    session.user.cartId = cartId.data.account.cart.id;
+                const cartId = cart.data?.account?.cart?.id;
+
+                if (cartId) {
+                    session.user.cartId = cartId;
                 }
             }
 

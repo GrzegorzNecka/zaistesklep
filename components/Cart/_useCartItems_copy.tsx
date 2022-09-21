@@ -119,6 +119,7 @@ export const useCartItems = () => {
                 variables: {
                     cartId: cartId,
                     productId: item.id,
+                    sign: "222",
                 },
             });
 

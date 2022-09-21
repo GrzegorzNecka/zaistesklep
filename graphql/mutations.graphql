@@ -40,15 +40,19 @@ mutation ConnectAccountWithCartAndPublish($accountId: ID!, $cartId: ID!) {
     }
 }
 
-mutation AddProductToCart($cartId: ID!, $productId: ID!) {
+fragment cartContent on Cart {
+    id
+    cartItems {
+        id
+    }
+}
+
+mutation AddProductToCart($cartId: ID!, $productId: ID!, $sign: String!) {
     updateCart(
         where: { id: $cartId }
-        data: { cartItems: { create: { quantity: 1, product: { connect: { id: $productId } } } } }
+        data: { cartItems: { create: { sign: $sign, quantity: 1, product: { connect: { id: $productId } } } } }
     ) {
-        id
-        cartItems {
-            id
-        }
+        ...cartContent
     }
 }
 
@@ -57,10 +61,7 @@ mutation UpdateProductQuantityInCartItem($cartId: ID!, $cartItemId: ID!, $quanti
         where: { id: $cartId }
         data: { cartItems: { update: { where: { id: $cartItemId }, data: { quantity: $quantity } } } }
     ) {
-        id
-        cartItems {
-            id
-        }
+        ...cartContent
     }
 }
 
@@ -85,5 +86,23 @@ mutation PublishCartItem($cartItemId: ID!) {
 mutation PublishCart($cartId: ID!) {
     publishCart(to: PUBLISHED, where: { id: $cartId }) {
         id
+    }
+}
+
+mutation CreateCartItem($cartId: ID!, $productId: ID!, $sign: String!) {
+    create: createCartItem(
+        data: { quantity: 1, sign: $sign, cart: { connect: { id: $cartId } }, product: { connect: { id: $productId } } }
+    ) {
+        quantity
+        id
+        product {
+            name
+            price
+            images {
+                id
+                url
+            }
+            slug
+        }
     }
 }

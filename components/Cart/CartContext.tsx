@@ -7,7 +7,7 @@ import { changeToCurrency, moveTheComa } from "utils/currency";
 export const CartStateContext = createContext<CartState | null>(null);
 
 export const CartStateContextProvider = ({ children }: { children: React.ReactNode }) => {
-    const [cartItems, addItems, removeItems] = useCartItems();
+    const [cartItems, loader, addItems, removeItems] = useCartItems();
     // const cartState = useCartState();
 
     return (
@@ -17,6 +17,7 @@ export const CartStateContextProvider = ({ children }: { children: React.ReactNo
                 totalCount: 0,
                 fullPrice: 0,
                 shippingTax: 1000, //10zł
+                loader,
                 addItemToCart: (item) => {
                     addItems(item);
                 },

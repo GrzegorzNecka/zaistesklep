@@ -95,21 +95,38 @@ query GetCartIdByAccountId($id: ID!) {
     }
 }
 
+fragment cartContentQuery on Cart {
+    __typename
+    id
+    cartItems {
+        __typename
+        id
+        quantity
+        product {
+            __typename
+            id
+            name
+            price
+            images {
+                url
+            }
+            slug
+        }
+    }
+}
+
 query GetCartItemsByCartId($id: ID!) {
+    cart(where: { id: $id }) {
+        ...cartContentQuery
+    }
+}
+
+query GetCartItems($id: ID!) {
     cart(where: { id: $id }) {
         id
         cartItems {
             id
-            quantity
-            product {
-                id
-                name
-                price
-                images {
-                    url
-                }
-                slug
-            }
+            sign
         }
     }
 }

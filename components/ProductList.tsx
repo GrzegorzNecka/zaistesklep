@@ -8,9 +8,23 @@ import { MarkdownResult } from "types/types";
 import { useCartState } from "./Cart/CartContext";
 import { ProductListItemProps } from "./types";
 import ProductArithmeticRating from "./ProductRating/ProductArithmeticRating";
+import { MouseEvent } from "react";
 
 export const ProductListItem = ({ data }: ProductListItemProps) => {
     const cartState = useCartState();
+
+    const handleAddItems = (e: MouseEvent<HTMLButtonElement>) => {
+        // console.log("e", e.currentTarget);
+
+        cartState.addItemToCart({
+            id: data.id,
+            price: data.price,
+            title: data.title,
+            count: 1,
+            imgUrl: data.thumbnailUrl,
+            slug: data.slug,
+        });
+    };
 
     return (
         <div className="p-8">
@@ -46,17 +60,10 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
             </div>
             <div className="pt-4">
                 <button
-                    className=" w-full  text-blackfont-semibold btn-custom-primary"
-                    onClick={() =>
-                        cartState.addItemToCart({
-                            id: data.id,
-                            price: data.price,
-                            title: data.title,
-                            count: 1,
-                            imgUrl: data.thumbnailUrl,
-                            slug: data.slug,
-                        })
-                    }
+                    disabled={cartState.loader}
+                    className={`${cartState.loader && "bg-red-500"}
+                    } w-full text-blackfont-semibold btn-custom-primary`}
+                    onClick={handleAddItems}
                 >
                     dodaj do koszyka
                 </button>
