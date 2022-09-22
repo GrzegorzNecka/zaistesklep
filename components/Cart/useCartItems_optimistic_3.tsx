@@ -52,6 +52,55 @@ export const useCartItems = () => {
             return;
         }
 
+        console.log("🚀 ~ cartData", cartData);
+
+        /*
+
+        cart
+{
+    "__typename": "Cart",
+    "id": "cl7q56m7a1eqp0ateldaehrcs",
+    "cartItems": [
+        {
+            "__typename": "CartItem",
+            "id": "cl8bmo69v0cpt0buphtaslrdw",
+            "quantity": 1,
+            "product": {
+                "__typename": "Product",
+                "id": "ckdu44mn40gxh010405uwgbtw",
+                "name": "Unisex Long Sleeve Tee",
+                "price": 1999,
+                "images": [
+                    {
+                        "__typename": "Asset",
+                        "url": "https://media.graphassets.com/TSPnQGujTFC8nwtYMXmz"
+                    }
+                ],
+                "slug": "unisex-long-sleeve-tee"
+            }
+        },
+        {
+            "__typename": "CartItem",
+            "id": "cl8cx9guvm7wb0duvb1mpfwo8",
+            "quantity": 1,
+            "product": {
+                "__typename": "Product",
+                "id": "ckdu48unc0gzq0158mbzvyzg3",
+                "name": "Snapback",
+                "price": 1299,
+                "images": [
+                    {
+                        "__typename": "Asset",
+                        "url": "https://media.graphassets.com/4ltH606Tdu0OYjg6HTrw"
+                    }
+                ],
+                "slug": "snapback"
+            }
+        }
+    ]
+}
+        */
+
         const cartItems = cartData.cart.cartItems.map((item) => {
             return {
                 id: item.product!.id,
@@ -66,8 +115,38 @@ export const useCartItems = () => {
         setCartItems(cartItems);
     }, [cartData, session]);
 
+    // graphQl - dodaj do koszyka
+
+    // const [addProduct, { data, loading: load, error, client }] = useAddProductToCartMutation({
+    //     update(cache, result) {
+    //         console.log("------addProduct result-------", result);
+
+    //         const cacheCartItems = cache.readQuery<GetCartItemsQuery, GetCartItemsQueryVariables>({
+    //             query: GetCartItemsDocument,
+    //             variables: { id: session.data?.user?.cartId! },
+    //         });
+    //         console.log("------addProduct result-------cacheCartItems", cacheCartItems);
+    //     },
+    // });
+
+    //---
+
     const [createCartItem, { data, loading: load, error, client }] = useCreateCartItemMutation({
         async update(cache, { data }) {
+            console.log("------createCartItemMutation result-------", data);
+
+            // cache.modify({
+            //     fields: {
+            //       sessions(exisitingSessions = []) {
+            //         const newSession = data.createSession;
+            //         cache.writeQuery({
+            //           query: GetCartItemsDocument,
+            //           data: { newSession, ...exisitingSessions }
+            //         });
+            //       }
+            //     }
+            //   })
+
             const createdItem = data?.create;
 
             await client.mutate<PublishCartItemMutation, PublishCartItemMutationVariables>({
@@ -81,13 +160,28 @@ export const useCartItems = () => {
                 query: GetCartItemsDocument,
                 variables: { id: session.data?.user?.cartId! },
             });
+            console.log("🚀 ~ file: useCartItems.tsx ~ line 116 ~ update ~ cacheCartItems", cacheCartItems);
+            /*
+            {
+                "cart": {
+                    "__typename": "Cart",
+                    "id": "cl7q56m7a1eqp0ateldaehrcs",
+                    "cartItems": [
+                        {
+                            "__typename": "CartItem",
+                            "id": "cl8bmo69v0cpt0buphtaslrdw"
+                        }
+                    ]
+                }
+            }
+            
+            */
 
             if (!cacheCartItems?.cart?.cartItems || !data?.create) {
                 // ... obsługa błędu
                 return;
             }
 
-            // optimisticResponse:
             const updatedCashCartItems = {
                 cart: {
                     id: cacheCartItems?.cart?.id!,
@@ -95,10 +189,21 @@ export const useCartItems = () => {
                     __typename: "Cart",
                 },
             };
+            // console.log("🚀 ~ file: useCartItems.tsx ~ line 125 ~ update ~ updatedCashCartItems", updatedCashCartItems);
+
+            // const updateCache = cache.writeQuery({
+            //     query: GetCartItemsDocument,
+            //     variables: { id: session.data?.user?.cartId! },
+            //     data: updatedCashCartItems,
+            // });
 
             const updateCache = cache.modify({
+                // optimistic: true,
+                // id: cache.identify(updatedCashCartItems),
                 fields: {
-                    cart() {
+                    cart(existCartRef = {}) {
+                        console.log("🚀 ~ file: useCartItems.tsx ~ line 143 ~ cart ~ existCartRef)", existCartRef);
+
                         cache.writeQuery({
                             query: GetCartItemsDocument,
                             variables: { id: session.data?.user?.cartId! },
@@ -108,9 +213,10 @@ export const useCartItems = () => {
                 },
             });
 
-            console.log("🚀 ~ updateCache", updateCache);
+            console.log("🚀 ~ file: useCartItems.tsx ~ line 130 ~ update ~ updateCache", updateCache);
         },
         onCompleted: (data) => {
+            console.log("complete", true);
             setLoader(false);
         },
     });
@@ -122,9 +228,11 @@ export const useCartItems = () => {
      */
 
     const addItems = async (product: CartItem) => {
+        console.log("🚀 ~ file: useCartItems.tsx ~ line 147 ~ addItems ~ product", product);
         setLoader(true);
         console.log("-----addItems------");
-
+        console.log("cartData?.cart?.cartItems", cartData?.cart?.cartItems);
+        console.log("cartData?.cart?.id", cartData?.cart?.id);
         if (!cartData?.cart?.cartItems || !cartData?.cart?.id) {
             return;
         }
@@ -134,9 +242,18 @@ export const useCartItems = () => {
         const existingItem = cartData.cart.cartItems.find((item) => item?.product?.id === product.id);
         console.log("~  existingItem", existingItem);
 
-        //---------------------------------
-
         if (!existingItem) {
+            // variables: {
+            //     review: {
+            //         ...data, // --1.1 dane te sąwysłane do serwera
+            //         product: {
+            //             connect: {
+            //                 slug: productSlug, //--1.2 ustawamy zmienną produktu
+            //             },
+            //         },
+            //     },
+            // },
+
             const newCartItem = await createCartItem({
                 variables: {
                     cartId: cartData.cart.id,
@@ -160,6 +277,22 @@ export const useCartItems = () => {
             });
 
             console.log("🚀 ~ file: useCartItems.tsx ~ line 178 ~ addItems ~ newCartItem", newCartItem);
+
+            /*
+             zwraca :
+            {
+                "create": {
+                    "__typename": "CartItem",
+                    "quantity": 1,
+                    "id": "cl8cx9guvm7wb0duvb1mpfwo8",
+                    "sign": "strzypior@gmail.com_ckdu48unc0gzq0158mbzvyzg3",
+                    "product": {
+                        "__typename": "Product",
+                        "id": "ckdu48unc0gzq0158mbzvyzg3"
+                    }
+                }
+            }
+            */
         }
     };
 
