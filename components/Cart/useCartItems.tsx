@@ -181,29 +181,19 @@ export const useCartItems = () => {
                     __typename: "Mutation",
                     create: {
                         __typename: "CartItem",
-                        sign,
+                        id: (-Math.random()).toString(32),
+                        product: {
+                            __typename: "Product",
+                            id: product.id,
+                        },
                         quantity: 1,
-                        ...product,
+                        sign: sign,
                     },
                 },
             });
 
             console.log("🚀 ~ file: useCartItems.tsx ~ line 178 ~ addItems ~ newCartItem", newCartItem);
-
-            // const createdItem = newCartItem?.data?.create;
-
-            // await client.mutate<PublishCartItemMutation, PublishCartItemMutationVariables>({
-            //     mutation: PublishCartItemDocument,
-            //     variables: {
-            //         cartItemId: createdItem?.id!,
-            //     },
-            // });
         }
-
-        // const cache = apolloClient.cache.readQuery<GetCartItemsQuery, GetCartItemsQueryVariables>({
-        //     query: GetCartItemsDocument,
-        //     variables: { id: session.data?.user?.cartId! },
-        // });
     };
 
     /**

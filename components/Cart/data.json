@@ -1,0 +1,12 @@
+{
+    "create": {
+        "__typename": "CartItem",
+        "id": "cl8crwjbywje50drsczjez6on",
+        "product": {
+            "__typename": "Product",
+            "id": "ckdu49mfc0h070102jgprxnj0"
+        },
+        "quantity": 1,
+        "sign": "strzypior@gmail.com_ckdu49mfc0h070102jgprxnj0"
+    }
+}
