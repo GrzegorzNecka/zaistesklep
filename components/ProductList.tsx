@@ -14,8 +14,10 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
     const cartState = useCartState();
 
     const handleAddItems = (e: MouseEvent<HTMLButtonElement>) => {
-        // console.log("e", e.currentTarget);
-
+        console.log("e", e.currentTarget);
+        if (cartState.loader) {
+            return;
+        }
         cartState.addItemToCart({
             id: data.id,
             price: data.price,
@@ -59,14 +61,17 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
                 <ProductArithmeticRating productSlug={data.slug} />
             </div>
             <div className="pt-4">
-                <button
-                    disabled={cartState.loader}
-                    className={`${cartState.loader && "bg-red-500"}
-                    } w-full text-blackfont-semibold btn-custom-primary`}
-                    onClick={handleAddItems}
-                >
-                    dodaj do koszyka
-                </button>
+                {cartState.loader && (
+                    <button disabled className={`bg-red-500" w-full text-blackfont-semibold btn-custom-primary`}>
+                        dodawanie
+                    </button>
+                )}
+
+                {!cartState.loader && (
+                    <button className={`w-full text-blackfont-semibold btn-custom-primary`} onClick={handleAddItems}>
+                        dodaj do koszyka
+                    </button>
+                )}
             </div>
         </div>
     );

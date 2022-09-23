@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { createContext } from "react";
 import { CartState } from "components/Cart/types";
-import { useCartItems } from "./useCartItems";
+import { useCartItems } from "./hooks/useCartItems";
 import { changeToCurrency, moveTheComa } from "utils/currency";
 
 export const CartStateContext = createContext<CartState | null>(null);

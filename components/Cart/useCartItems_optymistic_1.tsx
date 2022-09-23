@@ -18,6 +18,8 @@ import {
     PublishCartItemDocument,
     PublishCartItemMutation,
     PublishCartItemMutationVariables,
+    PublishCartMutation,
+    PublishCartMutationVariables,
     Scalars,
     useAddProductToCartMutation,
     useClearCartItemsMutation,
@@ -68,44 +70,17 @@ export const useCartItems = () => {
         setCartItems(cartItems);
     }, [cartData, session]);
 
-    // graphQl - dodaj do koszyka
-
-    // const [addProduct, { data, loading: load, error, client }] = useAddProductToCartMutation({
-    //     update(cache, result) {
-    //         console.log("------addProduct result-------", result);
-
-    //         const cacheCartItems = cache.readQuery<GetCartItemsQuery, GetCartItemsQueryVariables>({
-    //             query: GetCartItemsDocument,
-    //             variables: { id: session.data?.user?.cartId! },
-    //         });
-    //         console.log("------addProduct result-------cacheCartItems", cacheCartItems);
-    //     },
-    // });
-
-    //---
-
     const [createCartItem, { data, loading: load, error, client }] = useCreateCartItemMutation({
         async update(cache, { data }) {
             console.log("------createCartItemMutation result-------", data);
 
-            // cache.modify({
-            //     fields: {
-            //       sessions(exisitingSessions = []) {
-            //         const newSession = data.createSession;
-            //         cache.writeQuery({
-            //           query: GetCartItemsDocument,
-            //           data: { newSession, ...exisitingSessions }
-            //         });
-            //       }
-            //     }
-            //   })
-
             const createdItem = data?.create;
 
-            await client.mutate<PublishCartItemMutation, PublishCartItemMutationVariables>({
-                mutation: PublishCartItemDocument,
+            await client.mutate<PublishCartMutation, PublishCartMutationVariables>({
+                mutation: PublishCartDocument,
                 variables: {
                     cartItemId: createdItem?.id!,
+                    cartId: session.data?.user?.cartId!,
                 },
             });
 
@@ -159,17 +134,6 @@ export const useCartItems = () => {
         console.log("~  existingItem", existingItem);
 
         if (!existingItem) {
-            // variables: {
-            //     review: {
-            //         ...data, // --1.1 dane te sąwysłane do serwera
-            //         product: {
-            //             connect: {
-            //                 slug: productSlug, //--1.2 ustawamy zmienną produktu
-            //             },
-            //         },
-            //     },
-            // },
-
             const newCartItem = await createCartItem({
                 variables: {
                     cartId: cartData.cart.id,
@@ -187,7 +151,7 @@ export const useCartItems = () => {
                             id: product.id,
                         },
                         quantity: 1,
-                        sign: sign,
+                        // sign: sign,
                     },
                 },
             });

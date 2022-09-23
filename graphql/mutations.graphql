@@ -83,7 +83,10 @@ mutation PublishCartItem($cartItemId: ID!) {
     }
 }
 
-mutation PublishCart($cartId: ID!) {
+mutation PublishCart($cartId: ID!, $cartItemId: ID!) {
+    publishCartItem(to: PUBLISHED, where: { id: $cartItemId }) {
+        id
+    }
     publishCart(to: PUBLISHED, where: { id: $cartId }) {
         id
     }
@@ -96,13 +99,7 @@ mutation CreateCartItem($cartId: ID!, $productId: ID!, $sign: String!) {
         quantity
         id
         product {
-            name
-            price
-            images {
-                id
-                url
-            }
-            slug
+            id
         }
     }
 }

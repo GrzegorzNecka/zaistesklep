@@ -126,7 +126,6 @@ query GetCartItems($id: ID!) {
         id
         cartItems {
             id
-            sign
         }
     }
 }
