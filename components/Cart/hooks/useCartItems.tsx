@@ -12,15 +12,17 @@ export const useCartItems = () => {
     const session = useSession();
 
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
-    const [loader, setLoader] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const { data: cartData } = useGetCartItemsByCartIdQuery({
+    //------------------- get initial CartItems from graphQl
+
+    const { data } = useGetCartItemsByCartIdQuery({
         skip: !Boolean(session.data?.user?.cartId),
         variables: {
             id: session.data?.user?.cartId!,
         },
         onCompleted: (data) => {
-            setLoader(false);
+            setIsLoading(false);
             console.log("seGetCartItemsByCartIdQuery -  data", data);
         },
         onError: (error) => {
@@ -28,15 +30,14 @@ export const useCartItems = () => {
         },
     });
 
-    // zaktualizuj  Contenxt
+    // ---------------- update React Context
+
     useEffect(() => {
-        if (session.status !== "authenticated" || !cartData || !cartData.cart) {
+        if (session.status !== "authenticated" || !data || !data.cart) {
             return;
         }
 
-        console.log("🚀 ~ cartData", cartData);
-
-        const cartItems = cartData.cart.cartItems.map((item) => {
+        const initialCartItems = data.cart.cartItems.map((item) => {
             return {
                 id: item.product!.id,
                 price: item.product!.price,
@@ -47,12 +48,12 @@ export const useCartItems = () => {
             };
         });
 
-        setCartItems(cartItems);
-    }, [cartData, session]);
+        setCartItems(initialCartItems);
+    }, [data, session]);
 
-    const [addItems] = useAddItems({ setLoader, cartData });
+    const [handleAddItemToCart] = useAddItems({ setIsLoading });
 
     const removeItems = (id: CartItem["id"]) => {};
 
-    return [cartItems, loader, addItems, removeItems] as const;
+    return [cartItems, isLoading, handleAddItemToCart, removeItems] as const;
 };

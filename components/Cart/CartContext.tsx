@@ -2,13 +2,11 @@ import { useContext } from "react";
 import { createContext } from "react";
 import { CartState } from "components/Cart/types";
 import { useCartItems } from "./hooks/useCartItems";
-import { changeToCurrency, moveTheComa } from "utils/currency";
 
 export const CartStateContext = createContext<CartState | null>(null);
 
 export const CartStateContextProvider = ({ children }: { children: React.ReactNode }) => {
-    const [cartItems, loader, addItems, removeItems] = useCartItems();
-    // const cartState = useCartState();
+    const [cartItems, isLoading, handleAddItemToCart, removeItems] = useCartItems();
 
     return (
         <CartStateContext.Provider
@@ -17,9 +15,9 @@ export const CartStateContextProvider = ({ children }: { children: React.ReactNo
                 totalCount: 0,
                 fullPrice: 0,
                 shippingTax: 1000, //10zł
-                loader,
+                isLoading,
                 addItemToCart: (item) => {
-                    addItems(item);
+                    handleAddItemToCart(item);
                 },
                 removeItemFromCart: (id) => removeItems(id),
             }}
@@ -28,6 +26,8 @@ export const CartStateContextProvider = ({ children }: { children: React.ReactNo
         </CartStateContext.Provider>
     );
 };
+
+//-------------------------------------
 
 export const useCartState = () => {
     const cartState = useContext(CartStateContext);

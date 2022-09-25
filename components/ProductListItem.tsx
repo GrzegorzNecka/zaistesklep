@@ -4,25 +4,46 @@ import Link from "next/link";
 import { Rating } from "./ProductRating/Raiting";
 import { NextSeo } from "next-seo";
 import Markdown from "./Markdown";
-import { MarkdownResult } from "types/types";
-import { useCartState } from "./Cart/CartContext";
-import { ProductListItemProps } from "./types";
-import ProductArithmeticRating from "./ProductRating/ProductArithmeticRating";
-import { MouseEvent } from "react";
 
-export const ProductListItem = ({ data }: ProductListItemProps) => {
+import { useCartState } from "./Cart/CartContext";
+import { ProductListItems } from "./types";
+import ProductArithmeticRating from "./ProductRating/ProductArithmeticRating";
+import {
+    Dispatch,
+    MouseEvent,
+    MutableRefObject,
+    SetStateAction,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
+
+interface ProductListItemProps {
+    data: ProductListItems;
+    targetButton: string | null;
+    setTargetButton: Dispatch<SetStateAction<string | null>>;
+}
+
+export const ProductListItem = ({ data, targetButton, setTargetButton }: ProductListItemProps) => {
     const cartState = useCartState();
+    const [count, setCount] = useState<number>(1);
 
     const handleAddItems = (e: MouseEvent<HTMLButtonElement>) => {
-        console.log("e", e.currentTarget);
-        if (cartState.loader) {
+        if (cartState.isLoading) {
             return;
         }
+
+        setTargetButton(data.title);
+
+        //!todo - walidacja  do count
+
         cartState.addItemToCart({
             id: data.id,
             price: data.price,
             title: data.title,
-            count: 1,
+            count: count,
             imgUrl: data.thumbnailUrl,
             slug: data.slug,
         });
@@ -61,16 +82,33 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
                 <ProductArithmeticRating productSlug={data.slug} />
             </div>
             <div className="pt-4">
-                {cartState.loader && (
-                    <button disabled className={`bg-red-500" w-full text-blackfont-semibold btn-custom-primary`}>
-                        dodawanie
-                    </button>
-                )}
-
-                {!cartState.loader && (
-                    <button className={`w-full text-blackfont-semibold btn-custom-primary`} onClick={handleAddItems}>
-                        dodaj do koszyka
-                    </button>
+                {cartState.isLoading && targetButton === data.title ? (
+                    <div className="flex mb-8">
+                        <input
+                            disabled
+                            type="number"
+                            className="mb-0 w-1/4 mr-4 bg-transparent py-2 px-4 border-2 border-black rounded"
+                        />
+                        <button disabled className={`mb-0 w-3/4 text-blackfont-semibold btn-custom-primary`}>
+                            dodawanie
+                        </button>
+                    </div>
+                ) : (
+                    <div className="flex mb-8">
+                        <input
+                            defaultValue="1"
+                            value={count}
+                            onChange={(e) => setCount(Number(e.currentTarget.value))}
+                            type="number"
+                            className="mb-0 w-1/4 mr-4 bg-transparent py-2 px-4 border-2 border-black rounded"
+                        />
+                        <button
+                            className={` mb-0 w-3/4 text-blackfont-semibold btn-custom-primary`}
+                            onClick={handleAddItems}
+                        >
+                            dodaj do koszyka
+                        </button>
+                    </div>
                 )}
             </div>
         </div>

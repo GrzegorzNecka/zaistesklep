@@ -92,9 +92,14 @@ mutation PublishCart($cartId: ID!, $cartItemId: ID!) {
     }
 }
 
-mutation CreateCartItem($cartId: ID!, $productId: ID!, $sign: String!) {
+mutation CreateCartItem($cartId: ID!, $quantity: Int!, $productId: ID!, $sign: String!) {
     create: createCartItem(
-        data: { quantity: 1, sign: $sign, cart: { connect: { id: $cartId } }, product: { connect: { id: $productId } } }
+        data: {
+            quantity: $quantity
+            sign: $sign
+            cart: { connect: { id: $cartId } }
+            product: { connect: { id: $productId } }
+        }
     ) {
         quantity
         id

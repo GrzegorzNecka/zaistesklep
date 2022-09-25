@@ -1,4 +1,4 @@
-import { ProductListItem } from "components/ProductList";
+import { ProductListItem } from "components/ProductListItem";
 import { InferGetStaticPropsType } from "next";
 import { InferGetStaticPathsType } from "types/types";
 import Pagination from "components/zadanie_Pagination/Pagination";
@@ -9,8 +9,11 @@ import { gql } from "@apollo/client";
 import { apolloClient } from "graphql/apolloClient";
 import { GetProductsListDocument, GetProductsListQuery } from "generated/graphql";
 import { changeToCurrency, moveTheComa } from "utils/currency";
+import { useState } from "react";
 
 const ProductListIdPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
+    const [targetButton, setTargetButton] = useState<string | null>(null);
+
     if (!data) {
         return <div>nie znaleziono strony</div>;
     }
@@ -32,22 +35,20 @@ const ProductListIdPage = ({ data }: InferGetStaticPropsType<typeof getStaticPro
                                     priceWithCurrency: changeToCurrency(moveTheComa(product.price)),
                                     // rating: product.rating.rate,
                                 }}
+                                targetButton={targetButton}
+                                setTargetButton={setTargetButton}
                             />
                         </li>
                     ))}
                 </ul>
             </div>
-            {/* <div>
-                {`page number: ${currentPage}`} {`-`} {`count of products: ${totalCount} `} {`-`}{" "}
-                {`pages: ${Math.floor(totalCount / 25)} `}
-            </div> */}
-            {/* <Pagination currentPage={currentPage} totalCount={totalCount} /> */}
         </Main>
     );
 };
 
 export default ProductListIdPage;
-// -----------------  getStaticPaths  ----------------------
+
+// -----------------
 
 export const getStaticPaths = async () => {
     const paths = [];
@@ -66,20 +67,12 @@ export const getStaticPaths = async () => {
     };
 };
 
-// -----------------  getStaticProps  ----------------------
+// -----------------
 
 export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof getStaticPaths>) => {
     if (!params?.productId) {
         return { props: {}, notFound: true };
     }
-
-    // const currentPage = Number(params.id);
-    // let take = 25;
-    // let offset = 0;
-
-    /* const totalCount = await countOfProducts();*/
-    // const totalCount = 4206;
-    // const products = await fetchProducts(take, offset);
 
     const { data } = await apolloClient.query<GetProductsListQuery>({
         query: GetProductsListDocument,
@@ -87,9 +80,6 @@ export const getStaticProps = async ({ params }: InferGetStaticPathsType<typeof 
 
     return {
         props: {
-            // products,
-            // currentPage: currentPage,
-            // totalCount: totalCount,
             data: data.products,
         },
     };

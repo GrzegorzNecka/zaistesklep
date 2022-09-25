@@ -29,11 +29,7 @@ export interface ProductDetailsProps {
  
  */
 
-export type ProductListItem = Pick<
+export type ProductListItems = Pick<
     ProductDetails,
     "id" | "slug" | "price" | "priceWithCurrency" | "title" | "thumbnailUrl" | "thumbnailAlt"
 >;
-
-export interface ProductListItemProps {
-    data: ProductListItem;
-}
