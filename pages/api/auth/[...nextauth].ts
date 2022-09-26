@@ -1,7 +1,9 @@
 import NextAuth from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import * as bcrypt from "bcrypt";
 import { authApolloClient } from "graphql/apolloClient";
+
 import {
     GetAccountByEmailDocument,
     GetAccountByEmailQuery,
@@ -14,7 +16,7 @@ import {
     GetCartItemsByCartIdQueryVariables,
 } from "generated/graphql";
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             name: "Logowanie hasłem",
@@ -79,4 +81,6 @@ export default NextAuth({
         },
     },
     secret: process.env.NEXT_AUTH_SECRET,
-});
+};
+
+export default NextAuth(authOptions);

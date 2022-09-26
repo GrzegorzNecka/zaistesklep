@@ -57,7 +57,37 @@ export const useCartItems = () => {
         setCartItems(initialCartItems);
     }, [data, session]);
 
-    const [handleAddItemToCart] = useAddItems({ setIsLoading });
+    // ---------------- handleAddItemToCart React Context
+
+    const handleAddItemToCart = async (product: CartItem) => {
+        if (session.status !== "authenticated" || !data || !data.cart) {
+            return;
+        }
+
+        setIsLoading(true);
+
+        const sign = `${session.data?.user.email}_${product.id}`;
+
+        const payload = {
+            cartItemId:
+            productId: product,
+            sign,
+            quantity: product.count,
+        };
+        
+        const add = await fetch("/api/cart/addItem", {
+            method: "POST",
+            headers: { "Content-Type": "application/json;" },
+            body: JSON.stringify(payload),
+        });
+        console.log("🚀 ~ file: useCartItems.tsx ~ line 82 ~ handleAddItemToCart ~ add", add);
+
+        // const isExistItem = existCartItems.find((item) => item?.product?.id === product.id);
+
+        // if (!isExistItem) {
+
+        // }
+    };
 
     const removeItems = (id: CartItem["id"]) => {};
 
