@@ -6,14 +6,14 @@ import { useSession } from "next-auth/react";
 import { apolloClient } from "graphql/apolloClient";
 import {
     GetCartItemsByCartIdDocument,
+    GetCartItemsByCartIdQuery,
+    GetCartItemsByCartIdQueryVariables,
     GetCartItemsDocument,
     GetCartItemsQuery,
     GetCartItemsQueryVariables,
     useGetCartItemsByCartIdQuery,
     useGetCartItemsQuery,
 } from "generated/graphql";
-import { ApolloClient, gql } from "@apollo/client";
-import useAddItems from "./useAddItems";
 
 export const useCartItems = () => {
     const session = useSession();
@@ -23,7 +23,7 @@ export const useCartItems = () => {
 
     //------------------- get initial CartItems from graphQl
 
-    const { data } = useGetCartItemsByCartIdQuery({
+    const { data, refetch } = useGetCartItemsByCartIdQuery({
         skip: !Boolean(session.data?.user?.cartId),
         variables: {
             id: session.data?.user?.cartId!,
@@ -36,6 +36,8 @@ export const useCartItems = () => {
             console.log("seGetCartItemsByCartIdQuery - error", error);
         },
         fetchPolicy: "network-only",
+        nextFetchPolicy: "network-only",
+        // pollInterval: 100,
     });
 
     // ---------------- update React Context
@@ -82,14 +84,63 @@ export const useCartItems = () => {
             body: JSON.stringify(payload),
         });
 
-        console.log("🚀 ~ file: useCartItems.tsx ~ line 82 ~ handleAddItemToCart ~ add", add.status);
+        console.log("🚀 ~ file: useCartItems.tsx ~ line 82 ~ handleAddItemToCart ~ add", add);
 
         if (add.status === 200) {
             setIsLoading(false);
+            refetch({ id: session.data?.user?.cartId! });
 
-            apolloClient.refetchQueries({
-                include: [GetCartItemsByCartIdDocument],
-            });
+            const data = await add.json();
+            console.log("🚀 ~ file: useCartItems.tsx ~ line 96 ~ handleAddItemToCart ~ data", data);
+
+            // const cacheCartItems = apolloClient.cache.readQuery<
+            //     GetCartItemsByCartIdQuery,
+            //     GetCartItemsByCartIdQueryVariables
+            // >({
+            //     query: GetCartItemsByCartIdDocument,
+            //     variables: { id: session.data?.user?.cartId! },
+            // });
+
+            // if (!cacheCartItems) {
+            //     alert("no cacheCartItems");
+            //     return;
+            // }
+
+            // const prevCardItems = cacheCartItems?.cart?.cartItems.map((item) => {
+            //     const cachCart = {
+            //         id: item.id,
+            //         __typename: "CartItem",
+            //     };
+
+            //     return cachCart;
+            // });
+
+            // if (!prevCardItems) {
+            //     return;
+            // }
+
+            // const updatedCashCartItems = {
+            //     cart: {
+            //         id: cacheCartItems?.cart?.id!,
+            //         cartItems: [...prevCardItems, { id: data?.create?.id, __typename: "CartItem" }],
+            //         __typename: "Cart",
+            //     },
+            // };
+
+            // const updateCache = apolloClient.cache.modify({
+            //     fields: {
+            //         cart() {
+            //             apolloClient.cache.writeQuery({
+            //                 query: GetCartItemsDocument,
+            //                 variables: { id: session.data?.user?.cartId! },
+            //                 data: updatedCashCartItems,
+            //             });
+            //         },
+            //     },
+            // });
+
+            //https://www.apollographql.com/docs/react/caching/cache-interaction/#using-updatequery-and-updatefragment
+            //https://www.apollographql.com/docs/react/data/queries#options
         }
 
         //----------------------------------------------------------------

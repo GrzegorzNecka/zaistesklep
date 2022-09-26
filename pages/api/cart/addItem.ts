@@ -45,16 +45,27 @@ const addItemdHandler: NextApiHandler = async (req, res) => {
             cartItemId: nextCartItem.data.create.id,
             cartId,
         },
+        // refetchQueries: [
+        //     {
+        //         query: GetCartItemsByCartIdDocument,
+        //         variables: {
+        //             id: cartId,
+        //         },
+        //         fetchPolicy: "no-cache",
+        //     },
+        // ],
     });
 
-    if (!nextCartItem?.data?.create?.id) {
+    if (!nextCart) {
         res.status(500).json({ message: "createCartItemMutation failed" });
         return;
     }
 
     console.log("🚀 nextCart", nextCart);
 
-    res.status(200).json({ nextCart: JSON.stringify(nextCart) });
+    //todo - tutaj powinien być zwrócony nowy cart item
+
+    res.status(200).json({ nextCartItem: JSON.stringify(nextCartItem) });
     return;
 };
 

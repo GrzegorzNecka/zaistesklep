@@ -95,6 +95,10 @@ export const ProductListItem = ({ data, targetButton, setTargetButton }: Product
                     </div>
                 ) : (
                     <div className="flex mb-8">
+                        {
+                            //todo -> A component is changing a controlled input to be uncontrolled. This is likely caused by the value changing from a defined to undefined, which should not happen.
+                            //todo .. Decide between using a controlled or uncontrolled input element for the lifetime of the component. More info: https://reactjs.org/link/controlled-components
+                        }
                         <input
                             // defaultValue="1"
                             value={count}

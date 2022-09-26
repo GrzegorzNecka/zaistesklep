@@ -66,6 +66,7 @@ export const authOptions: NextAuthOptions = {
                 >({
                     query: GetCartIdByAccountIdDocument,
                     variables: { id: token.sub },
+                    fetchPolicy: "no-cache",
                 });
 
                 const cartId = cart.data?.account?.cart?.id;
