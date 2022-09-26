@@ -96,7 +96,7 @@ export const ProductListItem = ({ data, targetButton, setTargetButton }: Product
                 ) : (
                     <div className="flex mb-8">
                         <input
-                            defaultValue="1"
+                            // defaultValue="1"
                             value={count}
                             onChange={(e) => setCount(Number(e.currentTarget.value))}
                             type="number"

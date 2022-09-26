@@ -1,4 +1,7 @@
 import {
+    GetCartItemsByCartIdDocument,
+    GetCartItemsByCartIdQuery,
+    GetCartItemsByCartIdQueryVariables,
     GetCartItemsDocument,
     GetCartItemsQuery,
     GetCartItemsQueryVariables,
@@ -47,25 +50,38 @@ const useAddItems = ({ setIsLoading }: AddItemsProps) => {
                     cartId: cartIdRef.current,
                 },
             });
-
             const variables = { id: cartIdRef.current };
 
-            const cacheCartItems = cache.readQuery<GetCartItemsQuery, GetCartItemsQueryVariables>({
-                query: GetCartItemsDocument,
+            const cacheCartItems = cache.readQuery<GetCartItemsByCartIdQuery, GetCartItemsByCartIdQueryVariables>({
+                query: GetCartItemsByCartIdDocument,
                 variables: { ...variables },
             });
 
             if (!cacheCartItems) {
+                //! w tym miejscu co jakiś czas zwraca nulla
                 console.log("🚀 ~ cacheCartItems", cacheCartItems); //null
-                console.log("🚀 ~ cartIdRef.current", cartIdRef.current);
-                // alert("no cacheCartItems");
-                // return;
+                console.log("🚀 ~ cartIdRef.current", cartIdRef.current); // tutaj zmienna jest id podawany do zmiennych
+                alert("no cacheCartItems");
+                return;
+            }
+
+            const prevCardItems = cacheCartItems?.cart?.cartItems.map((item) => {
+                const cachCart = {
+                    id: item.id,
+                    __typename: "CartItem",
+                };
+
+                return cachCart;
+            });
+
+            if (!prevCardItems) {
+                return;
             }
 
             const updatedCashCartItems = {
                 cart: {
                     id: cacheCartItems?.cart?.id!,
-                    cartItems: [...cacheCartItems?.cart?.cartItems!, { id: data?.create?.id, __typename: "CartItem" }],
+                    cartItems: [...prevCardItems, { id: data?.create?.id, __typename: "CartItem" }],
                     __typename: "Cart",
                 },
             };

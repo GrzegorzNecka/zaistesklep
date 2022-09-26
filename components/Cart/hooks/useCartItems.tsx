@@ -4,8 +4,14 @@ import { CartItem } from "components/Cart/types";
 import { fetchCartItems, getCartSessionToken, updateCartItems } from "../services/zadanie_cartItems";
 import { useSession } from "next-auth/react";
 import { apolloClient } from "graphql/apolloClient";
-import { useGetCartItemsByCartIdQuery } from "generated/graphql";
-import { gql } from "@apollo/client";
+import {
+    GetCartItemsDocument,
+    GetCartItemsQuery,
+    GetCartItemsQueryVariables,
+    useGetCartItemsByCartIdQuery,
+    useGetCartItemsQuery,
+} from "generated/graphql";
+import { ApolloClient, gql } from "@apollo/client";
 import useAddItems from "./useAddItems";
 
 export const useCartItems = () => {
