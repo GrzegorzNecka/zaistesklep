@@ -5,6 +5,7 @@ import { fetchCartItems, getCartSessionToken, updateCartItems } from "../service
 import { useSession } from "next-auth/react";
 import { apolloClient } from "graphql/apolloClient";
 import {
+    GetCartItemsByCartIdDocument,
     GetCartItemsDocument,
     GetCartItemsQuery,
     GetCartItemsQueryVariables,
@@ -34,6 +35,7 @@ export const useCartItems = () => {
         onError: (error) => {
             console.log("seGetCartItemsByCartIdQuery - error", error);
         },
+        fetchPolicy: "network-only",
     });
 
     // ---------------- update React Context
@@ -69,18 +71,28 @@ export const useCartItems = () => {
         const sign = `${session.data?.user.email}_${product.id}`;
 
         const payload = {
-            cartItemId:
-            productId: product,
+            productId: product.id,
             sign,
             quantity: product.count,
         };
-        
+
         const add = await fetch("/api/cart/addItem", {
             method: "POST",
             headers: { "Content-Type": "application/json;" },
             body: JSON.stringify(payload),
         });
-        console.log("🚀 ~ file: useCartItems.tsx ~ line 82 ~ handleAddItemToCart ~ add", add);
+
+        console.log("🚀 ~ file: useCartItems.tsx ~ line 82 ~ handleAddItemToCart ~ add", add.status);
+
+        if (add.status === 200) {
+            setIsLoading(false);
+
+            apolloClient.refetchQueries({
+                include: [GetCartItemsByCartIdDocument],
+            });
+        }
+
+        //----------------------------------------------------------------
 
         // const isExistItem = existCartItems.find((item) => item?.product?.id === product.id);
 

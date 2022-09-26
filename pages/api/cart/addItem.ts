@@ -14,7 +14,6 @@ import {
 
 const addItemdHandler: NextApiHandler = async (req, res) => {
     const session = await unstable_getServerSession(req, res, authOptions);
-    console.log("🚀 ~ file: addItem.ts ~ line 17 ~ constaddItemdHandler:NextApiHandler= ~ session", session);
 
     if (!session?.user.cartId) {
         return;
@@ -22,16 +21,9 @@ const addItemdHandler: NextApiHandler = async (req, res) => {
 
     const cartId = session.user.cartId;
 
-    const { cartItemId, productId, sign, quantity } = await req.body;
-    console.log(
-        "🚀 ~ file: addItem.ts ~ line 25 ~ constaddItemdHandler:NextApiHandler= ~ cartItemId, productId, sign, quantity",
-        cartItemId,
-        productId,
-        sign,
-        quantity
-    );
+    const { productId, sign, quantity } = await JSON.parse(req.body);
 
-    await apolloClient.mutate<CreateCartItemMutation, CreateCartItemMutationVariables>({
+    const nextCartItem = await apolloClient.mutate<CreateCartItemMutation, CreateCartItemMutationVariables>({
         mutation: CreateCartItemDocument,
         variables: {
             cartId,
@@ -40,24 +32,29 @@ const addItemdHandler: NextApiHandler = async (req, res) => {
             quantity,
         },
     });
+    console.log("🚀 ~ file: addItem.ts ~ line 36 ~ constaddItemdHandler:NextApiHandler= ~ nextCartItem", nextCartItem);
 
-    await apolloClient.mutate<PublishCartMutation, PublishCartMutationVariables>({
+    if (!nextCartItem?.data?.create?.id) {
+        res.status(500).json({ message: "createCartItemMutation failed" });
+        return;
+    }
+
+    const nextCart = await apolloClient.mutate<PublishCartMutation, PublishCartMutationVariables>({
         mutation: PublishCartDocument,
         variables: {
-            cartItemId,
+            cartItemId: nextCartItem.data.create.id,
             cartId,
         },
-        refetchQueries: [
-            {
-                query: GetCartItemsByCartIdDocument,
-                variables: {
-                    id: cartId,
-                },
-            },
-        ],
     });
 
-    res.status(200).json({ message: "published cartItem success" });
+    if (!nextCartItem?.data?.create?.id) {
+        res.status(500).json({ message: "createCartItemMutation failed" });
+        return;
+    }
+
+    console.log("🚀 nextCart", nextCart);
+
+    res.status(200).json({ nextCart: JSON.stringify(nextCart) });
     return;
 };
 
